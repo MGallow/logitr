@@ -1,0 +1,15 @@
+Package: logitr
+Type: Package
+Title: Ridge Penalized Logistic Regression
+Version: 0.1.0
+Authors@R: person("Matt", "Galloway", email = "gall0441@umn.edu",
+                  role = c("aut", "cre"))
+Description: This is an R package for ridge-penalized logistic regression.
+URL: https://github.com/MGallow/logitr
+BugReports: https://github.com/MGallow/logitr/issues
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: Rcpp (>= 0.12.10),
+    dplyr
+LinkingTo: Rcpp
