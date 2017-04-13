@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // rcpp_hello
 List rcpp_hello();
-RcppExport SEXP logitr2_rcpp_hello() {
+RcppExport SEXP logitr_rcpp_hello() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
