@@ -4,8 +4,7 @@
 \alias{gradient_IRLS_logistic}
 \title{Gradient of IRLS Logistic Regression}
 \usage{
-gradient_IRLS_logistic(betas, X, y, lam = 0, weights = NULL,
-  penalty = "L2", vec = NULL)
+gradient_IRLS_logistic(betas, X, y, lam = 0, weights, penalty = "None", vec)
 }
 \arguments{
 \item{betas}{beta estimates (includes intercept)}
@@ -16,11 +15,11 @@ gradient_IRLS_logistic(betas, X, y, lam = 0, weights = NULL,
 
 \item{lam}{tuning parameter for regularization term}
 
-\item{weights}{optional vector of weights for IRLS}
+\item{weights}{vector of weights for IRLS}
 
-\item{penalty}{choose from BLAH. Defaults to 'L2'}
+\item{penalty}{choose from c('None', 'L2'). Defaults to 'None'}
 
-\item{vec}{optional vector to specify which coefficients will be penalized}
+\item{vec}{vector to specify which coefficients will be penalized}
 }
 \value{
 returns the gradient

@@ -11,8 +11,8 @@ Overview
 
 `logitr` is a personal R package that I have created for organizational/convenience purposes. A (possibly incomplete) list of functions contained in the package can be found below:
 
--   `logistic()` calculate coefficient estimates for ridge (L2)-penalized linear regression
--   `logistic_bridge()` is a bi-section search algorithm.
+-   `logisticr()` computes the coefficient estimate for logistic regression. L2-penalization optional.
+-   `linearr()` computes the coefficient estimates for linear regression. L2-penalization and weighted regression, optional.
 
 Installation
 ------------

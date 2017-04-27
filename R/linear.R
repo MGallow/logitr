@@ -9,6 +9,7 @@
 #' @param lam optional tuning parameter for L2 regularization term. Defaults to "lam = 0"
 #' @param vec optional vector to specify which coefficients will be penalized
 #' @param weights optional vector of weights for weighted least squares
+#' @param penalty choose from c("None", "L2"). Defaults to "None"
 #' @param intercept add column of ones if not already present. Defaults to TRUE
 #' @return returns the coefficient estimates
 #' @export
@@ -20,25 +21,29 @@
 
 
 
-linear = function(X, y, lam = 0, weights = NULL, intercept = TRUE, vec = NULL) {
+linearr = function(X, y, lam = 0, weights = NULL, penalty = "None", intercept = TRUE, vec = NULL) {
 
   #checks
   n = dim(X)[1]
-  if (is.null(vec)) {vec = 1}
+  if (is.null(vec)){vec = 1}
   if (is.null(weights)){weights = rep(1, n)}
   if (length(weights) != n) stop("weights must be length ", n)
   if (length(lam) > 1) stop("lam must be a scalar!")
   if (lam < 0) stop("lam must be nonnegative!")
+  if (lam > 0) print("using L2 penalty!")
+  if (penalty %in% c("None", "L2") == FALSE)
+    stop("incorrect penalty!")
+  if ((penalty != "None") & (lam == 0)) stop("please specify lam!")
   if (intercept == TRUE){
-
     #if no first column of ones, then add it
     if (all(X[, 1] != rep(1, n))){
       X = cbind(1, X)
     }
-
-    #do not penalize intercept
-    p = dim(X)[2]
-    vec = c(0, rep(1, p - 1))
+    #do not penalize intercept, if not specified
+    if (vec == 1){
+      p = dim(X)[2]
+      vec = c(0, rep(1, p - 1))
+    }
   }
 
   W = diag(weights)
@@ -46,6 +51,7 @@ linear = function(X, y, lam = 0, weights = NULL, intercept = TRUE, vec = NULL) {
   y = sqrt(W) %*% as.matrix(y)
 
   #if p > n, linear kernel ridge regression
+  p = dim(X)[2]
   if(p > n){
 
     # SVD
@@ -59,7 +65,7 @@ linear = function(X, y, lam = 0, weights = NULL, intercept = TRUE, vec = NULL) {
 
   }
 
-  #else compute normal ridge regression
+  #compute normal ridge regression
   else {
 
     # SVD
@@ -74,7 +80,7 @@ linear = function(X, y, lam = 0, weights = NULL, intercept = TRUE, vec = NULL) {
   }
 
 
-  returns = list(Coefficients = betas)
+  returns = list(coefficients = betas)
   return(returns)
 }
 

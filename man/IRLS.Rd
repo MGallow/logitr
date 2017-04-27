@@ -4,8 +4,8 @@
 \alias{IRLS}
 \title{Iterative Re-Weighted Least Squares}
 \usage{
-IRLS(X, y, lam = 0, weights = NULL, penalty = "L2", tol = 10^(-5),
-  maxit = 1e+05, vec)
+IRLS(X, y, lam = 0, penalty = "None", intercept = TRUE, tol = 10^(-5),
+  maxit = 1e+05, vec = NULL)
 }
 \arguments{
 \item{X}{matrix or data frame}
@@ -14,9 +14,9 @@ IRLS(X, y, lam = 0, weights = NULL, penalty = "L2", tol = 10^(-5),
 
 \item{lam}{tuning parameter for regularization term}
 
-\item{weights}{optional vector of weights for IRLS}
+\item{penalty}{Choose from c('None', 'L2'). Defaults to 'None'}
 
-\item{penalty}{choose from BLAH. Defaults to 'L2'}
+\item{intercept}{Defaults to TRUE}
 
 \item{tol}{tolerance - used to determine algorithm convergence}
 

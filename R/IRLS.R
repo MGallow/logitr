@@ -1,21 +1,20 @@
 ## Matt Galloway
 
 
-#' @title Softmax
-#' @description Computes the probability for each observation in X being in class '1'.
+#' @title Logit
+#' @description Computes the logit for u
 #'
-#' @param X matrix (includes intercept)
-#' @param b beta estimates (includes intercept)
-#' @return returns the estimated probability
+#' @param u some number. Ex: X %*% beta
+#' @return returns the logit of u
 #' @examples
-#' softmax(X, b)
+#' logit(X %*% beta)
 
 
-softmax = function(X, b) {
-    
-    # calculate softmax probabilities
-    exp(X %*% b)/(1 + exp(X %*% b))
-    
+logitr = function(u) {
+
+    # calculate logit probabilities
+    exp(u)/(1 + exp(u))
+
 }
 
 
@@ -30,17 +29,17 @@ softmax = function(X, b) {
 #' @param X matrix or data frame
 #' @param y response vector of 0,1
 #' @param lam tuning parameter for regularization term
-#' @param vec optional vector to specify which coefficients will be penalized
-#' @param weights optional vector of weights for IRLS
-#' @param penalty choose from BLAH. Defaults to 'L2'
+#' @param vec vector to specify which coefficients will be penalized
+#' @param weights vector of weights for IRLS
+#' @param penalty choose from c('None', 'L2'). Defaults to 'None'
 #' @return returns the gradient
 #' @examples
 #' gradient_IRLS_logistic(betas, X, y, lam = 0.1, penalty = 'L2')
 
+## NOT RIGHT?!!?!?!!?
+gradient_IRLS_logistic = function(betas, X, y, lam = 0,
+    weights, penalty = "None", vec) {
 
-gradient_IRLS_logistic = function(betas, X, y, lam = 0, weights = NULL, penalty = "L2", 
-    vec = NULL) {
-    
     # checks
     n = dim(X)[1]
     if (is.null(vec)) {
@@ -49,13 +48,13 @@ gradient_IRLS_logistic = function(betas, X, y, lam = 0, weights = NULL, penalty 
     if (is.null(weights)) {
         weights = rep(1, n)
     }
-    if (length(weights) != n) 
+    if (length(weights) != n)
         stop("weights must be length ", n)
-    
+
     # gradient for beta
-    t(X) %*% diag(weights) %*% X %*% betas - t(X) %*% diag(weights) %*% y + lam * 
-        matrix(vec)
-    
+    t(X) %*% diag(weights) %*% X %*% betas - t(X) %*% diag(weights) %*%
+        y + lam * matrix(vec)
+
 }
 
 
@@ -70,61 +69,53 @@ gradient_IRLS_logistic = function(betas, X, y, lam = 0, weights = NULL, penalty 
 #' @param y matrix or vector of response 0,1
 #' @param lam tuning parameter for regularization term
 #' @param vec optional vector to specify which coefficients will be penalized
-#' @param weights optional vector of weights for IRLS
-#' @param penalty choose from BLAH. Defaults to 'L2'
+#' @param penalty Choose from c('None', 'L2'). Defaults to 'None'
+#' @param intercept Defaults to TRUE
 #' @param tol tolerance - used to determine algorithm convergence
 #' @param maxit maximum iterations
 #' @return returns beta estimates (includes intercept), total iterations, and gradients.
-#' @export
 #' @examples
 #' IRLS(X, y, n.list = c(rep(1, n)), lam = 0.1, alpha = 1.5)
 
 
-# calculates the coefficient estimates for logistic regression (IRLS)
-IRLS = function(X, y, lam = 0, weights = NULL, penalty = "L2", tol = 10^(-5), 
-    maxit = 1e+05, vec) {
-    
-    # if first column not vector of ones, add it
+# calculates the coefficient estimates for logistic
+# regression (IRLS)
+IRLS = function(X, y, lam = 0, penalty = "None", intercept = TRUE,
+    tol = 10^(-5), maxit = 1e+05, vec = NULL) {
+
+    # initialize
     n = dim(X)[1]
-    if (all(X[, 1] != rep(1, n))) {
-        X = cbind(1, X)
-    }
-    
-    # dimensions of data
     p = dim(X)[2]
     X = as.matrix(X)
     y = as.matrix(y)
-    
-    # initialize
+    betas = as.matrix(rep(1, p))
+    weights = rep(1, n)
     iteration = 1
-    delta = 10^(-5)
-    b = as.matrix(rep(1, p))
-    N = diag(n.list)
-    grads = gradient_logistic_bridge(X, y, N, b, lam, alpha)
-    
-    # part of Q maximization function
-    gamma = t(X) %*% ((0.25 + delta) * N) %*% X
-    
-    
+    grads = gradient_IRLS_logistic(betas, X, y, lam, weights,
+        penalty, vec)
+
     # IRLS algorithm
-    while ((iteration < maxit) & (max(grads$grad) > tol)) {
-        
-        # adjust v vector
-        v = as.numeric((b^2)^(alpha/2 - 1))
-        v[1] = 0
-        
-        # qrsolve
-        b = qr.solve(gamma + lam * diag(v), t(X) %*% N %*% (y - softmax(X, b)) + 
-            gamma %*% b)
-        
+    while ((iteration < maxit) & (max(abs(grads)) > tol)) {
+
+        # update working data
+        Xb = X %*% betas
+        p = logitr(Xb)
+        weights = as.numeric(p * (1 - p))
+        z = (y - p)/weights + Xb
+
+        # calculate new betas
+        betas = linearr(X, z, lam, weights, penalty, intercept,
+            vec)$coefficients
+
         # calculate updated gradients
-        grads = gradient_logistic_bridge(X, y, N, b, lam, alpha)
+        grads = gradient_IRLS_logistic(betas, X, y, lam,
+            weights, penalty, vec)
         iteration = iteration + 1
-        
+
     }
-    
-    
-    returns = list(b = b, total.iterations = iteration, grads = grads)
+
+    returns = list(coefficients = betas, total.iterations = iteration,
+        gradient = grads)
     return(returns)
 }
 
