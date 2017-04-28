@@ -4,7 +4,7 @@
 \alias{MM}
 \title{Majorize-Minimization function}
 \usage{
-MM(X, y, lam = 0, penalty = "None", intercept = TRUE, tol = 10^(-5),
+MM(X, y, lam = 0, alpha = 1.5, gamma = 1, tol = 10^(-5),
   maxit = 1e+05, vec = NULL)
 }
 \arguments{
@@ -12,11 +12,11 @@ MM(X, y, lam = 0, penalty = "None", intercept = TRUE, tol = 10^(-5),
 
 \item{y}{matrix or vector of response 0,1}
 
-\item{lam}{tuning parameter for regularization term}
+\item{lam}{optional tuning parameter for ridge regularization term. Defaults to 'lam = 0'}
 
-\item{penalty}{Choose from c('None', 'L2'). Defaults to 'None'}
+\item{alpha}{optional tuning parameter for bridge regularization term. Defaults to 'alpha = 1.5'}
 
-\item{intercept}{Defaults to TRUE}
+\item{gamma}{gamma indicator function. 'gamma = 1' for ridge, 'gamma = 0' for bridge. Defaults to 'gamma = 1'}
 
 \item{tol}{tolerance - used to determine algorithm convergence}
 
@@ -28,9 +28,9 @@ MM(X, y, lam = 0, penalty = "None", intercept = TRUE, tol = 10^(-5),
 returns beta estimates (includes intercept), total iterations, and gradients.
 }
 \description{
-This function utilizes the MM algorithm. It will be used to compute the logistic regression coefficient estimates. This function is to be used with the 'logistic' function.
+This function utilizes the MM algorithm. It will be used to compute the logistic regression coefficient estimates. This function is to be used with the 'logisticr' function.
 }
 \examples{
-IRLS(X, y, n.list = c(rep(1, n)), lam = 0.1, alpha = 1.5)
+MM(X, y)
 }
 

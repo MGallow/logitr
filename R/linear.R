@@ -5,12 +5,12 @@
 
 
 #' @title Gradient of Linear Regression
-#' @description Computes the gradient of linear regression (optional Ridge regularization term). This function is to be used with the 'Linearr' function.
+#' @description Computes the gradient of linear regression (optional ridge regularization term). This function is to be used with the 'Linearr' function.
 #'
 #' @param betas beta estimates (includes intercept)
 #' @param X matrix or data frame
 #' @param y response vector of 0,1
-#' @param lam tuning parameter for Ridge regularization term
+#' @param lam tuning parameter for ridge regularization term
 #' @param weights option vector of weights for weighted least squares
 #' @param vec vector to specify which coefficients will be penalized
 #' @return returns the gradient
@@ -34,11 +34,11 @@ gradient_linear = function(betas, X, y, lam = 0, weights = NULL,
 
 
 #' @title Linear
-#' @description Computes the linear regression coefficient estimates (Ridge-penalization and weights, optional)
+#' @description Computes the linear regression coefficient estimates (ridge-penalization and weights, optional)
 #'
 #' @param X matrix or data frame
 #' @param y matrix or data frame of response values
-#' @param lam optional tuning parameter for Ridge regularization term. Defaults to "lam = 0"
+#' @param lam optional tuning parameter for ridge regularization term. Defaults to "lam = 0"
 #' @param weights optional vector of weights for weighted least squares
 #' @param intercept add column of ones if not already present. Defaults to TRUE
 #' @param kernel use linear kernel to compute ridge regression coefficeients. Defaults to TRUE when p >> n
@@ -46,13 +46,13 @@ gradient_linear = function(betas, X, y, lam = 0, weights = NULL,
 #' @export
 #' @examples
 #'
-#' Weighted Ridge regression
+#' Weighted ridge regression
 #' library(dplyr)
 #' X = dplyr::select(iris, -c(Species, Sepal.Length))
 #' y = dplyr::select(iris, Sepal.Length)
 #' linearr(X, y, lam = 0.1, weights = rep(1:150))
 #'
-#' Kernelized Ridge regression
+#' Kernelized ridge regression
 #' linearr(X, y, lam = 0.1, kernel = T)
 
 

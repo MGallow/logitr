@@ -4,7 +4,7 @@
 \alias{logisticr}
 \title{Logistic Regression}
 \usage{
-logisticr(X, y, lam = 0, alpha = 1.5, penalty = "None",
+logisticr(X, y, lam = 0, alpha = 1.5, penalty = "none",
   intercept = TRUE, method = "IRLS", tol = 10^(-5), maxit = 10^(5),
   vec = NULL)
 }
@@ -13,11 +13,11 @@ logisticr(X, y, lam = 0, alpha = 1.5, penalty = "None",
 
 \item{y}{matrix or vector of response values 0,1}
 
-\item{lam}{optional tuning parameter for Ridge regularization term. Defaults to `lam = 0`}
+\item{lam}{optional tuning parameter for ridge regularization term. Defaults to `lam = 0`}
 
-\item{alpha}{optional tuning parameter for Bridge regularization term. Defaults to 'alpha = 1.5'}
+\item{alpha}{optional tuning parameter for bridge regularization term. Defaults to 'alpha = 1.5'}
 
-\item{penalty}{choose from c('None', 'Ridge', 'Bridge'). Defaults to 'None'}
+\item{penalty}{choose from c('none', 'ridge', 'bridge'). Defaults to 'none'}
 
 \item{intercept}{Defaults to TRUE}
 
@@ -30,16 +30,27 @@ logisticr(X, y, lam = 0, alpha = 1.5, penalty = "None",
 \item{vec}{optional vector to specify which coefficients will be penalized}
 }
 \value{
-returns the coefficient estimates
+returns beta estimates (includes intercept), total iterations, and gradients.
 }
 \description{
-Computes the coefficient estimates for logistic regression. Ridge regularization penalty optional.
+Computes the coefficient estimates for logistic regression. ridge regularization and bridge regularization optional.
 }
 \examples{
+Logistic Regression
 library(dplyr)
 X = dplyr::select(iris, -Species)
 y = dplyr::select(iris, Species)
 y$Species = ifelse(y$Species == 'setosa', 1, 0)
-logisticr(X, y, lam = 0.1)
+logisticr(X, y)
+
+ridge Logistic Regression with IRLS
+logistir(X, y, lam = 0.1, penalty = 'ridge')
+
+ridge Logistic Regression with MM
+logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
+
+bridge Logistic Regression
+(Defaults to MM -- IRLS will return error)
+logisticr(X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge')
 }
 

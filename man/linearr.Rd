@@ -4,19 +4,16 @@
 \alias{linearr}
 \title{Linear}
 \usage{
-linearr(X, y, lam = 0, weights = NULL, penalty = "None",
-  intercept = TRUE, kernel = FALSE)
+linearr(X, y, lam = 0, weights = NULL, intercept = TRUE, kernel = FALSE)
 }
 \arguments{
 \item{X}{matrix or data frame}
 
 \item{y}{matrix or data frame of response values}
 
-\item{lam}{optional tuning parameter for Ridge regularization term. Defaults to "lam = 0"}
+\item{lam}{optional tuning parameter for ridge regularization term. Defaults to "lam = 0"}
 
 \item{weights}{optional vector of weights for weighted least squares}
-
-\item{penalty}{choose from c("None", "Ridge"). Defaults to "None"}
 
 \item{intercept}{add column of ones if not already present. Defaults to TRUE}
 
@@ -26,12 +23,17 @@ linearr(X, y, lam = 0, weights = NULL, penalty = "None",
 returns the coefficient estimates
 }
 \description{
-Computes the linear regression coefficient estimates (Ridge-penalization and weights, optional)
+Computes the linear regression coefficient estimates (ridge-penalization and weights, optional)
 }
 \examples{
+
+Weighted ridge regression
 library(dplyr)
 X = dplyr::select(iris, -c(Species, Sepal.Length))
 y = dplyr::select(iris, Sepal.Length)
-linear(X, y, lam = 0.1, weights = rep(1, 150))
+linearr(X, y, lam = 0.1, weights = rep(1:150))
+
+Kernelized ridge regression
+linearr(X, y, lam = 0.1, kernel = T)
 }
 

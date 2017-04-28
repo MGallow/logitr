@@ -4,8 +4,7 @@
 \alias{IRLS}
 \title{Iterative Re-Weighted Least Squares}
 \usage{
-IRLS(X, y, lam = 0, penalty = "None", intercept = TRUE, tol = 10^(-5),
-  maxit = 1e+05, vec)
+IRLS(X, y, lam = 0, intercept = TRUE, tol = 10^(-5), maxit = 1e+05, vec)
 }
 \arguments{
 \item{X}{matrix or data frame}
@@ -13,8 +12,6 @@ IRLS(X, y, lam = 0, penalty = "None", intercept = TRUE, tol = 10^(-5),
 \item{y}{matrix or vector of response 0,1}
 
 \item{lam}{tuning parameter for regularization term}
-
-\item{penalty}{Choose from c('None', 'Ridge'). Defaults to 'None'}
 
 \item{intercept}{Defaults to TRUE}
 
@@ -28,7 +25,7 @@ IRLS(X, y, lam = 0, penalty = "None", intercept = TRUE, tol = 10^(-5),
 returns beta estimates (includes intercept), total iterations, and gradients.
 }
 \description{
-Computes the logistic regression coefficient estimates using the iterative re-weighted least squares (IRLS) algorithm. This function is to be used with the 'logistic' function.
+Computes the logistic regression coefficient estimates using the iterative re-weighted least squares (IRLS) algorithm. This function is to be used with the 'logisticr' function.
 }
 \examples{
 IRLS(X, y, n.list = c(rep(1, n)), lam = 0.1, alpha = 1.5)

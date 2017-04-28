@@ -4,8 +4,7 @@
 \alias{gradient_linear}
 \title{Gradient of Linear Regression}
 \usage{
-gradient_linear(betas, X, y, lam = 0, weights = NULL, penalty = "None",
-  vec)
+gradient_linear(betas, X, y, lam = 0, weights = NULL, vec)
 }
 \arguments{
 \item{betas}{beta estimates (includes intercept)}
@@ -14,11 +13,9 @@ gradient_linear(betas, X, y, lam = 0, weights = NULL, penalty = "None",
 
 \item{y}{response vector of 0,1}
 
-\item{lam}{tuning parameter for regularization term}
+\item{lam}{tuning parameter for ridge regularization term}
 
 \item{weights}{option vector of weights for weighted least squares}
-
-\item{penalty}{choose from c('None', 'Ridge'). Defaults to 'None'}
 
 \item{vec}{vector to specify which coefficients will be penalized}
 }
@@ -26,9 +23,10 @@ gradient_linear(betas, X, y, lam = 0, weights = NULL, penalty = "None",
 returns the gradient
 }
 \description{
-Computes the gradient of linear regression (optional Ridge regularization term). This function is to be used with the 'Linearr' function.
+Computes the gradient of linear regression (optional ridge regularization term). This function is to be used with the 'Linearr' function.
 }
 \examples{
-gradient_linear(betas, X, y, lam = 0.1, penalty = 'Ridge')
+
+gradient_linear(betas, X, y, lam = 0.1)
 }
 
