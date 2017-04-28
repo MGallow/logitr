@@ -1,67 +1,110 @@
 ## Matt Galloway
 
 
+##------------------------------------------------------------------------------------
+
+
+#' @title Gradient of Linear Regression
+#' @description Computes the gradient of linear regression (optional Ridge regularization term). This function is to be used with the 'Linearr' function.
+#'
+#' @param betas beta estimates (includes intercept)
+#' @param X matrix or data frame
+#' @param y response vector of 0,1
+#' @param lam tuning parameter for Ridge regularization term
+#' @param weights option vector of weights for weighted least squares
+#' @param vec vector to specify which coefficients will be penalized
+#' @return returns the gradient
+#' @examples
+#'
+#' gradient_linear(betas, X, y, lam = 0.1)
+
+gradient_linear = function(betas, X, y, lam = 0, weights = NULL,
+                             vec) {
+
+  # gradient for beta
+  -t(X) %*% diag(weights) %*% y + t(X) %*% diag(weights) %*% X %*% betas + lam * vec *
+    betas
+
+}
+
+
+
+##--------------------------------------------------------------------------------------------
+
+
+
 #' @title Linear
-#' @description Computes the linear regression coefficient estimates (L2-penalization and weights, optional)
+#' @description Computes the linear regression coefficient estimates (Ridge-penalization and weights, optional)
 #'
 #' @param X matrix or data frame
 #' @param y matrix or data frame of response values
-#' @param lam optional tuning parameter for L2 regularization term. Defaults to "lam = 0"
-#' @param vec optional vector to specify which coefficients will be penalized
+#' @param lam optional tuning parameter for Ridge regularization term. Defaults to "lam = 0"
 #' @param weights optional vector of weights for weighted least squares
-#' @param penalty choose from c("None", "L2"). Defaults to "None"
 #' @param intercept add column of ones if not already present. Defaults to TRUE
+#' @param kernel use linear kernel to compute ridge regression coefficeients. Defaults to TRUE when p >> n
 #' @return returns the coefficient estimates
 #' @export
 #' @examples
+#'
+#' Weighted Ridge regression
 #' library(dplyr)
 #' X = dplyr::select(iris, -c(Species, Sepal.Length))
 #' y = dplyr::select(iris, Sepal.Length)
-#' linear(X, y, lam = 0.1, weights = rep(1, 150))
+#' linearr(X, y, lam = 0.1, weights = rep(1:150))
+#'
+#' Kernelized Ridge regression
+#' linearr(X, y, lam = 0.1, kernel = T)
 
 
 
-linearr = function(X, y, lam = 0, weights = NULL, penalty = "None", intercept = TRUE, vec = NULL) {
+linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE, kernel = FALSE) {
 
   #checks
   n = dim(X)[1]
-  if (is.null(vec)){vec = 1}
+  p = dim(X)[2]
   if (is.null(weights)){weights = rep(1, n)}
   if (length(weights) != n) stop("weights must be length ", n)
   if (length(lam) > 1) stop("lam must be a scalar!")
   if (lam < 0) stop("lam must be nonnegative!")
-  if (lam > 0) print("using L2 penalty!")
-  if (penalty %in% c("None", "L2") == FALSE)
-    stop("incorrect penalty!")
-  if ((penalty != "None") & (lam == 0)) stop("please specify lam!")
+  if ((kernel == TRUE) & (lam == 0)) stop("must specify lam to use kernel!")
+
+
+  #initialization
+  X = as.matrix(X)
+  y = as.matrix(y)
   if (intercept == TRUE){
-    #if no first column of ones, then add it
-    if (all(X[, 1] != rep(1, n))){
-      X = cbind(1, X)
+    #if first column of ones, then remove it
+    if (all(X[, 1] == rep(1, n))){
+      X = X[, -1]
     }
-    #do not penalize intercept, if not specified
-    if (vec == 1){
-      p = dim(X)[2]
-      vec = c(0, rep(1, p - 1))
-    }
+
+    #center the data
+    X_bar = (as.matrix(t(weights)) %*% X)/sum(weights)
+    y_bar = sum(weights*y)/sum(weights)
+
+    X = X - rep(1, n) %*% X_bar
+    y = y - y_bar
+    s = as.numeric(t(X^2) %*% weights)
+
   }
 
   W = diag(weights)
-  X = sqrt(W) %*% as.matrix(X)
-  y = sqrt(W) %*% as.matrix(y)
+  X = sqrt(W) %*% X
+  y = sqrt(W) %*% y
+
 
   #if p > n, linear kernel ridge regression
-  p = dim(X)[2]
-  if(p > n){
+  if((p > n) | (kernel == TRUE)){
 
     # SVD
     svd = svd(X)
 
     # adjust d vector for regularization and diagonalize
-    d_adj = diag(1/(svd$d^2 + lam*vec))
+    d_adj = diag(1/(svd$d^2 + lam))
 
     # calculate beta estimates
     betas = t(X) %*% svd$u %*% d_adj %*% t(svd$u) %*% y
+    rownames(betas) = NULL
 
   }
 
@@ -72,10 +115,21 @@ linearr = function(X, y, lam = 0, weights = NULL, penalty = "None", intercept = 
     svd = svd(X)
 
     # adjust d vector for regularization and diagonalize
-    d_adj = diag(svd$d/(svd$d^2 + lam*vec))
+    d_adj = diag(svd$d/(svd$d^2 + lam))
 
     # calculate beta estimates
     betas = svd$v %*% d_adj %*% t(svd$u) %*% y
+    rownames(betas) = NULL
+
+  }
+
+  #add intercept, if needed
+  if (intercept == TRUE){
+
+    #calculate intercept
+    b1 = y_bar - X_bar %*% betas
+    rownames(b1) = c("intercept")
+    betas = rbind(b1, betas)
 
   }
 

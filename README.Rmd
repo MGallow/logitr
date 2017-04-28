@@ -14,10 +14,10 @@ See [vignette](https://htmlpreview.github.io/?https://github.com/MGallow/logitr/
 
 ## Overview
 
-`logitr` is a personal R package that I have created for organizational/convenience purposes. A (possibly incomplete) list of functions contained in the package can be found below:
+`logitr` is an R package for logistic regression and ridge-penalized logistic regression. A (possibly incomplete) list of functions contained in the package can be found below:
 
 * `logisticr()` computes the coefficient estimate for logistic regression. L2-penalization optional.
-* `linearr()` computes the coefficient estimates for linear regression. L2-penalization and weighted regression, optional.
+* `linearr()` computes the coefficient estimates for linear regression. L2-penalization and weighted linear regression, optional.
 
 
 

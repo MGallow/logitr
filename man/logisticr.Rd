@@ -4,17 +4,20 @@
 \alias{logisticr}
 \title{Logistic Regression}
 \usage{
-logisticr(X, y, lam = 0, penalty = "None", intercept = TRUE,
-  method = "IRLS", tol = 10^(-5), maxit = 10^(5), vec = NULL)
+logisticr(X, y, lam = 0, alpha = 1.5, penalty = "None",
+  intercept = TRUE, method = "IRLS", tol = 10^(-5), maxit = 10^(5),
+  vec = NULL)
 }
 \arguments{
 \item{X}{matrix or data frame}
 
 \item{y}{matrix or vector of response values 0,1}
 
-\item{lam}{optional tuning parameter for L2 regularization term. Defaults to `lam = 0`}
+\item{lam}{optional tuning parameter for Ridge regularization term. Defaults to `lam = 0`}
 
-\item{penalty}{choose from c('None', 'L2'). Defaults to 'None'}
+\item{alpha}{optional tuning parameter for Bridge regularization term. Defaults to 'alpha = 1.5'}
+
+\item{penalty}{choose from c('None', 'Ridge', 'Bridge'). Defaults to 'None'}
 
 \item{intercept}{Defaults to TRUE}
 
@@ -30,7 +33,7 @@ logisticr(X, y, lam = 0, penalty = "None", intercept = TRUE,
 returns the coefficient estimates
 }
 \description{
-Computes the coefficient estimates for logistic regression. L2 regularization penalty optional.
+Computes the coefficient estimates for logistic regression. Ridge regularization penalty optional.
 }
 \examples{
 library(dplyr)

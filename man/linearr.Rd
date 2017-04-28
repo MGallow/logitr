@@ -5,28 +5,28 @@
 \title{Linear}
 \usage{
 linearr(X, y, lam = 0, weights = NULL, penalty = "None",
-  intercept = TRUE, vec = NULL)
+  intercept = TRUE, kernel = FALSE)
 }
 \arguments{
 \item{X}{matrix or data frame}
 
 \item{y}{matrix or data frame of response values}
 
-\item{lam}{optional tuning parameter for L2 regularization term. Defaults to "lam = 0"}
+\item{lam}{optional tuning parameter for Ridge regularization term. Defaults to "lam = 0"}
 
 \item{weights}{optional vector of weights for weighted least squares}
 
-\item{penalty}{choose from c("None", "L2"). Defaults to "None"}
+\item{penalty}{choose from c("None", "Ridge"). Defaults to "None"}
 
 \item{intercept}{add column of ones if not already present. Defaults to TRUE}
 
-\item{vec}{optional vector to specify which coefficients will be penalized}
+\item{kernel}{use linear kernel to compute ridge regression coefficeients. Defaults to TRUE when p >> n}
 }
 \value{
 returns the coefficient estimates
 }
 \description{
-Computes the linear regression coefficient estimates (L2-penalization and weights, optional)
+Computes the linear regression coefficient estimates (Ridge-penalization and weights, optional)
 }
 \examples{
 library(dplyr)

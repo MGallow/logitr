@@ -22,38 +22,24 @@ logitr = function(u) {
 ##------------------------------------------------------------------------------------
 
 
-#' @title Gradient of IRLS Logistic Regression
-#' @description Computes the gradient of logistic regression. We use this to determine if the KKT conditions are satisfied. This function is to be used with the 'IRLS' function.
+#' @title Gradient of Logistic Regression
+#' @description Computes the gradient of logistic regression (optional Ridge regularization term). We use this to determine if the KKT conditions are satisfied. This function is to be used with the 'IRLS' function.
 #'
 #' @param betas beta estimates (includes intercept)
 #' @param X matrix or data frame
 #' @param y response vector of 0,1
-#' @param lam tuning parameter for regularization term
+#' @param lam tuning parameter for Ridge regularization term
 #' @param vec vector to specify which coefficients will be penalized
-#' @param weights vector of weights for IRLS
-#' @param penalty choose from c('None', 'L2'). Defaults to 'None'
 #' @return returns the gradient
 #' @examples
-#' gradient_IRLS_logistic(betas, X, y, lam = 0.1, penalty = 'L2')
+#' gradient_logistic(betas, X, y, lam = 0.1, penalty = 'Ridge')
 
-## NOT RIGHT?!!?!?!!?
-gradient_IRLS_logistic = function(betas, X, y, lam = 0,
-    weights, penalty = "None", vec) {
-
-    # checks
-    n = dim(X)[1]
-    if (is.null(vec)) {
-        vec = rep(1, n)
-    }
-    if (is.null(weights)) {
-        weights = rep(1, n)
-    }
-    if (length(weights) != n)
-        stop("weights must be length ", n)
+gradient_logistic = function(betas, X, y, lam = 0,
+    vec) {
 
     # gradient for beta
-    t(X) %*% diag(weights) %*% X %*% betas - t(X) %*% diag(weights) %*%
-        y + lam * matrix(vec)
+    t(X) %*% (logitr(X %*% betas) - y) + lam * as.matrix(vec) *
+        betas
 
 }
 
@@ -63,13 +49,12 @@ gradient_IRLS_logistic = function(betas, X, y, lam = 0,
 
 
 #' @title Iterative Re-Weighted Least Squares
-#' @description Computes the logistic regression coefficient estimates using the iterative re-weighted least squares (IRLS) algorithm. This function is to be used with the 'logistic' function.
+#' @description Computes the logistic regression coefficient estimates using the iterative re-weighted least squares (IRLS) algorithm. This function is to be used with the 'logisticr' function.
 #'
 #' @param X matrix or data frame
 #' @param y matrix or vector of response 0,1
 #' @param lam tuning parameter for regularization term
 #' @param vec optional vector to specify which coefficients will be penalized
-#' @param penalty Choose from c('None', 'L2'). Defaults to 'None'
 #' @param intercept Defaults to TRUE
 #' @param tol tolerance - used to determine algorithm convergence
 #' @param maxit maximum iterations
@@ -80,38 +65,36 @@ gradient_IRLS_logistic = function(betas, X, y, lam = 0,
 
 # calculates the coefficient estimates for logistic
 # regression (IRLS)
-IRLS = function(X, y, lam = 0, penalty = "None", intercept = TRUE,
-    tol = 10^(-5), maxit = 1e+05, vec = NULL) {
+IRLS = function(X, y, lam = 0, intercept = TRUE,
+    tol = 10^(-5), maxit = 1e+05, vec) {
 
     # initialize
     n = dim(X)[1]
     p = dim(X)[2]
     X = as.matrix(X)
     y = as.matrix(y)
-    betas = as.matrix(rep(1, p))
-    weights = rep(1, n)
+    betas = as.matrix(rep(0.1, p))
+    weights = rep(1, n)/n
     iteration = 1
-    grads = gradient_IRLS_logistic(betas, X, y, lam, weights,
-        penalty, vec)
+    grads = gradient_logistic(betas, X, y, lam,
+        vec)
 
     # IRLS algorithm
     while ((iteration < maxit) & (max(abs(grads)) > tol)) {
 
         # update working data
         Xb = X %*% betas
-        p = logitr(Xb)
-        weights = as.numeric(p * (1 - p))
-        z = (y - p)/weights + Xb
+        P = logitr(Xb)
+        weights = as.numeric(P * (1 - P))
+        z = (y - P)/weights + Xb
 
         # calculate new betas
-        betas = linearr(X, z, lam, weights, penalty, intercept,
-            vec)$coefficients
+        betas = linearr(X, z, lam, weights, penalty, intercept)$coefficients
 
         # calculate updated gradients
-        grads = gradient_IRLS_logistic(betas, X, y, lam,
-            weights, penalty, vec)
+        grads = gradient_logistic(betas, X, y, lam,
+            vec)
         iteration = iteration + 1
-
     }
 
     returns = list(coefficients = betas, total.iterations = iteration,
