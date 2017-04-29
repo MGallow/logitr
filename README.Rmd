@@ -18,6 +18,8 @@ See [vignette](https://htmlpreview.github.io/?https://github.com/MGallow/logitr/
 
 * `logisticr()` computes the coefficient estimate for logistic regression. L2-penalization optional.
 * `linearr()` computes the coefficient estimates for linear regression. L2-penalization and weighted linear regression, optional.
+* `predict.logisticr()`
+* `predict.linearr()`
 
 
 

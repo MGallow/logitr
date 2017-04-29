@@ -4,8 +4,8 @@
 \alias{MM}
 \title{Majorize-Minimization function}
 \usage{
-MM(X, y, lam = 0, alpha = 1.5, gamma = 1, tol = 10^(-5),
-  maxit = 1e+05, vec = NULL)
+MM(X, y, lam = 0, alpha = 1.5, gamma = 1, intercept = TRUE,
+  tol = 10^(-5), maxit = 1e+05, vec = NULL)
 }
 \arguments{
 \item{X}{matrix or data frame}
@@ -17,6 +17,8 @@ MM(X, y, lam = 0, alpha = 1.5, gamma = 1, tol = 10^(-5),
 \item{alpha}{optional tuning parameter for bridge regularization term. Defaults to 'alpha = 1.5'}
 
 \item{gamma}{gamma indicator function. 'gamma = 1' for ridge, 'gamma = 0' for bridge. Defaults to 'gamma = 1'}
+
+\item{intercept}{defaults to TRUE}
 
 \item{tol}{tolerance - used to determine algorithm convergence}
 

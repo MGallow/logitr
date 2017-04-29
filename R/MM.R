@@ -40,6 +40,7 @@ gradient_MM_logistic = function(betas, X, y, lam = 0, alpha = 1.5,
 #' @param alpha optional tuning parameter for bridge regularization term. Defaults to 'alpha = 1.5'
 #' @param vec optional vector to specify which coefficients will be penalized
 #' @param gamma gamma indicator function. 'gamma = 1' for ridge, 'gamma = 0' for bridge. Defaults to 'gamma = 1'
+#' @param intercept defaults to TRUE
 #' @param tol tolerance - used to determine algorithm convergence
 #' @param maxit maximum iterations
 #' @return returns beta estimates (includes intercept), total iterations, and gradients.
@@ -49,8 +50,8 @@ gradient_MM_logistic = function(betas, X, y, lam = 0, alpha = 1.5,
 
 # calculates the coefficient estimates for logistic
 # regression (MM)
-MM = function(X, y, lam = 0, alpha = 1.5, gamma = 1, tol = 10^(-5), 
-    maxit = 1e+05, vec = NULL) {
+MM = function(X, y, lam = 0, alpha = 1.5, gamma = 1, intercept = TRUE, 
+    tol = 10^(-5), maxit = 1e+05, vec = NULL) {
     
     # initialize
     n = dim(X)[1]

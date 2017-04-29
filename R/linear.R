@@ -21,6 +21,9 @@
 gradient_linear = function(betas, X, y, lam = 0, weights = NULL,
                              vec) {
 
+  # add intercept, if needed
+  if (ncol(X) != nrow(betas)){X = cbind(1, X)}
+
   # gradient for beta
   -t(X) %*% diag(weights) %*% y + t(X) %*% diag(weights) %*% X %*% betas + lam * vec *
     betas
@@ -70,40 +73,39 @@ linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE, kernel = FAL
 
 
   #initialization
-  X = as.matrix(X)
-  y = as.matrix(y)
+  X. = as.matrix(X)
+  y. = as.matrix(y)
   if (intercept == TRUE){
     #if first column of ones, then remove it
-    if (all(X[, 1] == rep(1, n))){
-      X = X[, -1]
+    if (all(X.[, 1] == rep(1, n))){
+      X. = X.[, -1]
     }
 
     #center the data
-    X_bar = (as.matrix(t(weights)) %*% X)/sum(weights)
-    y_bar = sum(weights*y)/sum(weights)
+    X_bar = (as.matrix(t(weights)) %*% X.)/sum(weights)
+    y_bar = sum(weights*y.)/sum(weights)
 
-    X = X - rep(1, n) %*% X_bar
-    y = y - y_bar
-    s = as.numeric(t(X^2) %*% weights)
+    X. = X. - rep(1, n) %*% X_bar
+    y. = y. - y_bar
 
   }
 
   W = diag(weights)
-  X = sqrt(W) %*% X
-  y = sqrt(W) %*% y
+  X. = sqrt(W) %*% X.
+  y. = sqrt(W) %*% y.
 
 
   #if p > n, linear kernel ridge regression
   if((p > n) | (kernel == TRUE)){
 
     # SVD
-    svd = svd(X)
+    svd = svd(X.)
 
     # adjust d vector for regularization and diagonalize
     d_adj = diag(1/(svd$d^2 + lam))
 
     # calculate beta estimates
-    betas = t(X) %*% svd$u %*% d_adj %*% t(svd$u) %*% y
+    betas = t(X.) %*% svd$u %*% d_adj %*% t(svd$u) %*% y.
     rownames(betas) = NULL
 
   }
@@ -112,13 +114,13 @@ linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE, kernel = FAL
   else {
 
     # SVD
-    svd = svd(X)
+    svd = svd(X.)
 
     # adjust d vector for regularization and diagonalize
     d_adj = diag(svd$d/(svd$d^2 + lam))
 
     # calculate beta estimates
-    betas = svd$v %*% d_adj %*% t(svd$u) %*% y
+    betas = svd$v %*% d_adj %*% t(svd$u) %*% y.
     rownames(betas) = NULL
 
   }
@@ -132,7 +134,6 @@ linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE, kernel = FAL
     betas = rbind(b1, betas)
 
   }
-
 
   returns = list(coefficients = betas)
   return(returns)

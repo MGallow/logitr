@@ -96,14 +96,19 @@ logisticr = function(X, y, lam = 0, alpha = 1.5, penalty = "none",
         gamma = ifelse(penalty == "bridge", 0, 1)
         
         # execute MM script
-        logistic = MM(X, y, lam, alpha, gamma, tol, maxit, 
-            vec)
+        logistic = MM(X, y, lam, alpha, gamma, intercept, 
+            tol, maxit, vec)
         if (logistic$total.iterations == maxit) 
             print("Algorithm did not converge...")
         
     }
     
+    
+    # generate fitted values
+    fit = predict.logisticr(logistic, as.matrix(X), y)
+    
     returns = list(coefficients = logistic$coefficients, 
+        MSE = fit$MSE, misclassification = fit$misclassification, 
         total.iterations = logistic$total.iterations, gradient = logistic$gradient)
     return(returns)
     
