@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## DOCUMENTATION IN PROGRESS***
 
-See [vignette](https://htmlpreview.github.io/?https://github.com/MGallow/logitr/blob/master/Vignette.html).
+See [vignette](https://htmlpreview.github.io/?https://github.com/MGallow/logitr/blob/master/Vignette.html) or [manual](https://htmlpreview.github.io/?https://github.com/MGallow/logitr/blob/master/logitr.pdf).
 
 ## Overview
 
