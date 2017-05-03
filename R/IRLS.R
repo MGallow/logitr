@@ -51,6 +51,7 @@ gradient_IRLS_logistic = function(betas, X, y, lam = 0,
 #' @title Iterative Re-Weighted Least Squares
 #' @description Computes the logistic regression coefficient estimates using the iterative re-weighted least squares (IRLS) algorithm. This function is to be used with the 'logisticr' function.
 #'
+#' @param betas beta estimates (includes intercept)
 #' @param X matrix or data frame
 #' @param y matrix or vector of response 0,1
 #' @param lam tuning parameter for regularization term
@@ -73,8 +74,8 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
     p = dim(X)[2]
     X = as.matrix(X)
     y = as.matrix(y)
-    betas = as.matrix(rep(0.1, p))
-    weights = rep(1, n)/n
+    betas = as.matrix(rep(0.1, p))/n
+    weights = rep(1, n)
     iteration = 1
     grads = gradient_IRLS_logistic(betas, X, y, lam, vec)
     
@@ -88,11 +89,14 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
         z = (y - P)/weights + Xb
         
         # calculate new betas
-        betas = linearr(X, z, lam, weights, intercept, kernel = FALSE)$coefficients
+        betas = linearr(X = X, y = z, lam = 0.1, weights = weights, 
+            intercept = intercept, kernel = FALSE)$coefficients
         
         # calculate updated gradients
         grads = gradient_IRLS_logistic(betas, X, y, lam, 
             vec)
+        
+        
         iteration = iteration + 1
     }
     

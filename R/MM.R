@@ -59,7 +59,7 @@ MM = function(X, y, lam = 0, alpha = 1.5, gamma = 1, intercept = TRUE,
     X = as.matrix(X)
     y = as.matrix(y)
     delta = 10^(-5)
-    betas = as.matrix(rep(0.1, p))
+    betas = as.matrix(rep(0.1, p))/n
     iteration = 1
     grads = gradient_MM_logistic(betas, X, y, lam, alpha, 
         gamma, vec)

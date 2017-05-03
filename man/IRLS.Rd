@@ -20,6 +20,8 @@ IRLS(X, y, lam = 0, intercept = TRUE, tol = 10^(-5), maxit = 1e+05, vec)
 \item{maxit}{maximum iterations}
 
 \item{vec}{optional vector to specify which coefficients will be penalized}
+
+\item{betas}{beta estimates (includes intercept)}
 }
 \value{
 returns beta estimates (includes intercept), total iterations, and gradients.

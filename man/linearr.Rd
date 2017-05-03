@@ -11,7 +11,7 @@ linearr(X, y, lam = 0, weights = NULL, intercept = TRUE, kernel = FALSE)
 
 \item{y}{matrix or data frame of response values}
 
-\item{lam}{optional tuning parameter for ridge regularization term. Defaults to "lam = 0"}
+\item{lam}{optional tuning parameter for ridge regularization term. Defaults to 'lam = 0'}
 
 \item{weights}{optional vector of weights for weighted least squares}
 

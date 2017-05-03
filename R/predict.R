@@ -44,6 +44,7 @@ predict.logisticr = function(object, X, y = NULL) {
     
     # if y, return MSE, misclassification
     MSE = NULL
+    Log.loss = NULL
     misclassification = NULL
     if (!is.null(y)) {
         
@@ -57,7 +58,7 @@ predict.logisticr = function(object, X, y = NULL) {
     
     
     returns = list(fitted.values = fitted, class = class, 
-        MSE = MSE, misclassification = misclassification)
+        MSE = MSE, Log.loss = Log.loss, misclassification = misclassification)
     return(returns)
 }
 
