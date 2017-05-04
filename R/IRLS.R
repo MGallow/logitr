@@ -45,6 +45,30 @@ gradient_IRLS_logistic = function(betas, X, y, lam = 0,
 
 
 
+##------------------------------------------------------------------------------------
+
+
+#' @title Loss of Logistic Regression
+#' @description Computes the loss of logistic regression (optional ridge regularization term). This is used for 'safe' Newton's method. This function is to be used with the 'IRLS' function.
+#'
+#' @param betas beta estimates (includes intercept)
+#' @param X matrix or data frame
+#' @param y response vector of 0,1
+#' @param lam tuning parameter for ridge regularization term
+#' @param vec vector to specify which coefficients will be penalized
+#' @return returns the gradient
+#'
+
+loss_logistic = function(betas, X, y, lam = 0, vec) {
+    
+    # loss
+    sum(log(1 + exp(X %*% betas))) - sum(y * (X %*% betas)) + 
+        lam * t(betas * vec) %*% betas
+    
+}
+
+
+
 ##--------------------------------------------------------------------------------------------
 
 
@@ -77,6 +101,8 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
     betas = as.matrix(rep(0.1, p))/n
     weights = rep(1, n)
     iteration = 1
+    checks = 0
+    loss = loss_logistic(betas, X, y, lam, vec)
     grads = gradient_IRLS_logistic(betas, X, y, lam, vec)
     
     # IRLS algorithm
@@ -96,12 +122,25 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
         grads = gradient_IRLS_logistic(betas, X, y, lam, 
             vec)
         
+        # safety check
+        if (loss < loss_logistic(betas, X, y, lam, vec)) {
+            checks = checks + 1
+            b = qr.solve(t(X) %*% diag(weights) %*% X + 
+                diag(vec * lam), t(X) %*% (P - y) + lam * 
+                vec * old_betas)
+            betas = old_betas - b * 0.5
+            
+        }
+        
+        old_betas = betas
+        loss = loss_logistic(betas, X, y, lam, vec)
+        
         
         iteration = iteration + 1
     }
     
     returns = list(coefficients = betas, total.iterations = iteration, 
-        gradient = grads)
+        checks = checks, gradient = grads)
     return(returns)
 }
 

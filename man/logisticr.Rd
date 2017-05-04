@@ -33,7 +33,7 @@ logisticr(X, y, lam = 0, alpha = 1.5, penalty = "none",
 returns beta estimates (includes intercept), total iterations, and gradients.
 }
 \description{
-Computes the coefficient estimates for logistic regression. ridge regularization and bridge regularization optional. If samples size greater than 5,000 consider using `method = 'MM'`.
+Computes the coefficient estimates for logistic regression. ridge regularization and bridge regularization optional.
 }
 \examples{
 Logistic Regression
