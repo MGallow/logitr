@@ -8,6 +8,7 @@
 #' @param object 'logisticr' object or matrix of betas
 #' @param X matrix or data frame of (new) observations
 #' @param y optional, matrix or vector of response values 0,1
+#' @return predictions and loss metrics
 #' @export
 #' @examples
 #'
@@ -75,6 +76,7 @@ predict_logisticr = function(object, X, y = NULL) {
 #' @param object 'linearr' object or matrix of betas
 #' @param X matrix or data frame of (new) observations
 #' @param y optional, matrix or vector of response values
+#' @return predictions and loss metrics
 #' @export
 #' @examples
 #'

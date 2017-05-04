@@ -13,6 +13,9 @@ predict_linearr(object, X, y = NULL)
 
 \item{y}{optional, matrix or vector of response values}
 }
+\value{
+predictions and loss metrics
+}
 \description{
 Generates prediction for linear regression. Note that one can either input a 'linearr' object or a matrix of beta coefficients.
 }

@@ -13,6 +13,9 @@ predict_logisticr(object, X, y = NULL)
 
 \item{y}{optional, matrix or vector of response values 0,1}
 }
+\value{
+predictions and loss metrics
+}
 \description{
 Generates prediction for logistic regression. Note that one can either input a 'logisticr' object or a matrix of beta coefficients.
 }

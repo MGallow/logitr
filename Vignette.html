@@ -12,7 +12,7 @@
 
 <meta name="author" content="Matt Galloway" />
 
-<meta name="date" content="2017-04-16" />
+<meta name="date" content="2017-05-04" />
 
 <title>logitr</title>
 
@@ -70,27 +70,25 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">logitr</h1>
 <h4 class="author"><em>Matt Galloway</em></h4>
-<h4 class="date"><em>2017-04-16</em></h4>
+<h4 class="date"><em>2017-05-04</em></h4>
 
 
 <div id="TOC">
 <ul>
-<li><a href="#documentation-in-progress-longer-version-of-readme">DOCUMENTATION IN PROGRESS (longer version of README)***</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#usage">Usage</a></li>
 </ul>
 </div>
 
-<div id="documentation-in-progress-longer-version-of-readme" class="section level2">
-<h2>DOCUMENTATION IN PROGRESS (longer version of README)***</h2>
-</div>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p><code>logitr</code> is a personal R package that I have created for organizational/convenience purposes. A (possibly incomplete) list of functions contained in the package can be found below:</p>
+<p><code>logitr</code> is an R package for linear and logistic regression with optional ridge and bridge regularization penalties. A (possibly incomplete) list of functions contained in the package can be found below:</p>
 <ul>
-<li><code>logistic()</code> calculate coefficient estimates for ridge (L2)-penalized linear regression</li>
-<li><code>logistic_bridge()</code> is a bi-section search algorithm.</li>
+<li><code>logisticr()</code> computes the coefficient estimates for logistic regression (ridge and bridge regularization optional)</li>
+<li><code>linearr()</code> computes the linear regression coefficient estimates (ridge regularization and weights optional)</li>
+<li><code>predict_logisticr()</code> generates predictions and loss metrics for logistic regression</li>
+<li><code>predict_linearr()</code> generates predictions and loss metric for linear regression</li>
 </ul>
 </div>
 <div id="installation" class="section level2">
@@ -104,7 +102,133 @@ devtools::<span class="kw">install_github</span>(<span class="st">&quot;MGallow/
 <h2>Usage</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(logitr)
 
-<span class="co">#IN PROGRESS</span></code></pre></div>
+<span class="co">#we will use the iris data set</span>
+X =<span class="st"> </span>dplyr::<span class="kw">select</span>(iris, -<span class="kw">c</span>(Species, Sepal.Length))
+y =<span class="st"> </span>dplyr::<span class="kw">select</span>(iris, Sepal.Length)
+y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr::<span class="kw">select</span>(iris, Species) ==<span class="st"> &quot;setosa&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>)
+
+<span class="co">#ridge regression</span>
+<span class="kw">linearr</span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>)</code></pre></div>
+<pre><code>## $coefficients
+##           Sepal.Length
+## intercept    1.8778524
+##              0.6462400
+##              0.7023063
+##             -0.5415988</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (IRLS)</span>
+<span class="kw">logisticr</span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>)</code></pre></div>
+<pre><code>## $coefficients
+##             Species
+## intercept  6.271222
+##            1.541615
+##           -3.640582
+##           -1.630140
+## 
+## $check
+## [1] 9
+## 
+## $MSE
+## [1] 5.14398e-05
+## 
+## $Log.loss
+## [1] 0.3960253
+## 
+## $misclassification
+## [1] 0
+## 
+## $total.iterations
+## [1] 16
+## 
+## $gradient
+##                   Species
+## 1            8.278927e-07
+## Sepal.Width  2.199962e-06
+## Petal.Length 3.542338e-06
+## Petal.Width  1.151503e-06</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (MM)</span>
+<span class="kw">logisticr</span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;MM&quot;</span>)</code></pre></div>
+<pre><code>## $coefficients
+##                [,1]
+## intercept  6.276226
+##            1.540818
+##           -3.641769
+##           -1.630502
+## 
+## $check
+## NULL
+## 
+## $MSE
+## [1] 5.134801e-05
+## 
+## $Log.loss
+## [1] 0.3956563
+## 
+## $misclassification
+## [1] 0
+## 
+## $total.iterations
+## [1] 5459
+## 
+## $gradient
+##                   Species
+## 1            1.831809e-06
+## Sepal.Width  5.390560e-06
+## Petal.Length 9.993386e-06
+## Petal.Width  3.516598e-06</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#bridge logistic regression (MM)</span>
+fit =<span class="st"> </span><span class="kw">logisticr</span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">alpha =</span> <span class="fl">1.2</span>, <span class="dt">penalty =</span> <span class="st">&quot;bridge&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;using MM algorithm...&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit</code></pre></div>
+<pre><code>## $coefficients
+##                 [,1]
+## intercept 13.0803079
+##            0.6170122
+##           -5.7168400
+##           -0.2300421
+## 
+## $check
+## NULL
+## 
+## $MSE
+## [1] 2.749702e-05
+## 
+## $Log.loss
+## [1] 0.1878654
+## 
+## $misclassification
+## [1] 0
+## 
+## $total.iterations
+## [1] 26021
+## 
+## $gradient
+##                   Species
+## 1            1.790043e-06
+## Sepal.Width  5.268013e-06
+## Petal.Length 9.997899e-06
+## Petal.Width  3.518574e-06</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#predict using bridge logistic regression estimates</span>
+<span class="kw">predict_logisticr</span>(fit, X[<span class="dv">1</span>:<span class="dv">3</span>,], y_class[<span class="dv">1</span>:<span class="dv">3</span>])</code></pre></div>
+<pre><code>## $fitted.values
+##        [,1]
+## 1 0.9992467
+## 2 0.9989747
+## 3 0.9994881
+## 
+## $class
+##   [,1]
+## 1    1
+## 2    1
+## 3    1
+## 
+## $MSE
+## [1] 6.269174e-07
+## 
+## $Log.loss
+## [1] 0.002291457
+## 
+## $misclassification
+## [1] 0</code></pre>
 </div>
 
 
