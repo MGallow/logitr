@@ -12,10 +12,10 @@
 #' @examples
 #'
 #' fitted = logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
-#' predict.logisticr(fitted, X)
+#' predict_logisticr(fitted, X)
 
 
-predict.logisticr = function(object, X, y = NULL) {
+predict_logisticr = function(object, X, y = NULL) {
     
     # checks
     X = as.matrix(X)
@@ -79,10 +79,10 @@ predict.logisticr = function(object, X, y = NULL) {
 #' @examples
 #'
 #' fitted = linearr(X, y, lam = 0.1)
-#' predict.linearr(fitted, X)
+#' predict_linearr(fitted, X)
 
 
-predict.linearr = function(object, X, y = NULL) {
+predict_linearr = function(object, X, y = NULL) {
     
     # checks
     X = as.matrix(X)

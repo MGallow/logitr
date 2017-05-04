@@ -107,7 +107,7 @@ logisticr = function(X, y, lam = 0, alpha = 1.5, penalty = "none",
     
     
     # generate fitted values
-    fit = predict.logisticr(logistic, as.matrix(X), y)
+    fit = predict_logisticr(logistic, as.matrix(X), y)
     
     returns = list(coefficients = logistic$coefficients, 
         check = logistic$checks, MSE = fit$MSE, Log.loss = fit$Log.loss, 
