@@ -53,32 +53,29 @@ logisticr(X, y_class, lam = 0.1, penalty = "ridge")
 
     ## $coefficients
     ##             Species
-    ## intercept  6.271222
-    ##            1.541615
-    ##           -3.640582
-    ##           -1.630140
-    ## 
-    ## $check
-    ## [1] 9
+    ## intercept  6.276283
+    ##            1.540809
+    ##           -3.641782
+    ##           -1.630507
     ## 
     ## $MSE
-    ## [1] 5.14398e-05
+    ## [1] 5.13471e-05
     ## 
     ## $Log.loss
-    ## [1] 0.3960253
+    ## [1] 0.3956525
     ## 
     ## $misclassification
     ## [1] 0
     ## 
     ## $total.iterations
-    ## [1] 16
+    ## [1] 11
     ## 
     ## $gradient
     ##                   Species
-    ## 1            8.278927e-07
-    ## Sepal.Width  2.199962e-06
-    ## Petal.Length 3.542338e-06
-    ## Petal.Width  1.151503e-06
+    ## 1            4.536556e-11
+    ## Sepal.Width  1.175443e-10
+    ## Petal.Length 1.671456e-10
+    ## Petal.Width  5.304082e-11
 
 ``` r
 #ridge logistic regression (MM)
@@ -91,9 +88,6 @@ logisticr(X, y_class, lam = 0.1, penalty = "ridge", method = "MM")
     ##            1.540818
     ##           -3.641769
     ##           -1.630502
-    ## 
-    ## $check
-    ## NULL
     ## 
     ## $MSE
     ## [1] 5.134801e-05
@@ -131,9 +125,6 @@ fit
     ##            0.6170122
     ##           -5.7168400
     ##           -0.2300421
-    ## 
-    ## $check
-    ## NULL
     ## 
     ## $MSE
     ## [1] 2.749702e-05
