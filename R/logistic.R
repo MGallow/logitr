@@ -110,9 +110,8 @@ logisticr = function(X, y, lam = 0, alpha = 1.5, penalty = "none",
     fit = predict_logisticr(logistic, as.matrix(X), y)
     
     returns = list(coefficients = logistic$coefficients, 
-        check = logistic$checks, MSE = fit$MSE, Log.loss = fit$Log.loss, 
-        misclassification = fit$misclassification, total.iterations = logistic$total.iterations, 
-        gradient = logistic$gradient)
+        MSE = fit$MSE, Log.loss = fit$Log.loss, misclassification = fit$misclassification, 
+        total.iterations = logistic$total.iterations, gradient = logistic$gradient)
     return(returns)
     
 }
