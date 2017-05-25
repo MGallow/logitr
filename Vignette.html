@@ -12,7 +12,7 @@
 
 <meta name="author" content="Matt Galloway" />
 
-<meta name="date" content="2017-05-05" />
+<meta name="date" content="2017-05-25" />
 
 <title>logitr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">logitr</h1>
 <h4 class="author"><em>Matt Galloway</em></h4>
-<h4 class="date"><em>2017-05-05</em></h4>
+<h4 class="date"><em>2017-05-25</em></h4>
 
 
 <div id="TOC">
@@ -211,6 +211,7 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 <p>Below you can find two snippets of code from the <code>logitr</code> package. The first snippet solves the weighted least squares problem. Note that this portion uses SVD decomposition which will not be discussed in this report. The second snippet is the code for IRLS.</p>
 
 <p><strong>Weighted least squares code snippet</strong>:</p>
+<p>Note this is not the actual code. The real code is written in c++.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#calculate the coefficient estimates for weighted least squares</span>
 linearr =<span class="st"> </span>function(X, y, <span class="dt">lam =</span> <span class="dv">0</span>, <span class="dt">weights =</span> <span class="ot">NULL</span>, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, 
     <span class="dt">kernel =</span> <span class="ot">FALSE</span>) {
@@ -249,6 +250,7 @@ linearr =<span class="st"> </span>function(X, y, <span class="dt">lam =</span> <
 }</code></pre></div>
 
 <p><strong>IRLS code snippet</strong>:</p>
+<p>Note this is not the actual code. The real code is written in c++.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculates the coefficient estimates for logistic</span>
 <span class="co"># regression (IRLS)</span>
 IRLS =<span class="st"> </span>function(X, y, <span class="dt">lam =</span> <span class="dv">0</span>, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, <span class="dt">tol =</span> <span class="dv">10</span>^(-<span class="dv">5</span>),
@@ -334,6 +336,7 @@ IRLS =<span class="st"> </span>function(X, y, <span class="dt">lam =</span> <spa
 <p>Below you can find a snippet of code for the MM function.</p>
 
 <p><strong>MM code snippet</strong>:</p>
+<p>Note this is not the actual code. The real code is written in c++.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculates the coefficient estimates for logistic</span>
 <span class="co"># regression (MM)</span>
 MM =<span class="st"> </span>function(X, y, <span class="dt">lam =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">1.5</span>, <span class="dt">gamma =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, 
@@ -387,7 +390,7 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr::<span cl
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (IRLS)</span>
 <span class="kw">logisticr</span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>)</code></pre></div>
 <pre><code>## $coefficients
-##             Species
+##                [,1]
 ## intercept  6.276283
 ##            1.540809
 ##           -3.641782
@@ -396,7 +399,7 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr::<span cl
 ## $MSE
 ## [1] 5.13471e-05
 ## 
-## $Log.loss
+## $log.loss
 ## [1] 0.3956525
 ## 
 ## $misclassification
@@ -406,11 +409,11 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr::<span cl
 ## [1] 11
 ## 
 ## $gradient
-##                   Species
-## 1            4.536556e-11
-## Sepal.Width  1.175443e-10
-## Petal.Length 1.671456e-10
-## Petal.Width  5.304082e-11</code></pre>
+##                   [,1]
+## intercept 4.536561e-11
+##           1.175446e-10
+##           1.671454e-10
+##           5.304043e-11</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (MM)</span>
 <span class="kw">logisticr</span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;MM&quot;</span>)</code></pre></div>
 <pre><code>## $coefficients
@@ -423,7 +426,7 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr::<span cl
 ## $MSE
 ## [1] 5.134801e-05
 ## 
-## $Log.loss
+## $log.loss
 ## [1] 0.3956563
 ## 
 ## $misclassification
@@ -433,11 +436,11 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr::<span cl
 ## [1] 5459
 ## 
 ## $gradient
-##                   Species
-## 1            1.831809e-06
-## Sepal.Width  5.390560e-06
-## Petal.Length 9.993386e-06
-## Petal.Width  3.516598e-06</code></pre>
+##                   [,1]
+## intercept 1.831808e-06
+##           5.390560e-06
+##           9.993386e-06
+##           3.516598e-06</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#bridge logistic regression (MM)</span>
 fit =<span class="st"> </span><span class="kw">logisticr</span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">alpha =</span> <span class="fl">1.2</span>, <span class="dt">penalty =</span> <span class="st">&quot;bridge&quot;</span>)</code></pre></div>
 <pre><code>## [1] &quot;using MM algorithm...&quot;</code></pre>
@@ -452,7 +455,7 @@ fit =<span class="st"> </span><span class="kw">logisticr</span>(X, y_class, <spa
 ## $MSE
 ## [1] 2.749702e-05
 ## 
-## $Log.loss
+## $log.loss
 ## [1] 0.1878654
 ## 
 ## $misclassification
@@ -462,29 +465,29 @@ fit =<span class="st"> </span><span class="kw">logisticr</span>(X, y_class, <spa
 ## [1] 26021
 ## 
 ## $gradient
-##                   Species
-## 1            1.790043e-06
-## Sepal.Width  5.268013e-06
-## Petal.Length 9.997899e-06
-## Petal.Width  3.518574e-06</code></pre>
+##                   [,1]
+## intercept 1.790042e-06
+##           5.268013e-06
+##           9.997899e-06
+##           3.518574e-06</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#predict using bridge logistic regression estimates</span>
 <span class="kw">predict_logisticr</span>(fit, X[<span class="dv">1</span>:<span class="dv">3</span>,], y_class[<span class="dv">1</span>:<span class="dv">3</span>])</code></pre></div>
 <pre><code>## $fitted.values
-##        [,1]
-## 1 0.9992467
-## 2 0.9989747
-## 3 0.9994881
+##           [,1]
+## [1,] 0.9992467
+## [2,] 0.9989747
+## [3,] 0.9994881
 ## 
 ## $class
-##   [,1]
-## 1    1
-## 2    1
-## 3    1
+##      [,1]
+## [1,]    1
+## [2,]    1
+## [3,]    1
 ## 
 ## $MSE
 ## [1] 6.269174e-07
 ## 
-## $Log.loss
+## $log.loss
 ## [1] 0.002291457
 ## 
 ## $misclassification
@@ -498,7 +501,7 @@ fit =<span class="st"> </span><span class="kw">logisticr</span>(X, y_class, <spa
 <p>Link : <a href="https://archive.ics.uci.edu/ml/datasets/HTRU2">HTRU2 Data</a> </p>
 <p>In the following code, we see that is only takes 0.2 seconds to compute our estimates using IRLS method and only 3.6 seconds to compute them using the MM algorithm.</p>
 
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;../HTRU_2.csv&quot;</span>, <span class="dt">header =</span> F)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;/Users/Matt/Documents/Grad School/Second Year/STAT 8054/HTRU_2.csv&quot;</span>, <span class="dt">header =</span> F)
 
 <span class="kw">dim</span>(data)</code></pre></div>
 <pre><code>## [1] 17898     9</code></pre>
@@ -523,16 +526,16 @@ y =<span class="st"> </span>dplyr::<span class="kw">select</span>(data, V9)
 <span class="co">#time IRLS</span>
 <span class="kw">timeit</span>(<span class="kw">logisticr</span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>))</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.265   0.031   0.297</code></pre>
+##   0.038   0.006   0.041</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#time MM</span>
 <span class="kw">timeit</span>(<span class="kw">logisticr</span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;MM&quot;</span>))</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   4.115   1.089   5.225</code></pre>
+##   0.943   0.038   0.964</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge regression using IRLS</span>
 fit =<span class="st"> </span><span class="kw">logisticr</span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>)
 fit</code></pre></div>
 <pre><code>## $coefficients
-##                     V9
+##                   [,1]
 ## intercept -8.918799296
 ##            0.029373816
 ##           -0.034879266
@@ -546,7 +549,7 @@ fit</code></pre></div>
 ## $MSE
 ## [1] 0.01715031
 ## 
-## $Log.loss
+## $log.loss
 ## [1] 1307.936
 ## 
 ## $misclassification
@@ -556,34 +559,34 @@ fit</code></pre></div>
 ## [1] 9
 ## 
 ## $gradient
-##              V9
-## 1  1.905876e-08
-## V1 2.106211e-06
-## V2 8.976102e-07
-## V3 5.419424e-09
-## V4 2.293671e-10
-## V5 6.767681e-08
-## V6 2.749831e-07
-## V7 2.794477e-07
-## V8 5.458740e-06</code></pre>
+##                   [,1]
+## intercept 1.904996e-08
+##           2.105113e-06
+##           8.971560e-07
+##           5.416822e-09
+##           2.332257e-10
+##           6.758361e-08
+##           2.745393e-07
+##           2.794070e-07
+##           5.458546e-06</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#predictions</span>
 <span class="kw">predict_logisticr</span>(fit, X[<span class="dv">1</span>:<span class="dv">3</span>,], y$V9[<span class="dv">1</span>:<span class="dv">3</span>])</code></pre></div>
 <pre><code>## $fitted.values
-##            V9
-## 1 0.001018225
-## 2 0.018336697
-## 3 0.009291594
+##             [,1]
+## [1,] 0.001018225
+## [2,] 0.018336697
+## [3,] 0.009291594
 ## 
 ## $class
-##   V9
-## 1  0
-## 2  0
-## 3  0
+##      [,1]
+## [1,]    0
+## [2,]    0
+## [3,]    0
 ## 
 ## $MSE
 ## [1] 0.0001412017
 ## 
-## $Log.loss
+## $log.loss
 ## [1] 0.02886067
 ## 
 ## $misclassification

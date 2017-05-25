@@ -176,6 +176,9 @@ Below you can find two snippets of code from the `logitr` package. The first sni
 
 \vspace{1cm}
 **Weighted least squares code snippet**:
+
+Note this is not the actual code. The real code is written in c++.
+
 ```{r eval = FALSE}
 #calculate the coefficient estimates for weighted least squares
 linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE, 
@@ -217,6 +220,9 @@ linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE,
 \vspace{1cm}
 
 **IRLS code snippet**:
+
+Note this is not the actual code. The real code is written in c++.
+
 ```{r eval = FALSE}
 # calculates the coefficient estimates for logistic
 # regression (IRLS)
@@ -323,6 +329,9 @@ Below you can find a snippet of code for the MM function.
 
 \vspace{1cm}
 **MM code snippet**:
+
+Note this is not the actual code. The real code is written in c++.
+
 ```{r eval = FALSE}
 # calculates the coefficient estimates for logistic
 # regression (MM)
@@ -403,7 +412,7 @@ In the following code, we see that is only takes 0.2 seconds to compute our esti
 
 \vspace{1cm}
 ```{r, eval = TRUE, warnings = FALSE, message = FALSE}
-data = read.csv("../HTRU_2.csv", header = F)
+data = read.csv("/Users/Matt/Documents/Grad School/Second Year/STAT 8054/HTRU_2.csv", header = F)
 
 dim(data)
 head(data)

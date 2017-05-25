@@ -52,7 +52,7 @@ logisticr(X, y_class, lam = 0.1, penalty = "ridge")
 ```
 
     ## $coefficients
-    ##             Species
+    ##                [,1]
     ## intercept  6.276283
     ##            1.540809
     ##           -3.641782
@@ -61,7 +61,7 @@ logisticr(X, y_class, lam = 0.1, penalty = "ridge")
     ## $MSE
     ## [1] 5.13471e-05
     ## 
-    ## $Log.loss
+    ## $log.loss
     ## [1] 0.3956525
     ## 
     ## $misclassification
@@ -71,11 +71,11 @@ logisticr(X, y_class, lam = 0.1, penalty = "ridge")
     ## [1] 11
     ## 
     ## $gradient
-    ##                   Species
-    ## 1            4.536556e-11
-    ## Sepal.Width  1.175443e-10
-    ## Petal.Length 1.671456e-10
-    ## Petal.Width  5.304082e-11
+    ##                   [,1]
+    ## intercept 4.536561e-11
+    ##           1.175446e-10
+    ##           1.671454e-10
+    ##           5.304043e-11
 
 ``` r
 #ridge logistic regression (MM)
@@ -92,7 +92,7 @@ logisticr(X, y_class, lam = 0.1, penalty = "ridge", method = "MM")
     ## $MSE
     ## [1] 5.134801e-05
     ## 
-    ## $Log.loss
+    ## $log.loss
     ## [1] 0.3956563
     ## 
     ## $misclassification
@@ -102,11 +102,11 @@ logisticr(X, y_class, lam = 0.1, penalty = "ridge", method = "MM")
     ## [1] 5459
     ## 
     ## $gradient
-    ##                   Species
-    ## 1            1.831809e-06
-    ## Sepal.Width  5.390560e-06
-    ## Petal.Length 9.993386e-06
-    ## Petal.Width  3.516598e-06
+    ##                   [,1]
+    ## intercept 1.831808e-06
+    ##           5.390560e-06
+    ##           9.993386e-06
+    ##           3.516598e-06
 
 ``` r
 #bridge logistic regression (MM)
@@ -129,7 +129,7 @@ fit
     ## $MSE
     ## [1] 2.749702e-05
     ## 
-    ## $Log.loss
+    ## $log.loss
     ## [1] 0.1878654
     ## 
     ## $misclassification
@@ -139,11 +139,11 @@ fit
     ## [1] 26021
     ## 
     ## $gradient
-    ##                   Species
-    ## 1            1.790043e-06
-    ## Sepal.Width  5.268013e-06
-    ## Petal.Length 9.997899e-06
-    ## Petal.Width  3.518574e-06
+    ##                   [,1]
+    ## intercept 1.790042e-06
+    ##           5.268013e-06
+    ##           9.997899e-06
+    ##           3.518574e-06
 
 ``` r
 #predict using bridge logistic regression estimates
@@ -151,21 +151,21 @@ predict_logisticr(fit, X[1:3,], y_class[1:3])
 ```
 
     ## $fitted.values
-    ##        [,1]
-    ## 1 0.9992467
-    ## 2 0.9989747
-    ## 3 0.9994881
+    ##           [,1]
+    ## [1,] 0.9992467
+    ## [2,] 0.9989747
+    ## [3,] 0.9994881
     ## 
     ## $class
-    ##   [,1]
-    ## 1    1
-    ## 2    1
-    ## 3    1
+    ##      [,1]
+    ## [1,]    1
+    ## [2,]    1
+    ## [3,]    1
     ## 
     ## $MSE
     ## [1] 6.269174e-07
     ## 
-    ## $Log.loss
+    ## $log.loss
     ## [1] 0.002291457
     ## 
     ## $misclassification

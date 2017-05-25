@@ -43,10 +43,13 @@ logisticr = function(X, y, lam = 0, alpha = 1.5, penalty = "none",
     # checks
     n = dim(X)[1]
     p = dim(X)[2]
+    X = as.matrix(X)
+    y = as.matrix(y)
     if (all(y == 1 | y == 0) == FALSE) 
         stop("y must be binary!")
+    vec_ = vec
     if (is.null(vec)) {
-        vec = rep(1, p)
+        vec_ = rep(1, p)
     }
     if ((alpha >= 2 | alpha <= 1)) 
         stop("alpha must be between 1 and 2!")
@@ -70,11 +73,11 @@ logisticr = function(X, y, lam = 0, alpha = 1.5, penalty = "none",
         # if no first column of ones, then add it
         if (all(X[, 1] != rep(1, n))) {
             X = cbind(1, X)
+            p = dim(X)[2]
         }
         # do not penalize intercept, if not specified
-        if (length(vec) == 1) {
-            p = dim(X)[2]
-            vec = c(0, rep(1, p - 1))
+        if (is.null(vec)) {
+            vec_ = c(0, rep(1, p - 1))
         }
     }
     if (method %in% c("IRLS", "MM") == FALSE) 
@@ -84,10 +87,13 @@ logisticr = function(X, y, lam = 0, alpha = 1.5, penalty = "none",
     # if IRLS algorithm...
     if (method == "IRLS") {
         
+        
         # execute IRLS script
-        logistic = IRLS(X, y, lam, intercept, tol, maxit, vec)
+        logistic = IRLSc(X, y, lam, intercept, tol, maxit, 
+            vec_)
         if (logistic$total.iterations == maxit) 
             print("Algorithm did not converge...Try MM")
+        
         
     }
     
@@ -97,21 +103,36 @@ logisticr = function(X, y, lam = 0, alpha = 1.5, penalty = "none",
         # change gamma parameter, if needed
         gamma = ifelse(penalty == "bridge", 0, 1)
         
+        
         # execute MM script
-        logistic = MM(X, y, lam, alpha, gamma, intercept, tol, maxit, 
-            vec)
+        logistic = MMc(X, y, lam, alpha, gamma, intercept, 
+            tol, maxit, vec_)
         if (logistic$total.iterations == maxit) 
             print("Algorithm did not converge...Try IRLS")
+        
+        
         
     }
     
     
+    # add intercept name, if needed
+    betas = logistic$coefficients
+    grads = logistic$gradient
+    if (intercept == TRUE) {
+        b1 = as.matrix(betas[1])
+        rownames(b1) = "intercept"
+        betas = rbind(b1, as.matrix(betas[-1, ]))
+        g1 = as.matrix(grads[1])
+        rownames(g1) = "intercept"
+        grads = rbind(g1, as.matrix(grads[-1, ]))
+    }
+    
     # generate fitted values
     fit = predict_logisticr(logistic, as.matrix(X), y)
     
-    returns = list(coefficients = logistic$coefficients, MSE = fit$MSE, 
-        log.loss = fit$log.loss, misclassification = fit$misclassification, 
-        total.iterations = logistic$total.iterations, gradient = logistic$gradient)
+    returns = list(coefficients = betas, MSE = fit$MSE, log.loss = fit$log.loss, 
+        misclassification = fit$misclassification, total.iterations = logistic$total.iterations, 
+        gradient = grads)
     return(returns)
     
 }

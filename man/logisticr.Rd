@@ -53,4 +53,3 @@ bridge Logistic Regression
 (Defaults to MM -- IRLS will return error)
 logisticr(X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge')
 }
-
