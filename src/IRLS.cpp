@@ -38,7 +38,7 @@ arma::colvec logitc(const arma::colvec& u) {
 //' gradient_IRLS_logistic(betas, X, y, lam = 0.1, penalty = 'ridge')
 //'
 // [[Rcpp::export]]
-arma::colvec gradient_IRLS_logisticc(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, const arma::colvec& vec = 0) {
+arma::colvec gradient_IRLS_logistic(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, const arma::colvec& vec = 0) {
 
   // gradient for beta
   return arma::trans(X) * (logitc(X * betas) - y) + lam * vec % betas;
@@ -66,14 +66,14 @@ arma::colvec gradient_IRLS_logisticc(const arma::colvec& betas, const arma::mat&
 //' IRLSc(X, y, n.list = c(rep(1, n)), lam = 0.1, alpha = 1.5)
 //'
 // [[Rcpp::export]]
-List IRLSc(const arma::mat& X, const arma::colvec& y, double lam = 0, bool intercept = true, double tol = 1e-5, double maxit = 1e5, const arma::colvec& vec = 0) {
+List IRLS(const arma::mat& X, const arma::colvec& y, double lam = 0, bool intercept = true, double tol = 1e-5, double maxit = 1e5, const arma::colvec& vec = 0) {
 
   // initialize
   int n = X.n_rows, p = X.n_cols;
   arma::colvec betas = 0.1*arma::ones<arma::colvec>(p)/n;
   arma::colvec weights = arma::ones<arma::colvec>(n);
   int iteration = 1;
-  arma::colvec grads = gradient_IRLS_logisticc(betas, X, y, lam, vec);
+  arma::colvec grads = gradient_IRLS_logistic(betas, X, y, lam, vec);
 
   // IRLS algorithm
   List linearc(const arma::mat& X, const arma::colvec& y, double lam = 0, arma::colvec weights = 0, bool intercept = true, bool kernel = false);
@@ -91,7 +91,7 @@ List IRLSc(const arma::mat& X, const arma::colvec& y, double lam = 0, bool inter
 
 
     // calculate updated gradients
-    grads = gradient_IRLS_logisticc(betas, X, y, lam, vec);
+    grads = gradient_IRLS_logistic(betas, X, y, lam, vec);
     iteration += 1;
   }
 

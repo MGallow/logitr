@@ -23,7 +23,7 @@ using namespace Rcpp;
 //' gradient_MM_logistic(betas, X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge')
 //'
 // [[Rcpp::export]]
-arma::colvec gradient_MM_logisticc(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, const arma::colvec& vec = 0) {
+arma::colvec gradient_MM_logistic(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, const arma::colvec& vec = 0) {
 
   // gradient for beta
   arma::colvec logitc(const arma::colvec& u);
@@ -51,17 +51,17 @@ arma::colvec gradient_MM_logisticc(const arma::colvec& betas, const arma::mat& X
 //' @param maxit maximum iterations
 //' @return returns beta estimates (includes intercept), total iterations, and gradients.
 //' @examples
-//' MMc(X, y)
+//' MM(X, y)
 //'
 // [[Rcpp::export]]
-List MMc(const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, bool intercept = true, double tol = 1e-5, double maxit = 1e5, const arma::colvec& vec = 0) {
+List MM(const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, bool intercept = true, double tol = 1e-5, double maxit = 1e5, const arma::colvec& vec = 0) {
 
   // initialize
   int n = X.n_rows, p = X.n_cols;
   double delta = 1e-5;
   arma::colvec betas = 0.1*arma::ones<arma::colvec>(p)/n;
   int iteration = 1;
-  arma::colvec grads = gradient_MM_logisticc(betas, X, y, lam, alpha, gamma, vec);
+  arma::colvec grads = gradient_MM_logistic(betas, X, y, lam, alpha, gamma, vec);
   arma::mat Z = arma::trans(X) * X * (0.25 + delta);
 
   // MM algorithm
@@ -78,7 +78,7 @@ List MMc(const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha
     betas = arma::solve(Z + lam * arma::diagmat(gamma * (vec - d) + d), arma::trans(X) * (y - logitc(X * betas)) + Z * betas);
 
     // calculate updated gradients
-    grads = gradient_MM_logisticc(betas, X, y, lam, alpha, gamma, vec);
+    grads = gradient_MM_logistic(betas, X, y, lam, alpha, gamma, vec);
     iteration += 1;
 
   }

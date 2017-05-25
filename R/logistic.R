@@ -89,7 +89,7 @@ logisticr = function(X, y, lam = 0, alpha = 1.5, penalty = "none",
         
         
         # execute IRLS script
-        logistic = IRLSc(X, y, lam, intercept, tol, maxit, 
+        logistic = IRLS(X, y, lam, intercept, tol, maxit, 
             vec_)
         if (logistic$total.iterations == maxit) 
             print("Algorithm did not converge...Try MM")
@@ -105,7 +105,7 @@ logisticr = function(X, y, lam = 0, alpha = 1.5, penalty = "none",
         
         
         # execute MM script
-        logistic = MMc(X, y, lam, alpha, gamma, intercept, 
+        logistic = MM(X, y, lam, alpha, gamma, intercept, 
             tol, maxit, vec_)
         if (logistic$total.iterations == maxit) 
             print("Algorithm did not converge...Try IRLS")

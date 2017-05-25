@@ -25,9 +25,9 @@ logitc <- function(u) {
 #' @examples
 #' gradient_IRLS_logistic(betas, X, y, lam = 0.1, penalty = 'ridge')
 #'
-gradient_IRLS_logisticc <- function(betas, X, y, lam = 0, 
+gradient_IRLS_logistic <- function(betas, X, y, lam = 0, 
     vec = 0L) {
-    .Call("logitr_gradient_IRLS_logisticc", PACKAGE = "logitr", 
+    .Call("logitr_gradient_IRLS_logistic", PACKAGE = "logitr", 
         betas, X, y, lam, vec)
 }
 
@@ -46,10 +46,10 @@ gradient_IRLS_logisticc <- function(betas, X, y, lam = 0,
 #' @examples
 #' IRLSc(X, y, n.list = c(rep(1, n)), lam = 0.1, alpha = 1.5)
 #'
-IRLSc <- function(X, y, lam = 0, intercept = TRUE, tol = 1e-05, 
+IRLS <- function(X, y, lam = 0, intercept = TRUE, tol = 1e-05, 
     maxit = 1e+05, vec = 0L) {
-    .Call("logitr_IRLSc", PACKAGE = "logitr", X, y, lam, 
-        intercept, tol, maxit, vec)
+    .Call("logitr_IRLS", PACKAGE = "logitr", X, y, lam, intercept, 
+        tol, maxit, vec)
 }
 
 #' @title Linearc (c++)
@@ -61,7 +61,6 @@ IRLSc <- function(X, y, lam = 0, intercept = TRUE, tol = 1e-05,
 #' @param intercept add column of ones if not already present. Defaults to TRUE
 #' @param kernel use linear kernel to compute ridge regression coefficeients. Defaults to true when p >> n
 #' @return returns the coefficient estimates
-#' @export
 #' @examples
 #' Weighted ridge regression
 #' library(dplyr)
@@ -92,9 +91,9 @@ linearc <- function(X, y, lam = 0, weights = 0L, intercept = TRUE,
 #' @examples
 #' gradient_MM_logistic(betas, X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge')
 #'
-gradient_MM_logisticc <- function(betas, X, y, lam = 0, alpha = 1.5, 
+gradient_MM_logistic <- function(betas, X, y, lam = 0, alpha = 1.5, 
     gamma = 1, vec = 0L) {
-    .Call("logitr_gradient_MM_logisticc", PACKAGE = "logitr", 
+    .Call("logitr_gradient_MM_logistic", PACKAGE = "logitr", 
         betas, X, y, lam, alpha, gamma, vec)
 }
 
@@ -112,11 +111,11 @@ gradient_MM_logisticc <- function(betas, X, y, lam = 0, alpha = 1.5,
 #' @param maxit maximum iterations
 #' @return returns beta estimates (includes intercept), total iterations, and gradients.
 #' @examples
-#' MMc(X, y)
+#' MM(X, y)
 #'
-MMc <- function(X, y, lam = 0, alpha = 1.5, gamma = 1, intercept = TRUE, 
+MM <- function(X, y, lam = 0, alpha = 1.5, gamma = 1, intercept = TRUE, 
     tol = 1e-05, maxit = 1e+05, vec = 0L) {
-    .Call("logitr_MMc", PACKAGE = "logitr", X, y, lam, alpha, 
+    .Call("logitr_MM", PACKAGE = "logitr", X, y, lam, alpha, 
         gamma, intercept, tol, maxit, vec)
 }
 

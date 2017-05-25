@@ -14,7 +14,6 @@ using namespace Rcpp;
 //' @param intercept add column of ones if not already present. Defaults to TRUE
 //' @param kernel use linear kernel to compute ridge regression coefficeients. Defaults to true when p >> n
 //' @return returns the coefficient estimates
-//' @export
 //' @examples
 //' Weighted ridge regression
 //' library(dplyr)
