@@ -30,7 +30,7 @@ devtools::install_github("MGallow/logitr")
 ```
 
 
-If there are any issues/bugs, please let me know: https://github.com/MGallow/logitr/issues/.
+If there are any issues/bugs, please let me know: https://github.com/MGallow/logitr/issues/. Pull requests are welcome!
 
 \vspace{1cm}
 ## Logistic Regression
@@ -380,13 +380,19 @@ X = dplyr::select(iris, -c(Species, Sepal.Length))
 y = dplyr::select(iris, Sepal.Length)
 y_class = ifelse(dplyr::select(iris, Species) == "setosa", 1, 0)
 
-#ridge regression
-linearr(X, y, lam = 0.1)
+#ridge regression (specify lam = 0.1)
+linearr(X, y, lam = 0.1, penalty = "ridge")
 
-#ridge logistic regression (IRLS)
-logisticr(X, y_class, lam = 0.1, penalty = "ridge")
+#ridge regression (use CV for optimal lam; options default to seq(0, 2, 0.1))
+linearr(X, y, penalty = "ridge")
 
-#ridge logistic regression (MM)
+#ridge regression (use CV for optimal lam; specify seq(0, 2, 0.01))
+linearr(X, y, lam = seq(0, 2, 0.01), penalty = "ridge")
+
+#ridge logistic regression (IRLS) (use CV for optimal lam)
+logisticr(X, y_class, penalty = "ridge")
+
+#ridge logistic regression (MM) (specify lam = 0.1)
 logisticr(X, y_class, lam = 0.1, penalty = "ridge", method = "MM")
 
 #bridge logistic regression (MM)
@@ -411,19 +417,26 @@ Link : [HTRU2 Data](https://archive.ics.uci.edu/ml/datasets/HTRU2)
 In the following code, we see that is only takes 0.2 seconds to compute our estimates using IRLS method and only 3.6 seconds to compute them using the MM algorithm.
 
 \vspace{1cm}
-```{r, eval = TRUE, warnings = FALSE, message = FALSE}
+```{r, echo = F, warnings = FALSE, message = FALSE}
 data = read.csv("/Users/Matt/Documents/Grad School/Second Year/STAT 8054/HTRU_2.csv", header = F)
+
+```
+
+```{r, eval = T, warning = F, message = F}
 
 dim(data)
 head(data)
 X = dplyr::select(data, -V9)
 y = dplyr::select(data, V9)
 
-#time IRLS
+#time IRLS (specify lam = 0.1)
 timeit(logisticr(X, y, lam = 0.1, penalty = "ridge"))
 
-#time MM
+#time MM (specify lam = 0.1)
 timeit(logisticr(X, y, lam = 0.1, penalty = "ridge", method = "MM"))
+
+#time IRLS (use CV for optimal lam)
+timeit(logisticr(X, y, penalty = "ridge"))
 
 #ridge regression using IRLS
 fit = logisticr(X, y, lam = 0.1, penalty = "ridge")

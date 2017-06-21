@@ -30,7 +30,7 @@ See [vignette](https://htmlpreview.github.io/?https://github.com/MGallow/logitr/
 devtools::install_github("MGallow/logitr")
 ```
 
-If there are any issues/bugs, please let me know: [github](https://github.com/MGallow/logitr/issues). You can also contact me via my [website](http://users.stat.umn.edu/~gall0441/).
+If there are any issues/bugs, please let me know: [github](https://github.com/MGallow/logitr/issues). You can also contact me via my [website](http://users.stat.umn.edu/~gall0441/). Pull requests are welcome!
 
 ## Usage
 
@@ -42,11 +42,11 @@ X = dplyr::select(iris, -c(Species, Sepal.Length))
 y = dplyr::select(iris, Sepal.Length)
 y_class = ifelse(dplyr::select(iris, Species) == "setosa", 1, 0)
 
-#ridge regression
-linearr(X, y, lam = 0.1)
+#ridge regression (use CV for optimal lambda)
+linearr(X, y, penalty = "ridge")
 
-#ridge logistic regression (IRLS)
-logisticr(X, y_class, lam = 0.1, penalty = "ridge")
+#ridge logistic regression (IRLS) (use CV for optimal lambda)
+logisticr(X, y_class, penalty = "ridge")
 
 #ridge logistic regression (MM)
 logisticr(X, y_class, lam = 0.1, penalty = "ridge", method = "MM")

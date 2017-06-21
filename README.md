@@ -22,7 +22,7 @@ Installation
 devtools::install_github("MGallow/logitr")
 ```
 
-If there are any issues/bugs, please let me know: [github](https://github.com/MGallow/logitr/issues). You can also contact me via my [website](http://users.stat.umn.edu/~gall0441/).
+If there are any issues/bugs, please let me know: [github](https://github.com/MGallow/logitr/issues). You can also contact me via my [website](http://users.stat.umn.edu/~gall0441/). Pull requests are welcome!
 
 Usage
 -----
@@ -35,53 +35,75 @@ X = dplyr::select(iris, -c(Species, Sepal.Length))
 y = dplyr::select(iris, Sepal.Length)
 y_class = ifelse(dplyr::select(iris, Species) == "setosa", 1, 0)
 
-#ridge regression
-linearr(X, y, lam = 0.1)
+#ridge regression (use CV for optimal lambda)
+linearr(X, y, penalty = "ridge")
 ```
 
+    ## $parameters
+    ##      lam alpha
+    ## [1,] 0.1   NaN
+    ## 
     ## $coefficients
-    ##           Sepal.Length
-    ## intercept    1.8778524
-    ##              0.6462400
-    ##              0.7023063
-    ##             -0.5415988
-
-``` r
-#ridge logistic regression (IRLS)
-logisticr(X, y_class, lam = 0.1, penalty = "ridge")
-```
-
-    ## $coefficients
-    ##                [,1]
-    ## intercept  6.276283
-    ##            1.540809
-    ##           -3.641782
-    ##           -1.630507
+    ##                 [,1]
+    ## intercept  1.8778524
+    ##            0.6462400
+    ##            0.7023063
+    ##           -0.5415988
     ## 
     ## $MSE
-    ## [1] 5.13471e-05
+    ## [1] 0.09631325
+    ## 
+    ## $gradient
+    ##                    [,1]
+    ## intercept -3.410605e-13
+    ##           -2.425421e-13
+    ##           -1.442652e-12
+    ##           -2.665645e-13
+
+``` r
+#ridge logistic regression (IRLS) (use CV for optimal lambda)
+logisticr(X, y_class, penalty = "ridge")
+```
+
+    ## $parameters
+    ##      lam alpha
+    ## [1,]   0   NaN
+    ## 
+    ## $coefficients
+    ##                 [,1]
+    ## intercept   7.885352
+    ##             8.894847
+    ##            -7.548629
+    ##           -18.604247
+    ## 
+    ## $MSE
+    ## [1] 8.0815e-14
     ## 
     ## $log.loss
-    ## [1] 0.3956525
+    ## [1] 6.929591e-06
     ## 
     ## $misclassification
     ## [1] 0
     ## 
     ## $total.iterations
-    ## [1] 11
+    ## [1] 18
     ## 
     ## $gradient
     ##                   [,1]
-    ## intercept 4.536561e-11
-    ##           1.175446e-10
-    ##           1.671454e-10
-    ##           5.304043e-11
+    ## intercept 1.240583e-06
+    ##           3.160471e-06
+    ##           9.143271e-06
+    ##           3.372886e-06
 
 ``` r
 #ridge logistic regression (MM)
 logisticr(X, y_class, lam = 0.1, penalty = "ridge", method = "MM")
 ```
 
+    ## $parameters
+    ##      lam alpha
+    ## [1,] 0.1   NaN
+    ## 
     ## $coefficients
     ##                [,1]
     ## intercept  6.276226
@@ -119,6 +141,10 @@ fit = logisticr(X, y_class, lam = 0.1, alpha = 1.2, penalty = "bridge")
 fit
 ```
 
+    ## $parameters
+    ##      lam alpha
+    ## [1,] 0.1   1.2
+    ## 
     ## $coefficients
     ##                 [,1]
     ## intercept 13.0803079

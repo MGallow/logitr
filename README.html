@@ -39,7 +39,7 @@ body {
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The easiest way to install is from the development version from GitHub:</span>
 <span class="co"># install.packages(&quot;devtools&quot;)</span>
 devtools::<span class="kw">install_github</span>(<span class="st">&quot;MGallow/logitr&quot;</span>)</code></pre></div>
-<p>If there are any issues/bugs, please let me know: <a href="https://github.com/MGallow/logitr/issues">github</a>. You can also contact me via my <a href="http://users.stat.umn.edu/~gall0441/">website</a>.</p>
+<p>If there are any issues/bugs, please let me know: <a href="https://github.com/MGallow/logitr/issues">github</a>. You can also contact me via my <a href="http://users.stat.umn.edu/~gall0441/">website</a>. Pull requests are welcome!</p>
 <h2 id="usage">Usage</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(logitr)
 
@@ -48,44 +48,66 @@ X =<span class="st"> </span>dplyr::<span class="kw">select</span>(iris, -<span c
 y =<span class="st"> </span>dplyr::<span class="kw">select</span>(iris, Sepal.Length)
 y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr::<span class="kw">select</span>(iris, Species) ==<span class="st"> &quot;setosa&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>)
 
-<span class="co">#ridge regression</span>
-<span class="kw">linearr</span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>)</code></pre></div>
-<pre><code>## $coefficients
-##           Sepal.Length
-## intercept    1.8778524
-##              0.6462400
-##              0.7023063
-##             -0.5415988</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (IRLS)</span>
-<span class="kw">logisticr</span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>)</code></pre></div>
-<pre><code>## $coefficients
-##                [,1]
-## intercept  6.276283
-##            1.540809
-##           -3.641782
-##           -1.630507
+<span class="co">#ridge regression (use CV for optimal lambda)</span>
+<span class="kw">linearr</span>(X, y, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>)</code></pre></div>
+<pre><code>## $parameters
+##      lam alpha
+## [1,] 0.1   NaN
+## 
+## $coefficients
+##                 [,1]
+## intercept  1.8778524
+##            0.6462400
+##            0.7023063
+##           -0.5415988
 ## 
 ## $MSE
-## [1] 5.13471e-05
+## [1] 0.09631325
+## 
+## $gradient
+##                    [,1]
+## intercept -3.410605e-13
+##           -2.425421e-13
+##           -1.442652e-12
+##           -2.665645e-13</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (IRLS) (use CV for optimal lambda)</span>
+<span class="kw">logisticr</span>(X, y_class, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>)</code></pre></div>
+<pre><code>## $parameters
+##      lam alpha
+## [1,]   0   NaN
+## 
+## $coefficients
+##                 [,1]
+## intercept   7.885352
+##             8.894847
+##            -7.548629
+##           -18.604247
+## 
+## $MSE
+## [1] 8.0815e-14
 ## 
 ## $log.loss
-## [1] 0.3956525
+## [1] 6.929591e-06
 ## 
 ## $misclassification
 ## [1] 0
 ## 
 ## $total.iterations
-## [1] 11
+## [1] 18
 ## 
 ## $gradient
 ##                   [,1]
-## intercept 4.536561e-11
-##           1.175446e-10
-##           1.671454e-10
-##           5.304043e-11</code></pre>
+## intercept 1.240583e-06
+##           3.160471e-06
+##           9.143271e-06
+##           3.372886e-06</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (MM)</span>
 <span class="kw">logisticr</span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">&quot;ridge&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;MM&quot;</span>)</code></pre></div>
-<pre><code>## $coefficients
+<pre><code>## $parameters
+##      lam alpha
+## [1,] 0.1   NaN
+## 
+## $coefficients
 ##                [,1]
 ## intercept  6.276226
 ##            1.540818
@@ -114,7 +136,11 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr::<span cl
 fit =<span class="st"> </span><span class="kw">logisticr</span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">alpha =</span> <span class="fl">1.2</span>, <span class="dt">penalty =</span> <span class="st">&quot;bridge&quot;</span>)</code></pre></div>
 <pre><code>## [1] &quot;using MM algorithm...&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit</code></pre></div>
-<pre><code>## $coefficients
+<pre><code>## $parameters
+##      lam alpha
+## [1,] 0.1   1.2
+## 
+## $coefficients
 ##                 [,1]
 ## intercept 13.0803079
 ##            0.6170122
