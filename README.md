@@ -1,6 +1,8 @@
 logitr
 ================
 
+### \*\*\*This package is no longer maintained.
+
 See [vignette](https://htmlpreview.github.io/?https://github.com/MGallow/logitr/blob/master/Vignette.html) or [manual](https://github.com/MGallow/logitr/blob/master/logitr.pdf).
 
 Overview
@@ -41,24 +43,24 @@ linearr(X, y, penalty = "ridge")
 
     ## $parameters
     ##      lam alpha
-    ## [1,] 0.1   NaN
+    ## [1,]   0   NaN
     ## 
     ## $coefficients
     ##                 [,1]
-    ## intercept  1.8778524
-    ##            0.6462400
-    ##            0.7023063
-    ##           -0.5415988
+    ## intercept  1.8559975
+    ##            0.6508372
+    ##            0.7091320
+    ##           -0.5564827
     ## 
     ## $MSE
-    ## [1] 0.09631325
+    ## [1] 0.0963027
     ## 
     ## $gradient
     ##                    [,1]
-    ## intercept -3.410605e-13
-    ##           -2.425421e-13
-    ##           -1.442652e-12
-    ##           -2.665645e-13
+    ## intercept -1.136868e-13
+    ##           -1.364242e-12
+    ##           -1.364242e-12
+    ##           -2.273737e-13
 
 ``` r
 #ridge logistic regression (IRLS) (use CV for optimal lambda)
@@ -128,7 +130,7 @@ logisticr(X, y_class, lam = 0.1, penalty = "ridge", method = "MM")
     ## intercept 1.831808e-06
     ##           5.390560e-06
     ##           9.993386e-06
-    ##           3.516598e-06
+    ##           3.516597e-06
 
 ``` r
 #bridge logistic regression (MM)

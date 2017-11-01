@@ -9,6 +9,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
+### ***This package is no longer maintained.
+
 See [vignette](https://htmlpreview.github.io/?https://github.com/MGallow/logitr/blob/master/Vignette.html) or [manual](https://github.com/MGallow/logitr/blob/master/logitr.pdf).
 
 ## Overview
