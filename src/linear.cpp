@@ -26,7 +26,6 @@ using namespace Rcpp;
 //' @param vec optional vector to specify which coefficients will be penalized
 //' @param init optional initialization for MM algorithm
 //' @return returns the coefficient estimates
-//' @export
 //' @examples
 //' Weighted ridge regression
 //' library(dplyr)

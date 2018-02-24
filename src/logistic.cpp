@@ -22,7 +22,6 @@ using namespace Rcpp;
 //' @param vec optional vector to specify which coefficients will be penalized
 //' @param init optional initialization for MM algorithm
 //' @return returns beta estimates (includes intercept), total iterations, and gradients.
-//' @export
 //' @examples
 //' Logistic Regression
 //' library(dplyr)

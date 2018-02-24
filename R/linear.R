@@ -31,8 +31,11 @@
 #' Kernelized ridge regression
 #' linearr(X, y, lam = 0.1, penalty = 'ridge', kernel = T)
 
-linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none", weights = NULL, intercept = TRUE, 
-    kernel = FALSE, method = "SVD", tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1, K = 5) {
+linearr = function(X, y, lam = seq(0, 2, 0.1), 
+    alpha = 1.5, penalty = "none", weights = NULL, 
+    intercept = TRUE, kernel = FALSE, method = "SVD", 
+    tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1, 
+    K = 5) {
     
     # checks
     n = dim(X)[1]
@@ -69,7 +72,8 @@ linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none", we
         print("using MM algorithm...")
         method = "MM"
     }
-    if (penalty %in% c("none", "ridge", "bridge") == FALSE) 
+    if (penalty %in% c("none", "ridge", "bridge") == 
+        FALSE) 
         stop("incorrect penalty!")
     if (method %in% c("SVD", "MM") == FALSE) 
         stop("incorrect method!")
@@ -91,18 +95,21 @@ linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none", we
     
     
     # CV needed?
-    if ((length(lam) > 1 | length(alpha) > 1) & (penalty != "none")) {
+    if ((length(lam) > 1 | length(alpha) > 1) & 
+        (penalty != "none")) {
         
         # execute CV_logisticc
-        CV = CV_linearc(X, y, lam, alpha, penalty, weights, intercept, kernel, method, tol, maxit, 
-            vec_, init, K)
+        CV = CV_linearc(X, y, lam, alpha, penalty, 
+            weights, intercept, kernel, method, 
+            tol, maxit, vec_, init, K)
         lam = CV$best.lam
         alpha = CV$best.alpha
     }
     
     # execute linearc
-    linear = linearc(X, y, lam, alpha, penalty, weights, intercept, kernel, method, tol, maxit, vec_, 
-        init)
+    linear = linearc(X, y, lam, alpha, penalty, 
+        weights, intercept, kernel, method, tol, 
+        maxit, vec_, init)
     
     
     # add intercept name, if needed
@@ -111,14 +118,17 @@ linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none", we
     if (intercept) {
         b1 = as.matrix(betas[1])
         rownames(b1) = "intercept"
-        betas = rbind(b1, as.matrix(betas[-1, ]))
+        betas = rbind(b1, as.matrix(betas[-1, 
+            ]))
         g1 = as.matrix(grads[1])
         rownames(g1) = "intercept"
-        grads = rbind(g1, as.matrix(grads[-1, ]))
+        grads = rbind(g1, as.matrix(grads[-1, 
+            ]))
     }
     
     # generate fitted values
-    fit = predict_linearc(linear$coefficients, as.matrix(X), y)
+    fit = predict_linearc(linear$coefficients, 
+        as.matrix(X), y)
     
     # misc
     if (penalty == "none") {
@@ -130,7 +140,8 @@ linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none", we
     parameters = matrix(c(lam, alpha), ncol = 2)
     colnames(parameters) = c("lam", "alpha")
     
-    returns = list(parameters = parameters, coefficients = betas, MSE = fit$MSE, gradient = grads)
+    returns = list(parameters = parameters, coefficients = betas, 
+        MSE = fit$MSE, gradient = grads)
     return(returns)
 }
 

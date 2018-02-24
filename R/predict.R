@@ -51,14 +51,17 @@ predict_logisticr = function(object, X, y = NULL) {
         
         # calculate metrics
         MSE = mean((y - fitted)^2)
-        log.losses = -y * log(fitted) - (1 - y) * log(1 - fitted)
-        log.loss = sum(ifelse(is.nan(log.losses), 0, log.losses))
+        log.losses = -y * log(fitted) - (1 - 
+            y) * log(1 - fitted)
+        log.loss = sum(ifelse(is.nan(log.losses), 
+            0, log.losses))
         misclassification = mean(y != class)
         
     }
     
     
-    returns = list(fitted.values = fitted, class = class, MSE = MSE, log.loss = log.loss, misclassification = misclassification)
+    returns = list(fitted.values = fitted, class = class, 
+        MSE = MSE, log.loss = log.loss, misclassification = misclassification)
     return(returns)
 }
 
@@ -118,6 +121,7 @@ predict_linearr = function(object, X, y = NULL) {
     }
     
     
-    returns = list(fitted.values = fitted, RSS = RSS, MSE = MSE)
+    returns = list(fitted.values = fitted, RSS = RSS, 
+        MSE = MSE)
     return(returns)
 }

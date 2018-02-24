@@ -39,8 +39,11 @@
 #' logisticr(X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge')
 
 
-logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none", intercept = TRUE, 
-    method = "IRLS", tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1, criteria = "logloss", K = 5) {
+logisticr = function(X, y, lam = seq(0, 2, 0.1), 
+    alpha = 1.5, penalty = "none", intercept = TRUE, 
+    method = "IRLS", tol = 1e-05, maxit = 1e+05, 
+    vec = NULL, init = 1, criteria = "logloss", 
+    K = 5) {
     
     # checks
     n = dim(X)[1]
@@ -69,9 +72,11 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none", 
         print("using MM algorithm...")
         method = "MM"
     }
-    if (penalty %in% c("none", "ridge", "bridge") == FALSE) 
+    if (penalty %in% c("none", "ridge", "bridge") == 
+        FALSE) 
         stop("incorrect penalty!")
-    if (criteria %in% c("mse", "logloss", "misclass") == FALSE) 
+    if (criteria %in% c("mse", "logloss", "misclass") == 
+        FALSE) 
         stop("incorrect criteria!")
     if (method %in% c("IRLS", "MM") == FALSE) 
         stop("incorrect method!")
@@ -93,17 +98,21 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none", 
     
     
     # CV needed?
-    if ((length(lam) > 1 | length(alpha) > 1) & (penalty != "none")) {
+    if ((length(lam) > 1 | length(alpha) > 1) & 
+        (penalty != "none")) {
         
         # execute CV_logisticc
-        CV = CV_logisticc(X, y, lam, alpha, penalty, intercept, method, tol, maxit, vec_, init, criteria, 
-            K)
+        CV = CV_logisticc(X, y, lam, alpha, penalty, 
+            intercept, method, tol, maxit, vec_, 
+            init, criteria, K)
         lam = CV$best.lam
         alpha = CV$best.alpha
     }
     
     # execute logisticc
-    logistic = logisticc(X, y, lam, alpha, penalty, intercept, method, tol, maxit, vec_, init)
+    logistic = logisticc(X, y, lam, alpha, penalty, 
+        intercept, method, tol, maxit, vec_, 
+        init)
     
     
     # add intercept name, if needed
@@ -112,14 +121,17 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none", 
     if (intercept == TRUE) {
         b1 = as.matrix(betas[1])
         rownames(b1) = "intercept"
-        betas = rbind(b1, as.matrix(betas[-1, ]))
+        betas = rbind(b1, as.matrix(betas[-1, 
+            ]))
         g1 = as.matrix(grads[1])
         rownames(g1) = "intercept"
-        grads = rbind(g1, as.matrix(grads[-1, ]))
+        grads = rbind(g1, as.matrix(grads[-1, 
+            ]))
     }
     
     # generate fitted values
-    fit = predict_logisticc(logistic$coefficients, as.matrix(X), y)
+    fit = predict_logisticc(logistic$coefficients, 
+        as.matrix(X), y)
     
     # misc
     if (penalty == "none") {
@@ -131,8 +143,10 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none", 
     parameters = matrix(c(lam, alpha), ncol = 2)
     colnames(parameters) = c("lam", "alpha")
     
-    returns = list(parameters = parameters, coefficients = betas, MSE = fit$MSE, log.loss = fit$log.loss, 
-        misclassification = fit$misclassification, total.iterations = logistic$total.iterations, 
+    returns = list(parameters = parameters, coefficients = betas, 
+        MSE = fit$MSE, log.loss = fit$log.loss, 
+        misclassification = fit$misclassification, 
+        total.iterations = logistic$total.iterations, 
         gradient = grads)
     return(returns)
     

@@ -30,7 +30,6 @@ NULL
 #' @param K specify number of folds in cross validation, if necessary
 #'
 #' @return returns best lambda, best alpha, and cross validation errors
-#' @export
 #' @examples
 #' CV_logisticc(X, y, lam = seq(0.1, 2, 0.1), alpha = c(1.1, 1.9, 0.1), penalty = "bridge", method = "MM", vec = c(0,1,1,1))
 #'
@@ -54,7 +53,6 @@ CV_logisticc <- function(X, y, lam = 0L, alpha = 0L, penalty = "none", intercept
 #' @param init optional initialization for MM algorithm
 #' @param K specify number of folds in cross validation, if necessary
 #' @return returns best lambda, best alpha, cv.errors
-#' @export
 #' @examples
 #' CV_linearc(X, y, lam = seq(0.1, 2, 0.1), alpha = seq(1.1, 1.9, 0.1), penalty = "bridge", vec = c(0,1,1,1))
 #'
@@ -121,7 +119,6 @@ logitc <- function(u) {
 #' @param vec optional vector to specify which coefficients will be penalized
 #' @param init optional initialization for MM algorithm
 #' @return returns the coefficient estimates
-#' @export
 #' @examples
 #' Weighted ridge regression
 #' library(dplyr)
@@ -151,7 +148,6 @@ linearc <- function(X, y, lam = 0, alpha = 1.5, penalty = "none", weights = 0L, 
 #' @param vec optional vector to specify which coefficients will be penalized
 #' @param init optional initialization for MM algorithm
 #' @return returns beta estimates (includes intercept), total iterations, and gradients.
-#' @export
 #' @examples
 #' Logistic Regression
 #' library(dplyr)
@@ -180,7 +176,6 @@ logisticc <- function(X, y, lam = 0, alpha = 1.5, penalty = "none", intercept = 
 #' @param X matrix of (new) observations
 #' @param y matrix of response values 0,1
 #' @return predictions and loss metrics
-#' @export
 #' @examples
 #'
 #' fitted = logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
@@ -197,7 +192,6 @@ predict_logisticc <- function(betas, X, y = 0L) {
 #' @param X matrix of (new) observations
 #' @param y matrix of response values
 #' @return predictions and loss metrics
-#' @export
 #' @examples
 #'
 #' fitted = linearr(X, y, penalty = "ridge")

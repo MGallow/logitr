@@ -14,7 +14,6 @@ using namespace Rcpp;
 //' @param X matrix of (new) observations
 //' @param y matrix of response values 0,1
 //' @return predictions and loss metrics
-//' @export
 //' @examples
 //'
 //' fitted = logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
@@ -88,7 +87,6 @@ List predict_logisticc(const arma::colvec& betas, const arma::mat& X, const arma
 //' @param X matrix of (new) observations
 //' @param y matrix of response values
 //' @return predictions and loss metrics
-//' @export
 //' @examples
 //'
 //' fitted = linearr(X, y, penalty = "ridge")
