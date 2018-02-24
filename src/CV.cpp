@@ -21,7 +21,7 @@ using namespace Rcpp;
 //' @examples
 //' kfold(10, 3)
 //'
-// [[Rcpp::export]]
+
 arma::vec kfold(int n, int K){
 
   // create sequence 1:n

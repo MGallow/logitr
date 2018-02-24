@@ -58,8 +58,7 @@ predict_logisticr = function(object, X, y = NULL) {
     }
     
     
-    returns = list(fitted.values = fitted, class = class, MSE = MSE, 
-        log.loss = log.loss, misclassification = misclassification)
+    returns = list(fitted.values = fitted, class = class, MSE = MSE, log.loss = log.loss, misclassification = misclassification)
     return(returns)
 }
 

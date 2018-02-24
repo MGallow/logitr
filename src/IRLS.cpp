@@ -37,7 +37,7 @@ arma::colvec logitc(const arma::colvec& u) {
 //' @examples
 //' gradient_IRLS_logistic(betas, X, y, lam = 0.1, vec = c(0,1,1,1))
 //'
-// [[Rcpp::export]]
+
 arma::colvec gradient_IRLS_logisticc(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, const arma::colvec& vec = 0) {
 
   // gradient for beta
@@ -66,7 +66,7 @@ arma::colvec gradient_IRLS_logisticc(const arma::colvec& betas, const arma::mat&
 //' @examples
 //' IRLSc(X, y, lam = 0.1, penalty = "ridge", vec = c(0,1,1,1))
 //'
-// [[Rcpp::export]]
+
 List IRLSc(const arma::mat& X, const arma::colvec& y, double lam = 0, std::string penalty = "none", bool intercept = true, double tol = 1e-5, double maxit = 1e5, const arma::colvec& vec = 0, const arma::colvec& init = 0) {
 
   // initialize

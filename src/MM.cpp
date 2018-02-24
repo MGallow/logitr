@@ -21,7 +21,7 @@ using namespace Rcpp;
 //' @examples
 //' gradient_MM_logistic(betas, X, y, lam = 0.1, alpha = 1.5, vec = c(0,1,1,1))
 //'
-// [[Rcpp::export]]
+
 arma::colvec gradient_MM_logisticc(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, const arma::colvec& vec = 0) {
 
   // gradient for beta
@@ -48,7 +48,7 @@ arma::colvec gradient_MM_logisticc(const arma::colvec& betas, const arma::mat& X
 //' @examples
 //' gradient_MM_linearc(betas, X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge')
 //'
-// [[Rcpp::export]]
+
 arma::colvec gradient_MM_linearc(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, arma::colvec weights = 0, const arma::colvec& vec = 0) {
 
   // gradient for beta
@@ -79,7 +79,7 @@ arma::colvec gradient_MM_linearc(const arma::colvec& betas, const arma::mat& X, 
 //' @examples
 //' MMc(X, y)
 //'
-// [[Rcpp::export]]
+
 List MMc(const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, bool intercept = true, double tol = 1e-5, double maxit = 1e5, const arma::colvec& vec = 0, const arma::colvec& init = 0) {
 
   // initialize
@@ -146,7 +146,7 @@ List MMc(const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha
 //' @examples
 //' MM_linearc(X, y)
 //'
-// [[Rcpp::export]]
+
 List MM_linearc(const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, arma::colvec weights = 0, bool intercept = true, double tol = 1e-5, double maxit = 1e5, const arma::colvec& vec = 0, const arma::colvec& init = 0) {
 
   // initialize

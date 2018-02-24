@@ -19,7 +19,7 @@ using namespace Rcpp;
 //' @examples
 //' gradient_linearc(betas, X, y, lam = 0.1, weights = rep(1,150), intercept = TRUE)
 //'
-// [[Rcpp::export]]
+
 arma::colvec gradient_linearc(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, const arma::colvec& weights = 0, bool intercept = true) {
 
   // do not penalize intercept
@@ -61,7 +61,7 @@ arma::colvec gradient_linearc(const arma::colvec& betas, const arma::mat& X, con
 //' @examples
 //' SVDc(X, y, lam = 0.1 weights = rep(1, 150))
 //'
-// [[Rcpp::export]]
+
 List SVDc(const arma::mat& X, const arma::colvec& y, double lam = 0, arma::colvec weights = 0, bool intercept = true, bool kernel = false) {
 
   // checks
