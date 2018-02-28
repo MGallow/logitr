@@ -30,6 +30,7 @@ NULL
 #' @param K specify number of folds in cross validation, if necessary
 #'
 #' @return returns best lambda, best alpha, and cross validation errors
+#' @export
 #' @examples
 #' CV_logisticc(X, y, lam = seq(0.1, 2, 0.1), alpha = c(1.1, 1.9, 0.1), penalty = "bridge", method = "MM", vec = c(0,1,1,1))
 #'

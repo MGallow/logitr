@@ -16,7 +16,7 @@
 #' predict_logisticr(fitted, X)
 
 
-predict_logisticr = function(object, X, y = NULL) {
+predict.logisticr = function(object, X, y = NULL) {
     
     # checks
     X = as.matrix(X)
@@ -30,7 +30,7 @@ predict_logisticr = function(object, X, y = NULL) {
     }
     
     # if object is list, extract betas
-    if (class(object) == "list") {
+    if (class(object) == "logisticr") {
         object = object$coefficients
     }
     
@@ -51,10 +51,9 @@ predict_logisticr = function(object, X, y = NULL) {
         
         # calculate metrics
         MSE = mean((y - fitted)^2)
-        log.losses = -y * log(fitted) - (1 - 
-            y) * log(1 - fitted)
-        log.loss = sum(ifelse(is.nan(log.losses), 
-            0, log.losses))
+        log.losses = -y * log(fitted) - (1 - y) * log(1 - 
+            fitted)
+        log.loss = sum(ifelse(is.nan(log.losses), 0, log.losses))
         misclassification = mean(y != class)
         
     }
@@ -86,7 +85,7 @@ predict_logisticr = function(object, X, y = NULL) {
 #' predict_linearr(fitted, X)
 
 
-predict_linearr = function(object, X, y = NULL) {
+predict.linearr = function(object, X, y = NULL) {
     
     # checks
     X = as.matrix(X)
@@ -97,7 +96,7 @@ predict_linearr = function(object, X, y = NULL) {
     }
     
     # if object is list, extract betas
-    if (class(object) == "list") {
+    if (class(object) == "linearr") {
         object = object$coefficients
     }
     

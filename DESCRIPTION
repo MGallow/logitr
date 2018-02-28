@@ -10,7 +10,7 @@ BugReports: https://github.com/MGallow/logitr/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports:
+Depends:
     Rcpp (>= 0.12.10),
     RcppArmadillo,
     dplyr

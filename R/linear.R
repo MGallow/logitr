@@ -31,17 +31,21 @@
 #' Kernelized ridge regression
 #' linearr(X, y, lam = 0.1, penalty = 'ridge', kernel = T)
 
-linearr = function(X, y, lam = seq(0, 2, 0.1), 
-    alpha = 1.5, penalty = "none", weights = NULL, 
-    intercept = TRUE, kernel = FALSE, method = "SVD", 
-    tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1, 
-    K = 5) {
+linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, 
+    penalty = "none", weights = NULL, intercept = TRUE, 
+    kernel = FALSE, method = "SVD", tol = 1e-05, maxit = 1e+05, 
+    vec = NULL, init = 1, K = 5) {
     
     # checks
     n = dim(X)[1]
     p = dim(X)[2]
     X = as.matrix(X)
     y = as.matrix(y)
+    if (all(X[, 1] != rep(1, n))) {
+        X = scale(X)
+    } else {
+        print("data was not scaled due to intercept...")
+    }
     if (penalty == "none") {
         lam = 0
         alpha = 1.5
@@ -72,8 +76,7 @@ linearr = function(X, y, lam = seq(0, 2, 0.1),
         print("using MM algorithm...")
         method = "MM"
     }
-    if (penalty %in% c("none", "ridge", "bridge") == 
-        FALSE) 
+    if (penalty %in% c("none", "ridge", "bridge") == FALSE) 
         stop("incorrect penalty!")
     if (method %in% c("SVD", "MM") == FALSE) 
         stop("incorrect method!")
@@ -95,21 +98,20 @@ linearr = function(X, y, lam = seq(0, 2, 0.1),
     
     
     # CV needed?
-    if ((length(lam) > 1 | length(alpha) > 1) & 
-        (penalty != "none")) {
+    if ((length(lam) > 1 | length(alpha) > 1) & (penalty != 
+        "none")) {
         
         # execute CV_logisticc
-        CV = CV_linearc(X, y, lam, alpha, penalty, 
-            weights, intercept, kernel, method, 
-            tol, maxit, vec_, init, K)
+        CV = CV_linearc(X, y, lam, alpha, penalty, weights, 
+            intercept, kernel, method, tol, maxit, vec_, 
+            init, K)
         lam = CV$best.lam
         alpha = CV$best.alpha
     }
     
     # execute linearc
-    linear = linearc(X, y, lam, alpha, penalty, 
-        weights, intercept, kernel, method, tol, 
-        maxit, vec_, init)
+    linear = linearc(X, y, lam, alpha, penalty, weights, 
+        intercept, kernel, method, tol, maxit, vec_, init)
     
     
     # add intercept name, if needed
@@ -118,17 +120,15 @@ linearr = function(X, y, lam = seq(0, 2, 0.1),
     if (intercept) {
         b1 = as.matrix(betas[1])
         rownames(b1) = "intercept"
-        betas = rbind(b1, as.matrix(betas[-1, 
-            ]))
+        betas = rbind(b1, as.matrix(betas[-1, ]))
         g1 = as.matrix(grads[1])
         rownames(g1) = "intercept"
-        grads = rbind(g1, as.matrix(grads[-1, 
-            ]))
+        grads = rbind(g1, as.matrix(grads[-1, ]))
     }
     
     # generate fitted values
-    fit = predict_linearc(linear$coefficients, 
-        as.matrix(X), y)
+    fit = predict_linearc(linear$coefficients, as.matrix(X), 
+        y)
     
     # misc
     if (penalty == "none") {
@@ -142,7 +142,39 @@ linearr = function(X, y, lam = seq(0, 2, 0.1),
     
     returns = list(parameters = parameters, coefficients = betas, 
         MSE = fit$MSE, gradient = grads)
+    class(returns) = "linearr"
     return(returns)
 }
 
 
+
+
+##-----------------------------------------------------------------------------------
+
+
+
+
+
+#' @title Print logitr object
+#' @param x logitr class object
+#' @export
+print.linearr = function(x, ...) {
+    
+    # print optimal tuning parameters
+    cat("\nTuning parameters:\n")
+    print.default(round(x$parameters, 3), print.gap = 2L, 
+        quote = FALSE)
+    
+    # print MSE
+    cat("\nMSE:\n")
+    print.default(x$MSE, quote = FALSE)
+    
+    # print coefficients if dim <= 10
+    if (nrow(x$coefficients) <= 20) {
+        cat("\nCoefficients:\n")
+        print.default(round(x$coefficients, 5))
+    } else {
+        cat("\n(...output suppressed due to large dimension!)\n")
+    }
+    
+}
