@@ -16,6 +16,8 @@ src/*.dll
 logitr.Rproj
 tests/.DS_Store
 data/.DS_Store
+R/.DS_Store
+man/.DS_Store
 README.Rmd
 Vignette/logitr.Rmd
 Vignette/logitr_cache/html/*.rdb
