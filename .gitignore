@@ -12,6 +12,7 @@ src/*.dll
 .rdb
 .rdx
 .Rmd
+.text
 logitr.Rproj
 tests/.DS_Store
 data/.DS_Store
@@ -26,3 +27,6 @@ Vignette/logitr_cache/latex/*.Rdata
 README_cache/markdown_github/*.rdb
 README_cache/markdown_github/*.rdx
 README_cache/markdown_github/*.Rdata
+Vignette_cache/html/*.rdb
+Vignette_cache/html/*.rdx
+Vignette_cache/html/*.Rdata
