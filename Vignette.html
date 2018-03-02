@@ -12,7 +12,7 @@
 
 <meta name="author" content="Matt Galloway" />
 
-<meta name="date" content="2018-02-28" />
+<meta name="date" content="2018-03-02" />
 
 <title>logitr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">logitr</h1>
 <h4 class="author"><em>Matt Galloway</em></h4>
-<h4 class="date"><em>2018-02-28</em></h4>
+<h4 class="date"><em>2018-03-02</em></h4>
 
 
 <div id="TOC">
@@ -105,6 +105,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The easiest way to install is from the development version from GitHub:</span>
 <span class="co"># install.packages(&quot;devtools&quot;)</span>
 devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;MGallow/logitr&quot;</span>)</code></pre></div>
+<p><strong>Important:</strong> if using operating systems other than Mac or Windows, you will have to download the package as source and add a <code>src/Makevars</code> file (idential to the <code>Makevars.win</code> already included).</p>
 <p>If there are any issues/bugs, please let me know: <a href="https://github.com/MGallow/logitr/issues/" class="uri">https://github.com/MGallow/logitr/issues/</a>. Pull requests are welcome!</p>
 <p> ## Logistic Regression</p>
 <p>Logistic regression is used in a variety of fields and subjects when the goal of the analysis is to predict the likelihood or probability of a particular event occurring. We typically denote instances where an event occurs as a “success” and a “failure” when the event does not occur. These names, however, are often catered to the particular application of interest. For instance, we may opt to use “spam” and “not spam” in email spam detection and “cat” and “dog” in object recognition. <code>logitr</code> was built with particular applications like these in mind. In order to better understand the code contained in the package, we will provide a brief mathematical summary in the following paragraphs. </p>
