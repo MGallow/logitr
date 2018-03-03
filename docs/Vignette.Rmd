@@ -45,6 +45,7 @@ devtools::install_github("MGallow/logitr")
 If there are any issues/bugs, please let me know: https://github.com/MGallow/logitr/issues/. Pull requests are welcome!
 
 \vspace{1cm}
+
 ## Logistic Regression
 
 Logistic regression is used in a variety of fields and subjects when the goal of the analysis is to predict the likelihood or probability of a particular event occurring. We typically denote instances where an event occurs as a "success" and a "failure" when the event does not occur. These names, however, are often catered to the particular application of interest. For instance, we may opt to use "spam" and "not spam" in email spam detection and "cat" and "dog" in object recognition. `logitr` was built with particular applications like these in mind. In order to better understand the code contained in the package, we will provide a brief mathematical summary in the following paragraphs.

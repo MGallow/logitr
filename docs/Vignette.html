@@ -126,7 +126,8 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#overview">Overview</a></li>
-<li><a href="#installation">Installation</a><ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#logistic-regression">Logistic Regression</a><ul>
 <li><a href="#maximum-likelihood-estimation">Maximum Likelihood Estimation</a></li>
 <li><a href="#ridge-logistic-regression">Ridge Logistic Regression</a></li>
 <li><a href="#bridge-logistic-regression">Bridge Logistic Regression</a></li>
@@ -157,7 +158,10 @@ $(document).ready(function () {
 devtools::install_github(&quot;MGallow/logitr&quot;)</code></pre>
 <p><strong>Important:</strong> if using operating systems other than Mac or Windows, you will have to download the package as source and add a <code>src/Makevars</code> file (idential to the <code>Makevars.win</code> already included).</p>
 <p>If there are any issues/bugs, please let me know: <a href="https://github.com/MGallow/logitr/issues/" class="uri">https://github.com/MGallow/logitr/issues/</a>. Pull requests are welcome!</p>
-<p> ## Logistic Regression</p>
+
+</div>
+<div id="logistic-regression" class="section level2">
+<h2>Logistic Regression</h2>
 <p>Logistic regression is used in a variety of fields and subjects when the goal of the analysis is to predict the likelihood or probability of a particular event occurring. We typically denote instances where an event occurs as a “success” and a “failure” when the event does not occur. These names, however, are often catered to the particular application of interest. For instance, we may opt to use “spam” and “not spam” in email spam detection and “cat” and “dog” in object recognition. <code>logitr</code> was built with particular applications like these in mind. In order to better understand the code contained in the package, we will provide a brief mathematical summary in the following paragraphs. </p>
 <p>Let us consider a two-class classification problem. We denote the response <span class="math inline">\(y_{i}\)</span> for the <span class="math inline">\(i\)</span>th observation being contained in the set <span class="math inline">\(\left \{ 0, 1 \right \}\)</span>. In this set up (without loss of generality), “1” is the success and “0” is the failure. Furthermore, we denote our observed variables <span class="math inline">\(x_{1}, ..., x_{p}\)</span> as a column vector <span class="math inline">\(x_{i} = (1, x_{i1}, x_{i2}, ..., x_{ip})^{T}\)</span>. Given the information in <span class="math inline">\(x_{i}\)</span>, it is the goal of logistic regression to predict the probability that <span class="math inline">\(y_{i} = 1\)</span>. That is, the conditional probability <span class="math inline">\(P(Y_{1} = 1 | X_{i} = x_{i}) = 1 - P(Y_{i} = 0 | X_{i} = x_{i})\)</span>.</p>
 <p>Once this probability is calculated, we can define a <strong>decision rule</strong> (denoted by <span class="math inline">\(\phi\)</span>) that classifies observation <span class="math inline">\(i\)</span> as either “0” or “1”. Intuititvely, we might say that if the probability of observation <span class="math inline">\(i\)</span> being in class “1” is greater than the probability observation <span class="math inline">\(i\)</span> being in class “0”, then we should classify observation <span class="math inline">\(i\)</span> as class “1” (and “0” otherwise). Indeed, this is the optimal decision rule given to us by the <strong>Baye’s Rules</strong>. The decision rule is the following:</p>
