@@ -3,7 +3,7 @@ logitr
 
 ### \*\*\*This package is no longer maintained.
 
-See [vignette](https://htmlpreview.github.io/?https://github.com/MGallow/logitr/blob/master/Vignette.html) or [manual](https://github.com/MGallow/logitr/blob/master/logitr.pdf).
+See [vignette](https://mgallow.github.io/logitr/) or [manual](https://github.com/MGallow/logitr/blob/master/logitr.pdf).
 
 Overview
 --------
@@ -24,7 +24,7 @@ Installation
 devtools::install_github("MGallow/logitr")
 ```
 
-**Important:** if using operating systems other than Mac or Windows, you will have to download the package as source and add a `src/Makevars` file (idential to the `Makevars.win` already included).
+**Important**: if using operating systems other than Mac or Windows, you will have to download the package as source and add a `src/Makevars` file (idential to the `Makevars.win` already included).
 
 If there are any issues/bugs, please let me know: [github](https://github.com/MGallow/logitr/issues). You can also contact me via my [website](http://users.stat.umn.edu/~gall0441/). Pull requests are welcome!
 
@@ -46,17 +46,17 @@ linearr(X, y, penalty = "ridge")
     ## 
     ## Tuning parameters:
     ##       lam  alpha
-    ## [1,]  0.2    NaN
+    ## [1,]  0.1    NaN
     ## 
     ## MSE:
-    ## [1] 0.09637305
+    ## [1] 0.09632095
     ## 
     ## Coefficients:
     ##               [,1]
     ## intercept  5.84333
-    ##            0.28061
-    ##            1.21920
-    ##           -0.39335
+    ##            0.28212
+    ##            1.23521
+    ##           -0.40847
 
 ``` r
 #ridge logistic regression (IRLS) (use CV for optimal lambda)
