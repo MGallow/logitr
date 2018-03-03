@@ -267,6 +267,7 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
 ```
 
 \vspace{1cm}
+
 ## Majorize-Minimization (MM)
 
 The second algorithm we propose to compute $\hat{\beta}$ is called majorize-minimization (MM). Unlike the IRLS algorithm, the MM can be used with the ridge penalty as well as the bridge penalty. The main idea is the following:

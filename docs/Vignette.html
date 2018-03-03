@@ -133,6 +133,7 @@ $(document).ready(function () {
 <li><a href="#bridge-logistic-regression">Bridge Logistic Regression</a></li>
 </ul></li>
 <li><a href="#iterative-re-weighted-least-squares-irls">Iterative Re-Weighted Least Squares (IRLS)</a></li>
+<li><a href="#majorize-minimization-mm">Majorize-Minimization (MM)</a></li>
 <li><a href="#solve-for-qbeta-betak">Solve for <span class="math inline">\(Q(\beta | \beta^{(k)})\)</span></a></li>
 <li><a href="#usage">Usage</a></li>
 <li><a href="#example">Example</a></li>
@@ -327,7 +328,10 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
     returns = list(coefficients = betas, total.iterations = iteration, gradient = grads)
     return(returns)
 }</code></pre>
-<p> ## Majorize-Minimization (MM)</p>
+
+</div>
+<div id="majorize-minimization-mm" class="section level2">
+<h2>Majorize-Minimization (MM)</h2>
 <p>The second algorithm we propose to compute <span class="math inline">\(\hat{\beta}\)</span> is called majorize-minimization (MM). Unlike the IRLS algorithm, the MM can be used with the ridge penalty as well as the bridge penalty. The main idea is the following:</p>
 
 <p>Similar to IRLS, the MM algorithm will be looped for <span class="math inline">\(k = 0, 1, ..., K\)</span> until convergence. Unlike IRLS, we will assume an intercept for this problem. We will show how to find <span class="math inline">\(Q\)</span> for penalized logistic regression. Let’s state our objective:</p>
