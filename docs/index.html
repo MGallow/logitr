@@ -172,7 +172,6 @@ $(document).ready(function () {
 <pre class="r"><code># The easiest way to install is from the development version from GitHub:
 # install.packages(&quot;devtools&quot;)
 devtools::install_github(&quot;MGallow/logitr&quot;)</code></pre>
-<p><strong>Important:</strong> if using operating systems other than Mac or Windows, you will have to download the package as source and add a <code>src/Makevars</code> file (idential to the <code>Makevars.win</code> already included).</p>
 <p>If there are any issues/bugs, please let me know: <a href="https://github.com/MGallow/logitr/issues/" class="uri">https://github.com/MGallow/logitr/issues/</a>. Pull requests are welcome!</p>
 
 </div>
@@ -182,12 +181,12 @@ devtools::install_github(&quot;MGallow/logitr&quot;)</code></pre>
 <p>Let us consider a two-class classification problem. We denote the response <span class="math inline">\(y_{i}\)</span> for the <span class="math inline">\(i\)</span>th observation being contained in the set <span class="math inline">\(\left \{ 0, 1 \right \}\)</span>. In this set up (without loss of generality), “1” is the success and “0” is the failure. Furthermore, we denote our observed variables <span class="math inline">\(x_{1}, ..., x_{p}\)</span> as a column vector <span class="math inline">\(x_{i} = (1, x_{i1}, x_{i2}, ..., x_{ip})^{T}\)</span>. Given the information in <span class="math inline">\(x_{i}\)</span>, it is the goal of logistic regression to predict the probability that <span class="math inline">\(y_{i} = 1\)</span>. That is, the conditional probability <span class="math inline">\(P(Y_{1} = 1 | X_{i} = x_{i}) = 1 - P(Y_{i} = 0 | X_{i} = x_{i})\)</span>.</p>
 <p>Once this probability is calculated, we can define a <strong>decision rule</strong> (denoted by <span class="math inline">\(\phi\)</span>) that classifies observation <span class="math inline">\(i\)</span> as either “0” or “1”. Intuititvely, we might say that if the probability of observation <span class="math inline">\(i\)</span> being in class “1” is greater than the probability observation <span class="math inline">\(i\)</span> being in class “0”, then we should classify observation <span class="math inline">\(i\)</span> as class “1” (and “0” otherwise). Indeed, this is the optimal decision rule given to us by the <strong>Baye’s Rules</strong>. The decision rule is the following:</p>
 <p><span class="math display">\[ \phi(x_{i}) = \begin{cases}
-1 &amp; \text{ if } P(Y_{i} = 1 | X_{i} = x_{i}) \geq P(Y_{i} = 0 | X_{i} = x_{i}) \\
+1 &amp; \text{ if } P(Y_{i} = 1 | X_{i} = x_{i}) \geq P(Y_{i} = 0 | X_{i} = x_{i}) \\ 
 0 &amp; \text{ otherwise }
 \end{cases} \]</span></p>
 <p>This decision rule can be summed up as choosing the class that has the greatest probability conditional on the observed information <span class="math inline">\(x_{i}\)</span>. An equivalent decision rule uses what is called the <strong>log-odds ratio</strong>:</p>
 <p><span class="math display">\[ \phi(x_{i}) = \begin{cases}
-1 &amp; \text{ if } \log\left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{P(Y_{i} = 0 | X_{i} = x_{i})} \right ) \geq 0 \\
+1 &amp; \text{ if } \log\left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{P(Y_{i} = 0 | X_{i} = x_{i})} \right ) \geq 0 \\ 
 0 &amp; \text{ otherwise }
 \end{cases} \]</span></p>
 <p>where the <span class="math inline">\(\log(\cdot)\)</span> term is the log-odds ratio.</p>
@@ -204,7 +203,7 @@ devtools::install_github(&quot;MGallow/logitr&quot;)</code></pre>
 <h3>Maximum Likelihood Estimation</h3>
 <p>The classical statistical method of optimization for linear and generalized linear models is called <strong>maximum likelihood estimation</strong>. In short, we want to maximize the probability of our observed data. This requires defining a probability distribution. Recall that our formulation assumes <span class="math inline">\(Y_{i}\)</span> is some random variable that takes values in the set <span class="math inline">\(\left \{ 0, 1 \right \}\)</span>. By definition, this random variable follows a Bernoulli distribution:</p>
 <p><span class="math display">\[ P(Y_{i} = y_{i} | X_{i} = x_{i}) = \begin{cases}
-p(x_{i}) &amp; \text{ if } y_{i} = 1\\
+p(x_{i}) &amp; \text{ if } y_{i} = 1\\ 
 1 - p(x_{i}) &amp; \text{ if } y_{i} = 0
 \end{cases} \]</span></p>
 <p>Equivalently, we can write this as:</p>
@@ -259,7 +258,7 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 <p><span class="math display">\[ \beta^{(k + 1)} = (X^{T}W^{(k)}X + \lambda I_{p})^{-1}X^{T}W^{(k)}z^{(k)} \]</span></p>
 <p>If <span class="math inline">\(p\)</span> is particularly large (say <span class="math inline">\(p &gt;&gt; n\)</span>) then we can solve an alternative formulation:</p>
 <p><span class="math display">\[\beta^{(k + 1)} = X^{T}\sqrt{W^{(k)}}(\sqrt{W^{(k)}}XX^{T}\sqrt{W^{(k)}} + \lambda I_{p})^{-1}\sqrt{W^{(k)}}z^{(k)} \]</span></p>
-<p>This formulation makes use of what’s called the “kernel trick”. Note that in the latter formulation, we are only inverting a <span class="math inline">\(p \times p\)</span> matrix (as opposed to an <span class="math inline">\(n \times n\)</span> matrix). This allows us to save significant computation time when <span class="math inline">\(p\)</span> is particularly large. The <code>logitr</code> package will solve this formulation by default when <span class="math inline">\(p &gt; n\)</span>.</p>
+<p>This formulation makes use of what’s called the “kernel trick”. Note that in the latter formulation, we are only inverting a <span class="math inline">\(n \times n\)</span> matrix (as opposed to an <span class="math inline">\(n \times n\)</span> matrix). This allows us to save significant computation time when <span class="math inline">\(p\)</span> is particularly large. The <code>logitr</code> package will solve this formulation by default when <span class="math inline">\(p &gt; n\)</span>.</p>
 <p>Putting everything together, we have the IRLS algorithm:</p>
 
 <p><strong>Algorithm</strong>:</p>
@@ -278,38 +277,38 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 <p> <strong>Weighted least squares code snippet</strong>:</p>
 <p>Note this is not the actual code. The real code is written in c++.</p>
 <pre class="r"><code>#calculate the coefficient estimates for weighted least squares
-linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE,
+linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE, 
     kernel = FALSE) {
-
+    
     # if p &gt; n, linear kernel ridge regression
     if ((p &gt; n) | (kernel == TRUE)) {
-
+        
         # SVD
         svd = svd(X.)
-
+        
         # adjust d vector for regularization and diagonalize
         d_adj = diag(1/(svd$d^2 + lam))
-
+        
         # calculate beta estimates
-        betas = t(X.) %*% svd$u %*% d_adj %*% t(svd$u) %*%
+        betas = t(X.) %*% svd$u %*% d_adj %*% t(svd$u) %*% 
             y.
         rownames(betas) = NULL
-
+        
     } else {
         # compute normal ridge regression
-
+        
         # SVD
         svd = svd(X.)
-
+        
         # adjust d vector for regularization and diagonalize
         d_adj = diag(svd$d/(svd$d^2 + lam))
-
+        
         # calculate beta estimates
         betas = svd$v %*% d_adj %*% t(svd$u) %*% y.
         rownames(betas) = NULL
-
+        
     }
-
+    
     returns = list(coefficients = betas)
     return(returns)
 }</code></pre>
@@ -375,7 +374,7 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
   &amp;+ \lambda\left(\frac{\gamma}{2}(v \circ \beta)^{T}\beta +(1 - \gamma) \frac{1}{2}\beta^{T}diag(d^{(k)})\beta \right) + const. \\
   &amp; \nonumber \\
   &amp;\mbox{ where $v \circ \beta$ is the dot product between $\beta$ and a $(p + 1) \times 1$ vector $v$ with all entries equal to} \nonumber \\
-  &amp;\mbox{ zero except the first ($v = (0, 1, 1, 1,...)^{T}$). $d^{(k)}$ is the column vector with $d_{1}^{(k)} = 0$ and} \nonumber \\
+  &amp;\mbox{ zero except the first ($v = (0, 1, 1, 1,...)^{T}$), $d^{(k)}$ is the column vector with $d_{1}^{(k)} = 0$ and} \nonumber \\
   &amp;\mbox{ $d_{j}^{(k)} = (\beta_{j}^{(k)^{2}})^{\alpha/2 -1}$ for $j = 2,..,p$ and $\delta = 10^{-5}$ (some small number)} \nonumber \\
   &amp; \nonumber \\
   &amp;= \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
@@ -401,30 +400,30 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
 <p>Note this is not the actual code. The real code is written in c++.</p>
 <pre class="r"><code># calculates the coefficient estimates for logistic
 # regression (MM)
-MM = function(X, y, lam = 0, alpha = 1.5, gamma = 1, intercept = TRUE,
+MM = function(X, y, lam = 0, alpha = 1.5, gamma = 1, intercept = TRUE, 
     tol = 10^(-5), maxit = 1e+05, vec = NULL) {
-
+    
     # MM algorithm
     while ((iteration &lt; maxit) &amp; (max(abs(grads)) &gt; tol)) {
-
+        
         # update d vector
         d = as.numeric((betas^2)^(alpha/2 - 1))
         d[1] = 0
-
+        
         # qrsolve
-        betas = qr.solve(Z + lam * diag(gamma * (vec - d) +
-            d), t(X) %*% (y - logitr(X %*% betas)) + Z %*%
+        betas = qr.solve(Z + lam * diag(gamma * (vec - d) + 
+            d), t(X) %*% (y - logitr(X %*% betas)) + Z %*% 
             betas)
         rownames(betas) = NULL
-
+        
         # calculate updated gradients
-        grads = gradient_MM_logistic(betas, X, y, lam, alpha,
+        grads = gradient_MM_logistic(betas, X, y, lam, alpha, 
             gamma, vec)
         iteration = iteration + 1
-
+        
     }
-
-    returns = list(coefficients = betas, total.iterations = iteration,
+    
+    returns = list(coefficients = betas, total.iterations = iteration, 
         gradient = grads)
     return(returns)
 }</code></pre>
@@ -443,14 +442,14 @@ y_class = ifelse(dplyr::select(iris, Species) == &quot;setosa&quot;, 1, 0)
 
 #ridge regression (specify lam = 0.1)
 linearr(X, y, lam = 0.1, penalty = &quot;ridge&quot;)</code></pre>
-<pre><code>##
+<pre><code>## 
 ## Tuning parameters:
 ##       lam  alpha
 ## [1,]  0.1    NaN
-##
+## 
 ## MSE:
 ## [1] 0.09632095
-##
+## 
 ## Coefficients:
 ##               [,1]
 ## intercept  5.84333
@@ -459,14 +458,14 @@ linearr(X, y, lam = 0.1, penalty = &quot;ridge&quot;)</code></pre>
 ##           -0.40847</code></pre>
 <pre class="r"><code>#ridge regression (use CV for optimal lam; options default to seq(0, 2, 0.1))
 linearr(X, y, penalty = &quot;ridge&quot;)</code></pre>
-<pre><code>##
+<pre><code>## 
 ## Tuning parameters:
 ##       lam  alpha
 ## [1,]    0    NaN
-##
+## 
 ## MSE:
 ## [1] 0.0963027
-##
+## 
 ## Coefficients:
 ##               [,1]
 ## intercept  5.84333
@@ -475,14 +474,14 @@ linearr(X, y, penalty = &quot;ridge&quot;)</code></pre>
 ##           -0.42417</code></pre>
 <pre class="r"><code>#ridge regression (use CV for optimal lam; specify seq(0, 2, 0.01))
 linearr(X, y, lam = seq(0, 2, 0.01), penalty = &quot;ridge&quot;)</code></pre>
-<pre><code>##
+<pre><code>## 
 ## Tuning parameters:
 ##        lam  alpha
 ## [1,]  0.21    NaN
-##
+## 
 ## MSE:
 ## [1] 0.09637997
-##
+## 
 ## Coefficients:
 ##               [,1]
 ## intercept  5.84333
@@ -491,23 +490,23 @@ linearr(X, y, lam = seq(0, 2, 0.01), penalty = &quot;ridge&quot;)</code></pre>
 ##           -0.39187</code></pre>
 <pre class="r"><code>#ridge logistic regression (IRLS) (use CV for optimal lam)
 logisticr(X, y_class, penalty = &quot;ridge&quot;)</code></pre>
-<pre><code>##
+<pre><code>## 
 ## Iterations:
 ## [1] 17
-##
+## 
 ## Tuning parameters:
 ##       lam  alpha
 ## [1,]    0    NaN
-##
+## 
 ## MSE:
 ## [1] 5.838776e-13
-##
+## 
 ## logloss:
 ## [1] 1.874393e-05
-##
+## 
 ## misclassification:
 ## [1] 0
-##
+## 
 ## Coefficients:
 ##                [,1]
 ## intercept -14.39486
@@ -516,23 +515,23 @@ logisticr(X, y_class, penalty = &quot;ridge&quot;)</code></pre>
 ##           -12.88373</code></pre>
 <pre class="r"><code>#ridge logistic regression (MM) (specify lam = 0.1)
 logisticr(X, y_class, lam = 0.1, penalty = &quot;ridge&quot;, method = &quot;MM&quot;)</code></pre>
-<pre><code>##
+<pre><code>## 
 ## Iterations:
 ## [1] 2204
-##
+## 
 ## Tuning parameters:
 ##       lam  alpha
 ## [1,]  0.1    NaN
-##
+## 
 ## MSE:
 ## [1] 7.253825e-05
-##
+## 
 ## logloss:
 ## [1] 0.5151693
-##
+## 
 ## misclassification:
 ## [1] 0
-##
+## 
 ## Coefficients:
 ##               [,1]
 ## intercept -3.47091
@@ -543,23 +542,23 @@ logisticr(X, y_class, lam = 0.1, penalty = &quot;ridge&quot;, method = &quot;MM&
 fit = logisticr(X, y_class, lam = 0.1, alpha = 1.2, penalty = &quot;bridge&quot;)</code></pre>
 <pre><code>## [1] &quot;using MM algorithm...&quot;</code></pre>
 <pre class="r"><code>fit</code></pre>
-<pre><code>##
+<pre><code>## 
 ## Iterations:
 ## [1] 6871
-##
+## 
 ## Tuning parameters:
 ##       lam  alpha
 ## [1,]  0.1    1.2
-##
+## 
 ## MSE:
 ## [1] 1.50151e-05
-##
+## 
 ## logloss:
 ## [1] 0.2262398
-##
+## 
 ## misclassification:
 ## [1] 0
-##
+## 
 ## Coefficients:
 ##               [,1]
 ## intercept -4.40081
@@ -573,19 +572,19 @@ predict(fit, X[1:3,], y_class[1:3])</code></pre>
 ## [1,] 0.0009910544
 ## [2,] 0.0005029803
 ## [3,] 0.0010600969
-##
+## 
 ## $class
 ##      [,1]
 ## [1,]    0
 ## [2,]    0
 ## [3,]    0
-##
+## 
 ## $MSE
 ## [1] 0.998298
-##
+## 
 ## $log.loss
 ## [1] 21.3611
-##
+## 
 ## $misclassification
 ## [1] 1</code></pre>
 
@@ -640,23 +639,23 @@ microbenchmark(logisticr(X, y, penalty = &quot;ridge&quot;), times = 5)</code></
 <pre class="r"><code>#ridge regression using IRLS
 fit = logisticr(X, y, lam = 0.1, penalty = &quot;ridge&quot;)
 fit</code></pre>
-<pre><code>##
+<pre><code>## 
 ## Iterations:
 ## [1] 9
-##
+## 
 ## Tuning parameters:
 ##       lam  alpha
 ## [1,]  0.1    NaN
-##
+## 
 ## MSE:
 ## [1] 0.01715649
-##
+## 
 ## logloss:
 ## [1] 1307.966
-##
+## 
 ## misclassification:
 ## [1] 0
-##
+## 
 ## Coefficients:
 ##               [,1]
 ## intercept -4.30666
@@ -675,19 +674,19 @@ predict(fit, X[1:3,], y$V9[1:3])</code></pre>
 ## [1,] 1.0000000
 ## [2,] 0.9999999
 ## [3,] 1.0000000
-##
+## 
 ## $class
 ##      [,1]
 ## [1,]    1
 ## [2,]    1
 ## [3,]    1
-##
+## 
 ## $MSE
 ## [1] 1
-##
+## 
 ## $log.loss
 ## [1] Inf
-##
+## 
 ## $misclassification
 ## [1] 1</code></pre>
 

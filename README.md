@@ -1,8 +1,6 @@
 logitr
 ================
 
-### \*\*\*This package is no longer maintained.
-
 See [vignette](https://mgallow.github.io/logitr/) or [manual](https://github.com/MGallow/logitr/blob/master/logitr.pdf).
 
 Overview
@@ -23,8 +21,6 @@ Installation
 # install.packages("devtools")
 devtools::install_github("MGallow/logitr")
 ```
-
-**Important**: if using operating systems other than Mac or Windows, you will have to download the package as source and add a `src/Makevars` file (idential to the `Makevars.win` already included).
 
 If there are any issues/bugs, please let me know: [github](https://github.com/MGallow/logitr/issues). You can also contact me via my [website](http://users.stat.umn.edu/~gall0441/). Pull requests are welcome!
 

@@ -40,8 +40,6 @@ knitr::opts_chunk$set(cache = TRUE)
 devtools::install_github("MGallow/logitr")
 ```
 
-**Important:** if using operating systems other than Mac or Windows, you will have to download the package as source and add a `src/Makevars` file (idential to the `Makevars.win` already included).
-
 If there are any issues/bugs, please let me know: https://github.com/MGallow/logitr/issues/. Pull requests are welcome!
 
 \vspace{1cm}
@@ -168,7 +166,7 @@ If $p$ is particularly large (say $p >> n$) then we can solve an alternative for
 
 \[\beta^{(k + 1)} = X^{T}\sqrt{W^{(k)}}(\sqrt{W^{(k)}}XX^{T}\sqrt{W^{(k)}} + \lambda I_{p})^{-1}\sqrt{W^{(k)}}z^{(k)} \]
 
-This formulation makes use of what's called the "kernel trick". Note that in the latter formulation, we are only inverting a $p \times p$ matrix (as opposed to an $n \times n$ matrix). This allows us to save significant computation time when $p$ is particularly large. The `logitr` package will solve this formulation by default when $p > n$.
+This formulation makes use of what's called the "kernel trick". Note that in the latter formulation, we are only inverting a $n \times n$ matrix (as opposed to an $n \times n$ matrix). This allows us to save significant computation time when $p$ is particularly large. The `logitr` package will solve this formulation by default when $p > n$.
 
 Putting everything together, we have the IRLS algorithm:
 
@@ -314,7 +312,7 @@ We now derive our $Q$ function:
   &+ \lambda\left(\frac{\gamma}{2}(v \circ \beta)^{T}\beta +(1 - \gamma) \frac{1}{2}\beta^{T}diag(d^{(k)})\beta \right) + const. \\
   & \nonumber \\
   &\mbox{ where $v \circ \beta$ is the dot product between $\beta$ and a $(p + 1) \times 1$ vector $v$ with all entries equal to} \nonumber \\
-  &\mbox{ zero except the first ($v = (0, 1, 1, 1,...)^{T}$). $d^{(k)}$ is the column vector with $d_{1}^{(k)} = 0$ and} \nonumber \\
+  &\mbox{ zero except the first ($v = (0, 1, 1, 1,...)^{T}$), $d^{(k)}$ is the column vector with $d_{1}^{(k)} = 0$ and} \nonumber \\
   &\mbox{ $d_{j}^{(k)} = (\beta_{j}^{(k)^{2}})^{\alpha/2 -1}$ for $j = 2,..,p$ and $\delta = 10^{-5}$ (some small number)} \nonumber \\
   & \nonumber \\
   &= \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\

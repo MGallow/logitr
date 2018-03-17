@@ -41,8 +41,8 @@
 
 logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, 
     penalty = "none", intercept = TRUE, method = "IRLS", 
-    tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1, 
-    criteria = "logloss", K = 5) {
+    tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1, criteria = "logloss", 
+    K = 5) {
     
     # checks
     n = dim(X)[1]
@@ -106,8 +106,7 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
         
         # execute CV_logisticc
         CV = CV_logisticc(X, y, lam, alpha, penalty, intercept, 
-            method, tol, maxit, vec_, init, criteria, 
-            K)
+            method, tol, maxit, vec_, init, criteria, K)
         lam = CV$best.lam
         alpha = CV$best.alpha
     }
@@ -145,8 +144,7 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
     
     returns = list(parameters = parameters, coefficients = betas, 
         MSE = fit$MSE, log.loss = fit$log.loss, misclassification = fit$misclassification, 
-        total.iterations = logistic$total.iterations, 
-        gradient = grads)
+        total.iterations = logistic$total.iterations, gradient = grads)
     class(returns) = "logisticr"
     return(returns)
     

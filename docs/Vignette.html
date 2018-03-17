@@ -157,7 +157,6 @@ $(document).ready(function () {
 <pre class="r"><code># The easiest way to install is from the development version from GitHub:
 # install.packages(&quot;devtools&quot;)
 devtools::install_github(&quot;MGallow/logitr&quot;)</code></pre>
-<p><strong>Important:</strong> if using operating systems other than Mac or Windows, you will have to download the package as source and add a <code>src/Makevars</code> file (idential to the <code>Makevars.win</code> already included).</p>
 <p>If there are any issues/bugs, please let me know: <a href="https://github.com/MGallow/logitr/issues/" class="uri">https://github.com/MGallow/logitr/issues/</a>. Pull requests are welcome!</p>
 
 </div>
@@ -244,7 +243,7 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 <p><span class="math display">\[ \beta^{(k + 1)} = (X^{T}W^{(k)}X + \lambda I_{p})^{-1}X^{T}W^{(k)}z^{(k)} \]</span></p>
 <p>If <span class="math inline">\(p\)</span> is particularly large (say <span class="math inline">\(p &gt;&gt; n\)</span>) then we can solve an alternative formulation:</p>
 <p><span class="math display">\[\beta^{(k + 1)} = X^{T}\sqrt{W^{(k)}}(\sqrt{W^{(k)}}XX^{T}\sqrt{W^{(k)}} + \lambda I_{p})^{-1}\sqrt{W^{(k)}}z^{(k)} \]</span></p>
-<p>This formulation makes use of what’s called the “kernel trick”. Note that in the latter formulation, we are only inverting a <span class="math inline">\(p \times p\)</span> matrix (as opposed to an <span class="math inline">\(n \times n\)</span> matrix). This allows us to save significant computation time when <span class="math inline">\(p\)</span> is particularly large. The <code>logitr</code> package will solve this formulation by default when <span class="math inline">\(p &gt; n\)</span>.</p>
+<p>This formulation makes use of what’s called the “kernel trick”. Note that in the latter formulation, we are only inverting a <span class="math inline">\(n \times n\)</span> matrix (as opposed to an <span class="math inline">\(n \times n\)</span> matrix). This allows us to save significant computation time when <span class="math inline">\(p\)</span> is particularly large. The <code>logitr</code> package will solve this formulation by default when <span class="math inline">\(p &gt; n\)</span>.</p>
 <p>Putting everything together, we have the IRLS algorithm:</p>
 
 <p><strong>Algorithm</strong>:</p>
@@ -360,7 +359,7 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
   &amp;+ \lambda\left(\frac{\gamma}{2}(v \circ \beta)^{T}\beta +(1 - \gamma) \frac{1}{2}\beta^{T}diag(d^{(k)})\beta \right) + const. \\
   &amp; \nonumber \\
   &amp;\mbox{ where $v \circ \beta$ is the dot product between $\beta$ and a $(p + 1) \times 1$ vector $v$ with all entries equal to} \nonumber \\
-  &amp;\mbox{ zero except the first ($v = (0, 1, 1, 1,...)^{T}$). $d^{(k)}$ is the column vector with $d_{1}^{(k)} = 0$ and} \nonumber \\
+  &amp;\mbox{ zero except the first ($v = (0, 1, 1, 1,...)^{T}$), $d^{(k)}$ is the column vector with $d_{1}^{(k)} = 0$ and} \nonumber \\
   &amp;\mbox{ $d_{j}^{(k)} = (\beta_{j}^{(k)^{2}})^{\alpha/2 -1}$ for $j = 2,..,p$ and $\delta = 10^{-5}$ (some small number)} \nonumber \\
   &amp; \nonumber \\
   &amp;= \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
