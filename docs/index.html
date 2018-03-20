@@ -15,7 +15,7 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Penalized Regression</h1>
+        <h1>logitr</h1>
 
         <p class="view"><a href="https://github.com/MGallow/logitr">View the Project on GitHub <small>MGallow/logitr</small></a></p>
 
@@ -56,6 +56,16 @@ if (window.hljs) {
 </script>
 
 
+<style type="text/css">
+  p.abstract{
+    text-align: center;
+    font-weight: bold;
+  }
+  div.abstract{
+    margin: auto;
+    width: 90%;
+  }
+</style>
 
 <style type="text/css">
 h1 {
@@ -133,23 +143,21 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">logitr</h1>
+<h1 class="title toc-ignore">Penalized Regression</h1>
 <h4 class="author"><em>Matt Galloway</em></h4>
+<div class="abstract">
+<p class="abstract">Abstract</p>
+<code>logitr</code> is an R package for linear and logistic regression with optional ridge and bridge regularization penalties. In this report we will provide a brief theoretical justification for using logistic regression as well as examples and simulation results for this package.
+</div>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#overview">Overview</a></li>
 <li><a href="#installation">Installation</a></li>
-<li><a href="#logistic-regression">Logistic Regression</a><ul>
-<li><a href="#maximum-likelihood-estimation">Maximum Likelihood Estimation</a></li>
-<li><a href="#ridge-logistic-regression">Ridge Logistic Regression</a></li>
-<li><a href="#bridge-logistic-regression">Bridge Logistic Regression</a></li>
-</ul></li>
+<li><a href="#logistic-regression">Logistic Regression</a></li>
 <li><a href="#iterative-re-weighted-least-squares-irls">Iterative Re-Weighted Least Squares (IRLS)</a></li>
 <li><a href="#majorize-minimization-mm">Majorize-Minimization (MM)</a></li>
-<li><a href="#solve-for-qbeta-betak">Solve for <span class="math inline">\(Q(\beta | \beta^{(k)})\)</span></a></li>
 <li><a href="#usage">Usage</a></li>
 <li><a href="#example">Example</a></li>
 <li><a href="#computer-specs">Computer Specs:</a></li>
@@ -157,23 +165,22 @@ $(document).ready(function () {
 </ul>
 </div>
 
-<div id="overview" class="section level2">
-<h2>Overview</h2>
-<p><code>logitr</code> is an R package for linear and logistic regression with optional ridge and bridge regularization penalties. In this report we will provide a brief theoretical justification for using logistic regression as well as examples and simulation results for this package. A list of functions contained in the package (available to user) can be found below:</p>
-<ul>
-<li><code>logisticr()</code> computes the coefficient estimates for logistic regression (ridge and bridge regularization, optional)</li>
-<li><code>linearr()</code> computes the linear regression coefficient estimates (ridge regularization and weights, optional)</li>
-<li><code>predict.logisticr()</code> generates predictions and loss metrics for logistic regression</li>
-<li><code>predict.linearr()</code> generates predictions and loss metrics for linear regression</li>
-</ul>
-</div>
+<p><br></p>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
 <pre class="r"><code># The easiest way to install is from the development version from GitHub:
 # install.packages(&quot;devtools&quot;)
 devtools::install_github(&quot;MGallow/logitr&quot;)</code></pre>
 <p>If there are any issues/bugs, please let me know: <a href="https://github.com/MGallow/logitr/issues/" class="uri">https://github.com/MGallow/logitr/issues/</a>. Pull requests are welcome!</p>
-
+<p><br></p>
+<p>A list of functions contained in the package (available to user) can be found below:</p>
+<ul>
+<li><code>logisticr()</code> computes the coefficient estimates for logistic regression (ridge and bridge regularization, optional)</li>
+<li><code>linearr()</code> computes the linear regression coefficient estimates (ridge regularization and weights, optional)</li>
+<li><code>predict.logisticr()</code> generates predictions and loss metrics for logistic regression</li>
+<li><code>predict.linearr()</code> generates predictions and loss metrics for linear regression</li>
+</ul>
+<p><br></p>
 </div>
 <div id="logistic-regression" class="section level2">
 <h2>Logistic Regression</h2>
@@ -199,6 +206,7 @@ devtools::install_github(&quot;MGallow/logitr&quot;)</code></pre>
   &amp;\Rightarrow P(Y_{i} = 1 | X_{i} = x_{i}) \approx \frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \equiv p(x_{i}) \mbox{ (say)}
 \end{align}\]</span>
 <p>We see that the conditional probability <span class="math inline">\(P(Y_{i} = 1 | X_{i} = x_{i})\)</span> can be approximated by the function <span class="math inline">\(p(x_{i})\)</span> – we call this function the <strong>logit</strong> function (hence the name of our package!). We will show the method for solving for the optimal vector of coefficients (<span class="math inline">\(\hat{\beta}\)</span>) in the next section.</p>
+<p><br></p>
 <div id="maximum-likelihood-estimation" class="section level3">
 <h3>Maximum Likelihood Estimation</h3>
 <p>The classical statistical method of optimization for linear and generalized linear models is called <strong>maximum likelihood estimation</strong>. In short, we want to maximize the probability of our observed data. This requires defining a probability distribution. Recall that our formulation assumes <span class="math inline">\(Y_{i}\)</span> is some random variable that takes values in the set <span class="math inline">\(\left \{ 0, 1 \right \}\)</span>. By definition, this random variable follows a Bernoulli distribution:</p>
@@ -218,6 +226,7 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 \end{align}\]</span>
 <p>Maximum likelihood estimation involves find the <span class="math inline">\(\beta\)</span> vector that maximizes the log-likelihood function – or equivalently, minimizes the negative log-likelihood:</p>
 <p><span class="math display">\[ \hat{\beta} = \arg\min_{\beta} -l(\beta)  \]</span></p>
+<p><br></p>
 <p>In addition, we can add regularization terms if we so choose:</p>
 </div>
 <div id="ridge-logistic-regression" class="section level3">
@@ -228,7 +237,7 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 <h3>Bridge Logistic Regression</h3>
 <p><span class="math display">\[ \hat{\beta} = \arg\min_{\beta} -l(\beta) + \lambda\frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}  \]</span></p>
 <p>where <span class="math inline">\(\lambda \geq 0\)</span> and <span class="math inline">\(\alpha \in \left(1, 2 \right)\)</span>. Note that we do not penalize the intercept in either method. Algorithms for computing <span class="math inline">\(\hat{\beta}\)</span> will be the subject of our next section.</p>
-
+<p><br></p>
 <p><strong>Note:</strong></p>
 <span class="math display">\[\begin{align*}
 \nabla l(\beta) &amp;= \sum_{i = 1}^{n}y_{i}x_{i} - \sum_{i = 1}^{n}\left (\frac{x_{i}\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right) = \sum_{i = 1}^{n}y_{i}x_{i} - \sum_{i = 1}^{n}x_{i}p(x_{i}) \\
@@ -236,7 +245,7 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 \nabla^{2} l(\beta) &amp;= -\sum_{i = 1}^{n}\left (\frac{x_{i}x_{i}^{T}\exp(x_{i}^{T}\beta)(1 + \exp(x_{i}^{T}\beta)) - x_{i}x_{i}^{T}\exp(x_{i}^{T}\exp(x_{i}^{T}))}{(1 + \exp(x_{i}^{T}\beta))^{2}} \right) \\
   &amp;= -\sum_{i = 1}^{T}\left (\frac{x_{i}x_{i}^{T}\exp(x_{i}^{T}\beta)}{(1 + \exp(x_{i}^{n}\beta))^{2}} \right) = -\sum_{i = 1}^{n}x_{i}x_{i}^{T}p(x_{i})(1 - p(x_{i})) = \sum_{i = 1}^{n}x_{i}x_{i}^{T}w(x_{i}) \mbox{ (say)}
 \end{align*}\]</span>
-
+<p><br></p>
 </div>
 </div>
 <div id="iterative-re-weighted-least-squares-irls" class="section level2">
@@ -261,6 +270,7 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 <p>This formulation makes use of what’s called the “kernel trick”. Note that in the latter formulation, we are only inverting a <span class="math inline">\(n \times n\)</span> matrix (as opposed to an <span class="math inline">\(n \times n\)</span> matrix). This allows us to save significant computation time when <span class="math inline">\(p\)</span> is particularly large. The <code>logitr</code> package will solve this formulation by default when <span class="math inline">\(p &gt; n\)</span>.</p>
 <p>Putting everything together, we have the IRLS algorithm:</p>
 
+<p><br></p>
 <p><strong>Algorithm</strong>:</p>
 <ul>
 <li>Intialize <span class="math inline">\(\beta^{(0)}, W^{(0)}\)</span>.</li>
@@ -272,9 +282,9 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 <li><span class="math inline">\(\beta^{(k + 1)} = (X^{T}W^{(k)}X + \lambda I_{p})^{-1}X^{T}W^{(k)}z^{(k)}\)</span></li>
 </ul></li>
 </ul>
-
+<p><br></p>
 <p>Below you can find two snippets of code from the <code>logitr</code> package. The first snippet solves the weighted least squares problem. Note that this portion uses SVD decomposition which will not be discussed in this report. The second snippet is the code for IRLS.</p>
-<p> <strong>Weighted least squares code snippet</strong>:</p>
+<p><br> <strong>Weighted least squares code snippet</strong>:</p>
 <p>Note this is not the actual code. The real code is written in c++.</p>
 <pre class="r"><code>#calculate the coefficient estimates for weighted least squares
 linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE, 
@@ -312,7 +322,7 @@ linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE,
     returns = list(coefficients = betas)
     return(returns)
 }</code></pre>
-
+<p><br></p>
 <p><strong>IRLS code snippet</strong>:</p>
 <p>Note this is not the actual code. The real code is written in c++.</p>
 <pre class="r"><code># calculates the coefficient estimates for logistic
@@ -342,7 +352,7 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
     returns = list(coefficients = betas, total.iterations = iteration, gradient = grads)
     return(returns)
 }</code></pre>
-
+<p><br></p>
 </div>
 <div id="majorize-minimization-mm" class="section level2">
 <h2>Majorize-Minimization (MM)</h2>
@@ -351,9 +361,9 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
 <p>Similar to IRLS, the MM algorithm will be looped for <span class="math inline">\(k = 0, 1, ..., K\)</span> until convergence. Unlike IRLS, we will assume an intercept for this problem. We will show how to find <span class="math inline">\(Q\)</span> for penalized logistic regression. Let’s state our objective:</p>
 <p><span class="math display">\[ \hat{\beta} = \arg\min_{\beta} -l(\beta) + \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}\right)  \]</span></p>
 <p>where <span class="math inline">\(\alpha \in \left(1, 2 \right)\)</span> and <span class="math inline">\(\gamma \in \left\{0, 1 \right\}\)</span> will act as indicator function. If <code>penalty = &quot;ridge&quot;</code> then <span class="math inline">\(\gamma = 1\)</span>. If <code>penalty = &quot;bridge&quot;</code> then <span class="math inline">\(\gamma = 0\)</span> and the appropriate terms will be set to zero.</p>
-</div>
-<div id="solve-for-qbeta-betak" class="section level2">
-<h2>Solve for <span class="math inline">\(Q(\beta | \beta^{(k)})\)</span></h2>
+<p><br></p>
+<div id="solve-for-qbeta-betak" class="section level3">
+<h3>Solve for <span class="math inline">\(Q(\beta | \beta^{(k)})\)</span></h3>
 <p>Note the following fact: if for some function <span class="math inline">\(\phi\)</span>, <span class="math inline">\(\phi''(x) &lt; 0\)</span> for all <span class="math inline">\(x\)</span> then</p>
 <p><span class="math display">\[ \phi(x) \leq \phi(x^{(k)}) + \phi'(x^{(k)})(x - x^{(k)}) \]</span></p>
 <p>Let <span class="math inline">\(\phi(x) = (x)^{\alpha/2}\)</span>:</p>
@@ -361,7 +371,7 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
 <p><span class="math display">\[\frac{d^{2}}{d^{2}x}(x^{\alpha/2}) = \frac{\alpha}{2}(\frac{\alpha}{2} - 1)x^{\alpha/2-2} &lt; 0 \]</span></p>
 <p>This implies that the following inequality must hold:</p>
 <p><span class="math display">\[ \left|\beta_{j}\right|^{\alpha} = (\beta_{j}^{2})^{\alpha/2} \leq (\beta_{j}^{(k)^{2}})^{\alpha/2} + \frac{\alpha}{2}(\beta_{j}^{(k)^{2}})^{\alpha/2 - 1}(\beta_{j}^{2} - \beta_{j}^{(k)^{2}}) \]</span></p>
-<p> We now derive our <span class="math inline">\(Q\)</span> function:</p>
+<p><br> We now derive our <span class="math inline">\(Q\)</span> function:</p>
 <span class="math display">\[\begin{align}
 -l(\beta) &amp;+ \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}\right) \\
   &amp;=  -l(\beta^{(k)}) + \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
@@ -386,7 +396,7 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
 <p>That was a lot of effort to find our <span class="math inline">\(Q\)</span> function but we eventually see that our <span class="math inline">\(Q\)</span> function is quadratic in form. Therefore, we can find a closed solution for each update. By plugging in the gradient and hessian of our log-likelihood function and dropping constants, we will eventually see by solving for the gradient of <span class="math inline">\(Q\)</span> and setting it equal to zero, that we have:</p>
 <p><span class="math display">\[\beta^{(k + 1)} = \left(X^{T}(\frac{1}{4} + \delta)X +\lambda diag \left[\gamma(v - d^{(k)}) + d^{(k)}\right] \right)^{-1}\left(X^{T}(y - p^{(k)}) + X^{T}(\frac{1}{4} + \delta)X \right) \]</span></p>
 <p>Finally, putting everything together we have the MM algorithm for penalized logistic regression:</p>
-<p> <strong>Algorithm</strong>:</p>
+<p><br> <strong>Algorithm</strong>:</p>
 <ul>
 <li>Initialize <span class="math inline">\(\beta^{(0)}\)</span>.</li>
 <li>For <span class="math inline">\(k = 0, ..., K\)</span> until convergence:
@@ -394,9 +404,9 @@ IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
 <li><span class="math inline">\(\beta^{(k + 1)} = \left(X^{T}(\frac{1}{4} + \delta)X +\lambda diag \left[\gamma(v - d^{(k)}) + d^{(k)}\right] \right)^{-1}\left(X^{T}(y - p^{(k)}) + X^{T}(\frac{1}{4} + \delta)X \right)\)</span></li>
 </ul></li>
 </ul>
-
+<p><br></p>
 <p>Below you can find a snippet of code for the MM function.</p>
-<p> <strong>MM code snippet</strong>:</p>
+<p><br> <strong>MM code snippet</strong>:</p>
 <p>Note this is not the actual code. The real code is written in c++.</p>
 <pre class="r"><code># calculates the coefficient estimates for logistic
 # regression (MM)
@@ -427,12 +437,13 @@ MM = function(X, y, lam = 0, alpha = 1.5, gamma = 1, intercept = TRUE,
         gradient = grads)
     return(returns)
 }</code></pre>
-
+<p><br></p>
+</div>
 </div>
 <div id="usage" class="section level2">
 <h2>Usage</h2>
 <p>Let us walk through some functions in the <code>logitr</code> package. We will use the iris data set for illustration.</p>
-
+<p><br></p>
 <pre class="r"><code>library(logitr)
 
 #we will use the iris data set
@@ -587,14 +598,14 @@ predict(fit, X[1:3,], y_class[1:3])</code></pre>
 ## 
 ## $misclassification
 ## [1] 1</code></pre>
-
+<p><br></p>
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
 <p>Let us now consider a real-life data set. We will use the High Time Resolution Universe Survey (HTRU) data set. The goal of this study was to classify Pulsar (type of star) candidates. From the website: “Pulsars are a rare type of Neutron star that produce radio emission detectable here on Earth. They are of considerable scientific interest as probes of space-time, the inter-stellar medium, and states of matter” (1). This data set has 17,898 rows and 9 columns – what each column means is not of interest to us (we are only interested in computation time).</p>
-<p> Link : <a href="https://archive.ics.uci.edu/ml/datasets/HTRU2">HTRU2 Data</a> </p>
+<p><br> Link : <a href="https://archive.ics.uci.edu/ml/datasets/HTRU2">HTRU2 Data</a> <br></p>
 <p>In the following code, we see that is only takes 0.2 seconds to compute our estimates using IRLS method and only 3.6 seconds to compute them using the MM algorithm.</p>
-
+<p><br></p>
 <pre class="r"><code>dim(data)</code></pre>
 <pre><code>## [1] 17898     9</code></pre>
 <pre class="r"><code>head(data)</code></pre>
@@ -689,7 +700,7 @@ predict(fit, X[1:3,], y$V9[1:3])</code></pre>
 ## 
 ## $misclassification
 ## [1] 1</code></pre>
-
+<p><br></p>
 </div>
 <div id="computer-specs" class="section level2">
 <h2>Computer Specs:</h2>
@@ -699,6 +710,7 @@ predict(fit, X[1:3,], y$V9[1:3])</code></pre>
 <li>Memory: 8GB 2133 MHz</li>
 <li>Graphics: Intel Iris Graphics 550</li>
 </ul>
+<p><br></p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
