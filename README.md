@@ -1,6 +1,8 @@
 logitr
 ================
 
+### \*\*\*This package is experimental and not regularly maintained. It is recommended to use {glmnet} instead!
+
 See [vignette](https://mgallow.github.io/logitr/) or [manual](https://github.com/MGallow/logitr/blob/master/logitr.pdf).
 
 Overview

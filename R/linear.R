@@ -32,20 +32,20 @@
 #' linearr(X, y, lam = 0.1, penalty = 'ridge', kernel = T)
 
 linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, 
-    penalty = "none", weights = NULL, intercept = TRUE, 
-    kernel = FALSE, method = "SVD", tol = 1e-05, maxit = 1e+05, 
-    vec = NULL, init = 1, K = 5) {
+    penalty = c("none", "ridge", "bridge"), weights = NULL, 
+    intercept = TRUE, kernel = FALSE, method = c("SVD", 
+        "MM"), tol = 1e-05, maxit = 1e+05, vec = NULL, 
+    init = 1, K = 5) {
     
     # checks
     n = dim(X)[1]
     p = dim(X)[2]
     X = as.matrix(X)
     y = as.matrix(y)
-    if (all(X[, 1] != rep(1, n))) {
-        X = scale(X)
-    } else {
-        print("data was not scaled due to intercept...")
-    }
+    call = match.call()
+    penalty = match.arg(penalty)
+    method = match.arg(method)
+    lam = sort(lam)
     if (penalty == "none") {
         lam = 0
         alpha = 1.5
@@ -71,15 +71,10 @@ linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
         print("No penalty used: lam = 0")
         penalty = "none"
     }
-    
     if ((penalty == "bridge") & (method != "MM")) {
         print("using MM algorithm...")
         method = "MM"
     }
-    if (penalty %in% c("none", "ridge", "bridge") == FALSE) 
-        stop("incorrect penalty!")
-    if (method %in% c("SVD", "MM") == FALSE) 
-        stop("incorrect method!")
     if (intercept) {
         # if no first column of ones, then add it
         if (all(X[, 1] != rep(1, n))) {
@@ -140,8 +135,8 @@ linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
     parameters = matrix(c(lam, alpha), ncol = 2)
     colnames(parameters) = c("lam", "alpha")
     
-    returns = list(parameters = parameters, coefficients = betas, 
-        MSE = fit$MSE, gradient = grads)
+    returns = list(call = call, parameters = parameters, 
+        coefficients = betas, MSE = fit$MSE, gradient = grads)
     class(returns) = "linearr"
     return(returns)
 }
@@ -159,6 +154,10 @@ linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
 #' @param x logitr class object
 #' @export
 print.linearr = function(x, ...) {
+    
+    # print call
+    cat("\nCall: ", paste(deparse(x$call), sep = "\n", 
+        collapse = "\n"), "\n", sep = "")
     
     # print optimal tuning parameters
     cat("\nTuning parameters:\n")

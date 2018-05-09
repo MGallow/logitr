@@ -4,9 +4,10 @@
 \alias{linearr}
 \title{Linear}
 \usage{
-linearr(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none",
-  weights = NULL, intercept = TRUE, kernel = FALSE, method = "SVD",
-  tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1, K = 5)
+linearr(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = c("none",
+  "ridge", "bridge"), weights = NULL, intercept = TRUE, kernel = FALSE,
+  method = c("SVD", "MM"), tol = 1e-05, maxit = 1e+05, vec = NULL,
+  init = 1, K = 5)
 }
 \arguments{
 \item{X}{matrix or data frame}

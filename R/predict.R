@@ -120,6 +120,7 @@ predict.linearr = function(object, X, y = NULL) {
     }
     
     
-    returns = list(fitted.values = fitted, RSS = RSS, MSE = MSE)
+    returns = list(fitted.values = fitted, RSS = RSS, 
+        MSE = MSE)
     return(returns)
 }

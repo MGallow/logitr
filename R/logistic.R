@@ -41,19 +41,19 @@
 
 logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, 
     penalty = "none", intercept = TRUE, method = "IRLS", 
-    tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1, criteria = "logloss", 
-    K = 5) {
+    tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1, 
+    criteria = "logloss", K = 5) {
     
     # checks
     n = dim(X)[1]
     p = dim(X)[2]
     X = as.matrix(X)
     y = as.matrix(y)
-    if (all(X[, 1] != rep(1, n))) {
-        X = scale(X)
-    } else {
-        print("data was not scaled due to intercept...")
-    }
+    call = match.call()
+    penalty = match.arg(penalty)
+    method = match.arg(method)
+    criteria = match.arg(criteria)
+    lam = sort(lam)
     if (penalty == "none") {
         lam = 0
         alpha = 1.5
@@ -76,13 +76,6 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
         print("using MM algorithm...")
         method = "MM"
     }
-    if (penalty %in% c("none", "ridge", "bridge") == FALSE) 
-        stop("incorrect penalty!")
-    if (criteria %in% c("mse", "logloss", "misclass") == 
-        FALSE) 
-        stop("incorrect criteria!")
-    if (method %in% c("IRLS", "MM") == FALSE) 
-        stop("incorrect method!")
     if (intercept) {
         # if no first column of ones, then add it
         if (all(X[, 1] != rep(1, n))) {
@@ -106,7 +99,8 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
         
         # execute CV_logisticc
         CV = CV_logisticc(X, y, lam, alpha, penalty, intercept, 
-            method, tol, maxit, vec_, init, criteria, K)
+            method, tol, maxit, vec_, init, criteria, 
+            K)
         lam = CV$best.lam
         alpha = CV$best.alpha
     }
@@ -142,9 +136,10 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
     parameters = matrix(c(lam, alpha), ncol = 2)
     colnames(parameters) = c("lam", "alpha")
     
-    returns = list(parameters = parameters, coefficients = betas, 
-        MSE = fit$MSE, log.loss = fit$log.loss, misclassification = fit$misclassification, 
-        total.iterations = logistic$total.iterations, gradient = grads)
+    returns = list(call = call, parameters = parameters, 
+        coefficients = betas, MSE = fit$MSE, log.loss = fit$log.loss, 
+        misclassification = fit$misclassification, total.iterations = logistic$total.iterations, 
+        gradient = grads)
     class(returns) = "logisticr"
     return(returns)
     
@@ -162,6 +157,10 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
 #' @param x logitr class object
 #' @export
 print.logisticr = function(x, ...) {
+    
+    # print call
+    cat("\nCall: ", paste(deparse(x$call), sep = "\n", 
+        collapse = "\n"), "\n", sep = "")
     
     # print iterations
     cat("\nIterations:\n")
