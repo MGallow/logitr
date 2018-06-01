@@ -19,9 +19,4 @@ predictions and loss metrics
 \description{
 Generates prediction for logistic regression
 }
-\examples{
-
-fitted = logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
-predict_logisticr(fitted$coefficients, X)
-
-}
+\keyword{internal}

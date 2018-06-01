@@ -2,7 +2,7 @@
 % Please edit documentation in R/linear.R
 \name{linearr}
 \alias{linearr}
-\title{Linear}
+\title{Linear Regression}
 \usage{
 linearr(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = c("none",
   "ridge", "bridge"), weights = NULL, intercept = TRUE, kernel = FALSE,
@@ -45,13 +45,8 @@ returns the selected tuning parameters, coefficient estimates, MSE, and gradient
 Computes the linear regression coefficient estimates (ridge-penalization and weights, optional)
 }
 \examples{
-
-Weighted ridge regression
 library(dplyr)
 X = dplyr::select(iris, -c(Species, Sepal.Length))
 y = dplyr::select(iris, Sepal.Length)
-linearr(X, y, lam = 0.1, penalty = 'ridge', weights = rep(1:150))
-
-Kernelized ridge regression
-linearr(X, y, lam = 0.1, penalty = 'ridge', kernel = T)
+linearr(X, y, lam = 0.1, penalty = 'ridge')
 }

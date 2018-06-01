@@ -4,9 +4,10 @@
 \alias{logisticr}
 \title{Logistic Regression}
 \usage{
-logisticr(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = "none",
-  intercept = TRUE, method = "IRLS", tol = 1e-05, maxit = 1e+05,
-  vec = NULL, init = 1, criteria = "logloss", K = 5)
+logisticr(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, penalty = c("none",
+  "ridge", "bridge"), intercept = TRUE, method = c("IRLS", "MM"),
+  tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1,
+  criteria = c("logloss", "mse", "misclass"), K = 5)
 }
 \arguments{
 \item{X}{matrix or data frame}
@@ -42,20 +43,15 @@ returns selected tuning parameters, beta estimates (includes intercept), MSE, lo
 Computes the coefficient estimates for logistic regression. ridge regularization and bridge regularization optional.
 }
 \examples{
-Logistic Regression
 library(dplyr)
 X = dplyr::select(iris, -Species)
 y = dplyr::select(iris, Species)
 y$Species = ifelse(y$Species == 'setosa', 1, 0)
 logisticr(X, y)
 
-ridge Logistic Regression with IRLS
-logistir(X, y, lam = 0.1, penalty = 'ridge')
+# ridge Logistic Regression with IRLS
+logisticr(X, y, lam = 0.1, penalty = 'ridge')
 
-ridge Logistic Regression with MM
+# ridge Logistic Regression with MM
 logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
-
-bridge Logistic Regression
-(Defaults to MM -- IRLS will return error)
-logisticr(X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge')
 }

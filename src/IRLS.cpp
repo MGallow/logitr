@@ -10,8 +10,7 @@ using namespace Rcpp;
 //' @description Computes the logit for u
 //' @param u some number
 //' @return returns the logit of u
-//' @examples
-//' logit(X*beta)
+//' @keywords internal
 //'
 // [[Rcpp::export]]
 arma::colvec logitc(const arma::colvec& u) {
@@ -34,9 +33,6 @@ arma::colvec logitc(const arma::colvec& u) {
 //' @param lam tuning parameter for ridge regularization term
 //' @param vec vector to specify which coefficients will be penalized
 //' @return returns the gradient
-//' @examples
-//' gradient_IRLS_logistic(betas, X, y, lam = 0.1, vec = c(0,1,1,1))
-//'
 
 arma::colvec gradient_IRLS_logisticc(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, const arma::colvec& vec = 0) {
 
@@ -63,9 +59,6 @@ arma::colvec gradient_IRLS_logisticc(const arma::colvec& betas, const arma::mat&
 //' @param maxit maximum iterations
 //' @param vec optional vector to specify which coefficients will be penalized
 //' @return returns beta estimates (includes intercept), total iterations, and gradients.
-//' @examples
-//' IRLSc(X, y, lam = 0.1, penalty = "ridge", vec = c(0,1,1,1))
-//'
 
 List IRLSc(const arma::mat& X, const arma::colvec& y, double lam = 0, std::string penalty = "none", bool intercept = true, double tol = 1e-5, double maxit = 1e5, const arma::colvec& vec = 0, const arma::colvec& init = 0) {
 

@@ -16,9 +16,6 @@ using namespace Rcpp;
 //' @param weights option vector of weights for weighted least squares
 //' @param intercept add column of ones if not already present. Defaults to TRUE
 //' @return returns the gradient
-//' @examples
-//' gradient_linearc(betas, X, y, lam = 0.1, weights = rep(1,150), intercept = TRUE)
-//'
 
 arma::colvec gradient_linearc(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, const arma::colvec& weights = 0, bool intercept = true) {
 
@@ -58,9 +55,6 @@ arma::colvec gradient_linearc(const arma::colvec& betas, const arma::mat& X, con
 //' @param intercept add column of ones if not already present. Defaults to TRUE
 //' @param kernel use linear kernel to compute ridge regression coefficeients. Defaults to TRUE when p >> n (for "SVD")
 //' @return returns beta estimates (includes intercept) and gradients.
-//' @examples
-//' SVDc(X, y, lam = 0.1 weights = rep(1, 150))
-//'
 
 List SVDc(const arma::mat& X, const arma::colvec& y, double lam = 0, arma::colvec weights = 0, bool intercept = true, bool kernel = false) {
 

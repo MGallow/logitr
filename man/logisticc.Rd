@@ -37,21 +37,4 @@ returns beta estimates (includes intercept), total iterations, and gradients.
 \description{
 Computes the coefficient estimates for logistic regression. ridge regularization and bridge regularization optional.
 }
-\examples{
-Logistic Regression
-library(dplyr)
-X = as.matrix(dplyr::select(iris, -Species))
-y = as.matrix(dplyr::select(iris, Species))
-y = ifelse(y == 'setosa', 1, 0)
-logisticc(X, y, vec = c(0,1,1,1))
-
-ridge Logistic Regression with IRLS
-logisticc(X, y, lam = 0.1, penalty = 'ridge', vec = c(0,1,1,1))
-
-ridge Logistic Regression with MM
-logisticc(X, y, lam = 0.1, penalty = 'ridge', method = 'MM', vec = c(0,1,1,1))
-
-bridge Logistic Regression
-logisticc(X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge', method = 'MM', vec = c(0,1,1,1))
-
-}
+\keyword{internal}

@@ -2,10 +2,10 @@
 % Please edit documentation in R/logistic.R
 \name{print.logisticr}
 \alias{print.logisticr}
-\title{Print logitr object}
+\title{Print logisticr object}
 \usage{
 \method{print}{logisticr}(x, ...)
 }
 \arguments{
-\item{x}{logitr class object}
+\item{x}{logisticr class object}
 }

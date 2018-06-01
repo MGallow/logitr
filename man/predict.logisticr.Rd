@@ -20,7 +20,12 @@ predictions and loss metrics
 Generates prediction for logistic regression. Note that one can either input a 'logisticr' object or a matrix of beta coefficients.
 }
 \examples{
+library(dplyr)
+X = dplyr::select(iris, -Species)
+y = dplyr::select(iris, Species)
+y$Species = ifelse(y$Species == 'setosa', 1, 0)
+logisticr(X, y)
 
 fitted = logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
-predict_logisticr(fitted, X)
+predict(fitted, X)
 }

@@ -18,9 +18,6 @@ using namespace Rcpp;
 //' @param gamma indicator function. 'gamma = 1' for ridge, 'gamma = 0' for bridge. Defaults to 'gamma = 1'
 //' @param vec vector to specify which coefficients will be penalized
 //' @return returns the gradient
-//' @examples
-//' gradient_MM_logistic(betas, X, y, lam = 0.1, alpha = 1.5, vec = c(0,1,1,1))
-//'
 
 arma::colvec gradient_MM_logisticc(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, const arma::colvec& vec = 0) {
 
@@ -45,9 +42,6 @@ arma::colvec gradient_MM_logisticc(const arma::colvec& betas, const arma::mat& X
 //' @param gamma indicator function. 'gamma = 1' for ridge, 'gamma = 0' for bridge. Defaults to 'gamma = 1'
 //' @param vec vector to specify which coefficients will be penalized
 //' @return returns the gradient
-//' @examples
-//' gradient_MM_linearc(betas, X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge')
-//'
 
 arma::colvec gradient_MM_linearc(const arma::colvec& betas, const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, arma::colvec weights = 0, const arma::colvec& vec = 0) {
 
@@ -76,9 +70,6 @@ arma::colvec gradient_MM_linearc(const arma::colvec& betas, const arma::mat& X, 
 //' @param vec optional vector to specify which coefficients will be penalized
 //' @param init optional initialization for MM algorithm
 //' @return returns beta estimates (includes intercept), total iterations, and gradients.
-//' @examples
-//' MMc(X, y)
-//'
 
 List MMc(const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, double gamma = 1, bool intercept = true, double tol = 1e-5, double maxit = 1e5, const arma::colvec& vec = 0, const arma::colvec& init = 0) {
 

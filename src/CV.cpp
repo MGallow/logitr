@@ -61,7 +61,7 @@ arma::vec kfold(int n, int K){
 //' @param init optional initialization for MM algorithm
 //' @param criteria specify the criteria for cross validation. Choose from c("mse", "logloss", "misclass"). Defauls to "logloss"
 //' @param K specify number of folds in cross validation, if necessary
-//'
+//' @keywords internal
 //' @return returns best lambda, best alpha, and cross validation errors
 //' @export
 //' @examples
@@ -175,8 +175,7 @@ List CV_logisticc(const arma::mat& X, const arma::colvec& y, const arma::colvec&
 //' @param init optional initialization for MM algorithm
 //' @param K specify number of folds in cross validation, if necessary
 //' @return returns best lambda, best alpha, cv.errors
-//' @examples
-//' CV_linearc(X, y, lam = seq(0.1, 2, 0.1), alpha = seq(1.1, 1.9, 0.1), penalty = "bridge", vec = c(0,1,1,1))
+//' @keywords internal
 //'
 // [[Rcpp::export]]
 List CV_linearc(const arma::mat& X, const arma::colvec& y, const arma::colvec& lam = 0, const arma::colvec& alpha = 0, std::string penalty = "none", arma::colvec weights = 0, bool intercept = true, bool kernel = false, std::string method = "SVD", double tol = 1e-5, double maxit = 1e4, arma::colvec vec = 0, arma::colvec init = 0, int K = 5) {

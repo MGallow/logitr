@@ -20,7 +20,9 @@ predictions and loss metrics
 Generates prediction for linear regression. Note that one can either input a 'linearr' object or a matrix of beta coefficients.
 }
 \examples{
-
+library(dplyr)
+X = dplyr::select(iris, -c(Species, Sepal.Length))
+y = dplyr::select(iris, Sepal.Length)
 fitted = linearr(X, y, lam = 0.1)
-predict_linearr(fitted, X)
+predict(fitted, X)
 }

@@ -19,9 +19,4 @@ predictions and loss metrics
 \description{
 Generates prediction for linear regression
 }
-\examples{
-
-fitted = linearr(X, y, penalty = 'ridge')
-predict_linearr(fitted$coefficients, X)
-
-}
+\keyword{internal}

@@ -41,14 +41,4 @@ returns the coefficient estimates
 \description{
 Computes the linear regression coefficient estimates (ridge and bridge penalization and weights, optional)
 }
-\examples{
-Weighted ridge regression
-library(dplyr)
-X = dplyr::select(iris, -c(Species, Sepal.Length))
-y = dplyr::select(iris, Sepal.Length)
-linearc(X, y, lam = 0.1, penalty = 'ridge', weights = rep(1:150), vec = c(0,1,1,1))
-
-Kernelized ridge regression
-linearc(X, y, lam = 0.1, penalty = 'ridge', kernel = T, vec = c(0,1,1,1))
-
-}
+\keyword{internal}

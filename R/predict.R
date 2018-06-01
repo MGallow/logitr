@@ -11,10 +11,14 @@
 #' @return predictions and loss metrics
 #' @export
 #' @examples
+#' library(dplyr)
+#' X = dplyr::select(iris, -Species)
+#' y = dplyr::select(iris, Species)
+#' y$Species = ifelse(y$Species == 'setosa', 1, 0)
+#' logisticr(X, y)
 #'
 #' fitted = logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
-#' predict_logisticr(fitted, X)
-
+#' predict(fitted, X)
 
 predict.logisticr = function(object, X, y = NULL) {
     
@@ -80,9 +84,11 @@ predict.logisticr = function(object, X, y = NULL) {
 #' @return predictions and loss metrics
 #' @export
 #' @examples
-#'
+#' library(dplyr)
+#' X = dplyr::select(iris, -c(Species, Sepal.Length))
+#' y = dplyr::select(iris, Sepal.Length)
 #' fitted = linearr(X, y, lam = 0.1)
-#' predict_linearr(fitted, X)
+#' predict(fitted, X)
 
 
 predict.linearr = function(object, X, y = NULL) {
@@ -120,7 +126,6 @@ predict.linearr = function(object, X, y = NULL) {
     }
     
     
-    returns = list(fitted.values = fitted, RSS = RSS, 
-        MSE = MSE)
+    returns = list(fitted.values = fitted, RSS = RSS, MSE = MSE)
     return(returns)
 }

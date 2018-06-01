@@ -28,7 +28,7 @@ NULL
 #' @param init optional initialization for MM algorithm
 #' @param criteria specify the criteria for cross validation. Choose from c("mse", "logloss", "misclass"). Defauls to "logloss"
 #' @param K specify number of folds in cross validation, if necessary
-#'
+#' @keywords internal
 #' @return returns best lambda, best alpha, and cross validation errors
 #' @export
 #' @examples
@@ -54,8 +54,7 @@ CV_logisticc <- function(X, y, lam = 0L, alpha = 0L, penalty = "none", intercept
 #' @param init optional initialization for MM algorithm
 #' @param K specify number of folds in cross validation, if necessary
 #' @return returns best lambda, best alpha, cv.errors
-#' @examples
-#' CV_linearc(X, y, lam = seq(0.1, 2, 0.1), alpha = seq(1.1, 1.9, 0.1), penalty = "bridge", vec = c(0,1,1,1))
+#' @keywords internal
 #'
 CV_linearc <- function(X, y, lam = 0L, alpha = 0L, penalty = "none", weights = 0L, intercept = TRUE, kernel = FALSE, method = "SVD", tol = 1e-5, maxit = 1e4, vec = 0L, init = 0L, K = 5L) {
     .Call('_logitr_CV_linearc', PACKAGE = 'logitr', X, y, lam, alpha, penalty, weights, intercept, kernel, method, tol, maxit, vec, init, K)
@@ -70,9 +69,6 @@ CV_linearc <- function(X, y, lam = 0L, alpha = 0L, penalty = "none", weights = 0
 #' @param lam tuning parameter for ridge regularization term
 #' @param vec vector to specify which coefficients will be penalized
 #' @return returns the gradient
-#' @examples
-#' gradient_IRLS_logistic(betas, X, y, lam = 0.1, vec = c(0,1,1,1))
-#'
 NULL
 
 #' @title Iterative Re-Weighted Least Squares (c++)
@@ -88,17 +84,13 @@ NULL
 #' @param maxit maximum iterations
 #' @param vec optional vector to specify which coefficients will be penalized
 #' @return returns beta estimates (includes intercept), total iterations, and gradients.
-#' @examples
-#' IRLSc(X, y, lam = 0.1, penalty = "ridge", vec = c(0,1,1,1))
-#'
 NULL
 
 #' @title Logitc (c++)
 #' @description Computes the logit for u
 #' @param u some number
 #' @return returns the logit of u
-#' @examples
-#' logit(X*beta)
+#' @keywords internal
 #'
 logitc <- function(u) {
     .Call('_logitr_logitc', PACKAGE = 'logitr', u)
@@ -120,15 +112,7 @@ logitc <- function(u) {
 #' @param vec optional vector to specify which coefficients will be penalized
 #' @param init optional initialization for MM algorithm
 #' @return returns the coefficient estimates
-#' @examples
-#' Weighted ridge regression
-#' library(dplyr)
-#' X = dplyr::select(iris, -c(Species, Sepal.Length))
-#' y = dplyr::select(iris, Sepal.Length)
-#' linearc(X, y, lam = 0.1, penalty = "ridge", weights = rep(1:150), vec = c(0,1,1,1))
-#'
-#' Kernelized ridge regression
-#' linearc(X, y, lam = 0.1, penalty = "ridge", kernel = T, vec = c(0,1,1,1))
+#' @keywords internal
 #'
 linearc <- function(X, y, lam = 0, alpha = 1.5, penalty = "none", weights = 0L, intercept = TRUE, kernel = FALSE, method = "SVD", tol = 1e-5, maxit = 1e5, vec = 0L, init = 0L) {
     .Call('_logitr_linearc', PACKAGE = 'logitr', X, y, lam, alpha, penalty, weights, intercept, kernel, method, tol, maxit, vec, init)
@@ -149,22 +133,7 @@ linearc <- function(X, y, lam = 0, alpha = 1.5, penalty = "none", weights = 0L, 
 #' @param vec optional vector to specify which coefficients will be penalized
 #' @param init optional initialization for MM algorithm
 #' @return returns beta estimates (includes intercept), total iterations, and gradients.
-#' @examples
-#' Logistic Regression
-#' library(dplyr)
-#' X = as.matrix(dplyr::select(iris, -Species))
-#' y = as.matrix(dplyr::select(iris, Species))
-#' y = ifelse(y == 'setosa', 1, 0)
-#' logisticc(X, y, vec = c(0,1,1,1))
-#'
-#' ridge Logistic Regression with IRLS
-#' logisticc(X, y, lam = 0.1, penalty = 'ridge', vec = c(0,1,1,1))
-#'
-#' ridge Logistic Regression with MM
-#' logisticc(X, y, lam = 0.1, penalty = 'ridge', method = 'MM', vec = c(0,1,1,1))
-#'
-#' bridge Logistic Regression
-#' logisticc(X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge', method = "MM", vec = c(0,1,1,1))
+#' @keywords internal
 #'
 logisticc <- function(X, y, lam = 0, alpha = 1.5, penalty = "none", intercept = TRUE, method = "IRLS", tol = 1e-5, maxit = 1e5, vec = 0L, init = 0L) {
     .Call('_logitr_logisticc', PACKAGE = 'logitr', X, y, lam, alpha, penalty, intercept, method, tol, maxit, vec, init)
@@ -177,11 +146,7 @@ logisticc <- function(X, y, lam = 0, alpha = 1.5, penalty = "none", intercept = 
 #' @param X matrix of (new) observations
 #' @param y matrix of response values 0,1
 #' @return predictions and loss metrics
-#' @examples
-#'
-#' fitted = logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
-#' predict_logisticr(fitted$coefficients, X)
-#'
+#' @keywords internal
 predict_logisticc <- function(betas, X, y = 0L) {
     .Call('_logitr_predict_logisticc', PACKAGE = 'logitr', betas, X, y)
 }
@@ -193,11 +158,7 @@ predict_logisticc <- function(betas, X, y = 0L) {
 #' @param X matrix of (new) observations
 #' @param y matrix of response values
 #' @return predictions and loss metrics
-#' @examples
-#'
-#' fitted = linearr(X, y, penalty = "ridge")
-#' predict_linearr(fitted$coefficients, X)
-#'
+#' @keywords internal
 predict_linearc <- function(betas, X, y = 0L) {
     .Call('_logitr_predict_linearc', PACKAGE = 'logitr', betas, X, y)
 }

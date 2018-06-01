@@ -3,8 +3,6 @@ logitr
 
 ### \*\*\*This package is experimental and not regularly maintained. It is recommended to use {glmnet} instead!
 
-See [vignette](https://mgallow.github.io/logitr/) or [manual](https://github.com/MGallow/logitr/blob/master/logitr.pdf).
-
 Overview
 --------
 
@@ -14,6 +12,8 @@ Overview
 -   `linearr()` computes the linear regression coefficient estimates (ridge regularization and weights optional)
 -   `predict.logisticr()` generates predictions and loss metrics for logistic regression
 -   `predict.linearr()` generates predictions and loss metric for linear regression
+
+See [vignette](https://mgallow.github.io/logitr/) or [manual](https://github.com/MGallow/logitr/blob/master/logitr.pdf).
 
 Installation
 ------------

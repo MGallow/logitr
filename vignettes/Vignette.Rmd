@@ -1,0 +1,466 @@
+---
+title: "Penalized Regression"
+author: "Matt Galloway"
+date: \today
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+#abstract: "`logitr` is an R package for linear and logistic regression with optional ridge and bridge regularization penalties. In this report we will provide a brief theoretical justification for using logistic regression as well as examples and simulation results for this package."
+thanks: "**Contact**: gall0441@umn.edu."
+geometry: margin = 1in
+#fontfamily: mathpazo
+#fontsize: 12pt
+#spacing: double
+header-includes:
+   - \usepackage{bbm}
+   - \usepackage{multirow}
+   - \usepackage{graphicx}
+   - \usepackage{amsmath}
+   - \hypersetup{linkcolor=blue}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+```
+
+<br>\vspace{1cm}
+
+## Logistic Regression
+
+Logistic regression is used in a variety of fields and subjects when the goal of the analysis is to predict the likelihood or probability of a particular event occurring. We typically denote instances where an event occurs as a "success" and a "failure" when the event does not occur. These names, however, are often catered to the particular application of interest. For instance, we may opt to use "spam" and "not spam" in email spam detection and "cat" and "dog" in object recognition. `logitr` was built with particular applications like these in mind. In order to better understand the code contained in the package, we will provide a brief mathematical summary in the following paragraphs.
+\vspace{0.25cm}
+
+Let us consider a two-class classification problem. We denote the response $y_{i}$ for the $i$th observation being contained in the set $\left \{ 0, 1 \right \}$. In this set up (without loss of generality), "1" is the success and "0" is the failure. Furthermore, we denote our observed variables $x_{1}, ..., x_{p}$ as a column vector $x_{i} = (1, x_{i1}, x_{i2}, ..., x_{ip})^{T}$. Given the information in $x_{i}$, it is the goal of logistic regression to predict the probability that $y_{i} = 1$. That is, the conditional probability $P(Y_{1} = 1 | X_{i} = x_{i}) = 1 - P(Y_{i} = 0 | X_{i} = x_{i})$.
+
+Once this probability is calculated, we can define a **decision rule** (denoted by $\phi$) that classifies observation $i$ as either "0" or "1". Intuititvely, we might say that if the probability of observation $i$ being in class "1" is greater than the probability observation $i$ being in class "0", then we should classify observation $i$ as class "1" (and "0" otherwise). Indeed, this is the optimal decision rule given to us by the **Baye's Rules**. The decision rule is the following:
+
+\[ \phi(x_{i}) = \begin{cases}
+1 & \text{ if } P(Y_{i} = 1 | X_{i} = x_{i}) \geq P(Y_{i} = 0 | X_{i} = x_{i}) \\ 
+0 & \text{ otherwise }
+\end{cases} \]
+
+This decision rule can be summed up as choosing the class that has the greatest probability conditional on the observed information $x_{i}$. An equivalent decision rule uses what is called the **log-odds ratio**:
+
+\[ \phi(x_{i}) = \begin{cases}
+1 & \text{ if } \log\left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{P(Y_{i} = 0 | X_{i} = x_{i})} \right ) \geq 0 \\ 
+0 & \text{ otherwise }
+\end{cases} \]
+
+where the $\log(\cdot)$ term is the log-odds ratio.
+
+This formulation is convenient because in logistic regression we make the critical assumption that this log-odds ratio is linear in form. That is, we can estimate the log-odds ration using some vector of coefficients $\beta = (\beta_{0}, \beta_{1}, ..., \beta_{p})^{T}$:
+
+\[ \log \left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{P(Y_{i} = 0 | X_{i} = x_{i})} \right ) \approx x_{i}^{T}\beta \]
+
+This implies the following:
+
+\begin{align}
+\log &\left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{P(Y_{i} = 0 | X_{i} = x_{i})} \right ) = \log \left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{1 - P(Y_{i} = 1 | X_{i} = x_{i})} \right ) \approx x_{i}^{T}\beta \\
+  &\Rightarrow \frac{P(Y_{i} = 1 | X_{i} = x_{i})}{1 - P(Y_{i} = 1 | X_{i} = x_{i})} \approx \exp(x_{i}^{T}\beta) \\
+  &\Rightarrow P(Y_{i} = 1 | X_{i} = x_{i}) \approx \frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \equiv p(x_{i}) \mbox{ (say)}
+\end{align}
+
+We see that the conditional probability $P(Y_{i} = 1 | X_{i} = x_{i})$ can be approximated by the function $p(x_{i})$ -- we call this function the **logit** function (hence the name of our package!). We will show the method for solving for the optimal vector of coefficients ($\hat{\beta}$) in the next section.
+
+<br>\vspace{1cm}
+
+### Maximum Likelihood Estimation
+
+The classical statistical method of optimization for linear and generalized linear models is called **maximum likelihood estimation**. In short, we want to maximize the probability of our observed data. This requires defining a probability distribution. Recall that our formulation assumes $Y_{i}$ is some random variable that takes values in the set $\left \{ 0, 1 \right \}$. By definition, this random variable follows a Bernoulli distribution:
+
+\[ P(Y_{i} = y_{i} | X_{i} = x_{i}) = \begin{cases}
+p(x_{i}) & \text{ if } y_{i} = 1\\ 
+1 - p(x_{i}) & \text{ if } y_{i} = 0
+\end{cases} \]
+
+Equivalently, we can write this as:
+
+\[ P(Y_{i} = y_{i} | X_{i} = x_{i}) = p(x_{i})^{y_{i}}(1 - p(x_{i}))^{1 - y_{i}} \]
+
+Having defined a probability distribution, we can now construct our (log) likelihood function (assume an iid setting):
+
+\begin{align}
+l(\beta) = \log L(\beta) &=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(1 - p(x_{i})^{1 - y_{i}}) \right ] \\
+  &= \log \left [\prod_{i = 1}^{n} \left (\frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right)^{y_{i}} \left (1 - \frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right)^{1 - y_{i}} \right] \\
+  &= \log \left [\prod_{i = 1}^{n} \left (\frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right)^{y_{i}} \left (\frac{1}{1 + \exp(x_{i}^{T}\beta)} \right)^{1 - y_{i}} \right] \\
+&= \log \left [\prod_{i = 1}^{n} (\exp(x_{i}^{T}\beta))^{y_{i}}(1 + \exp(x_{i}^{T}\beta))^{-1} \right] \\
+&= \sum_{i = 1}^{n}y_{i}(x_{i}^{T}\beta) - \sum_{i = 1}^{n}\log(1 + \exp(x_{i}^{T}\beta))
+\end{align}
+
+Maximum likelihood estimation involves find the $\beta$ vector that maximizes the log-likelihood function -- or equivalently, minimizes the negative log-likelihood:
+
+\[ \hat{\beta} = \arg\min_{\beta} -l(\beta)  \]
+
+<br>\vspace{1cm}
+
+In addition, we can add regularization terms if we so choose:
+
+### Ridge Logistic Regression
+
+\[ \hat{\beta} = \arg\min_{\beta} -l(\beta) + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2}  \]
+
+
+### Bridge Logistic Regression
+
+\[ \hat{\beta} = \arg\min_{\beta} -l(\beta) + \lambda\frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}  \]
+
+where $\lambda \geq 0$ and $\alpha \in \left(1, 2 \right)$. Note that we do not penalize the intercept in either method. Algorithms for computing $\hat{\beta}$ will be the subject of our next section.
+
+<br>\vspace{1cm}
+
+**Note:**
+
+\begin{align*}
+\nabla l(\beta) &= \sum_{i = 1}^{n}y_{i}x_{i} - \sum_{i = 1}^{n}\left (\frac{x_{i}\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right) = \sum_{i = 1}^{n}y_{i}x_{i} - \sum_{i = 1}^{n}x_{i}p(x_{i}) \\
+  & \\
+\nabla^{2} l(\beta) &= -\sum_{i = 1}^{n}\left (\frac{x_{i}x_{i}^{T}\exp(x_{i}^{T}\beta)(1 + \exp(x_{i}^{T}\beta)) - x_{i}x_{i}^{T}\exp(x_{i}^{T}\exp(x_{i}^{T}))}{(1 + \exp(x_{i}^{T}\beta))^{2}} \right) \\
+  &= -\sum_{i = 1}^{T}\left (\frac{x_{i}x_{i}^{T}\exp(x_{i}^{T}\beta)}{(1 + \exp(x_{i}^{n}\beta))^{2}} \right) = -\sum_{i = 1}^{n}x_{i}x_{i}^{T}p(x_{i})(1 - p(x_{i})) = \sum_{i = 1}^{n}x_{i}x_{i}^{T}w(x_{i}) \mbox{ (say)}
+\end{align*}
+
+<br>\vspace{1cm}
+
+
+## Iterative Re-Weighted Least Squares (IRLS)
+
+The first algorithm we propose to compute the optimal $\beta$ is called iterative re-weighted least squares. The reasoning behind the name will be clear once the method is fully derived. For convenience, in this section we will assume that there is no intercept.
+
+According to Taylor's Theorem (Newton-Raphson),
+
+\[ -l(\beta) = -l(\beta^{(k)}) + \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \]
+
+where $\beta^{(k)}$ is some estimator for the true $\beta$. In this case $\beta^{(k)}$ is the $\beta$ estimate for the $k$th iteration. Dropping constants and adding our regularization term (only ridge penalty -- bridge will be computed using MM algorithm), we see the following:
+
+\begin{align*}
+\beta^{(k + 1)} &= \arg\min_{\beta} \left \{ \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta))(\beta - \beta^{(k)}) + (\nabla - l(\beta))^{T}(\beta - \beta^{(k)}) + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right\} \\
+  &= \arg\min_{\beta} \left \{ \frac{1}{2}(\beta - \beta^{(k)})^{T}(\sum_{i = 1}^{n}x_{i}x_{i}^{T}w_{i})(\beta - \beta^{(k)}) -\sum_{i = 1}^{n}x_{i}^{T}(y_{i} - p_{i}^{(k)})^{T}(\beta - \beta^{(k)}) + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
+  &= \arg\min_{\beta} \left \{ \frac{1}{2}\sum_{i = 1}^{n}w_{i}^{(k)}(x_{i}^{T}\beta - x_{i}^{T}\beta^{(k)})^{T}(x_{i}^{T}\beta - x_{i}^{T}\beta^{(k)}) - \sum_{i = 1}^{n}w_{i}^{(k)}(x_{i}^{T}\beta - x_{i}^{T}\beta^{(k)})\frac{y_{i} - p_{i}^{(k)}}{w_{i}^{(k)}} + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
+  &= \arg\min_{\beta} \left \{\sum_{i = 1}^{n}w_{i}^{(k)}\left (\frac{y_{i} - p_{i}^{(k)}}{w_{i}^{(k)}} + x_{i}^{T}\beta^{(k)} - x_{i}^{T}\beta \right)^{2} + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
+  &= \arg\min_{\beta} \left \{\sum_{i = 1}^{n}w_{i}^{(k)}(z_{i}^{(k)} - x_{i}^{T}\beta)^{2} + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
+  &= \arg\min_{\beta} \left \{\frac{1}{2}(z^{(k)} - X\beta)^{T}W^{(k)}(z^{(k)} - X\beta) + \frac{\lambda}{2}\beta^{T}\beta \right \}
+\end{align*}
+
+where $z^{(k)}$ is the column vector with $i$th entry $z_{i}^{(k)} = \frac{y_{i} - p_{i}^{(k)}}{w_{i}^{(k)}} + x_{i}^{T}\beta^{(k)}$ for the $k$th iteration. Further, $W^{(k)}$ is a diagonal matrix with $i$th diagonal element $w_{i}^{(k)} = p(x_{i})(1 - p(x_{i}))$ and $X$ is an $n \times p$ matrix containing all $n$ (sample size) observations.
+
+We can see that this is a weighted-least squares problem! The iterative aspect comes from the fact that we will be solving this minimization problem and looping it for $k = 0, 1, ..., K$ until convergence. Solving for the gradient and setting it equal to zero implies that,
+
+\[ \beta^{(k + 1)} = (X^{T}W^{(k)}X + \lambda I_{p})^{-1}X^{T}W^{(k)}z^{(k)} \]
+
+If $p$ is particularly large (say $p >> n$) then we can solve an alternative formulation:
+
+\[\beta^{(k + 1)} = X^{T}\sqrt{W^{(k)}}(\sqrt{W^{(k)}}XX^{T}\sqrt{W^{(k)}} + \lambda I_{p})^{-1}\sqrt{W^{(k)}}z^{(k)} \]
+
+This formulation makes use of what's called the "kernel trick". Note that in the latter formulation, we are only inverting a $n \times n$ matrix (as opposed to an $n \times n$ matrix). This allows us to save significant computation time when $p$ is particularly large. The `logitr` package will solve this formulation by default when $p > n$.
+
+Putting everything together, we have the IRLS algorithm:
+
+\newpage
+
+<br>\vspace{1cm}
+
+**Algorithm**:
+
+ - Intialize $\beta^{(0)}, W^{(0)}$.
+ - For $k = 0, ..., K$ until convergence:
+    + $p^{(k + 1)} = logit(X\beta^{(k)})$
+    + $W^{(k + 1)} = p^{(k + 1)}(1 - p^{(k + 1)})$
+    + $z^{(k + 1)} = (y - p^{(k + 1)})/W^{(k + 1)} + X\beta^{(k)}$
+    + $\beta^{(k + 1)} = (X^{T}W^{(k)}X + \lambda I_{p})^{-1}X^{T}W^{(k)}z^{(k)}$
+
+<br>\vspace{1cm}
+
+Below you can find two snippets of code from the `logitr` package. The first snippet solves the weighted least squares problem. Note that this portion uses SVD decomposition which will not be discussed in this report. The second snippet is the code for IRLS.
+
+<br>\vspace{1cm}
+**Weighted least squares code snippet**:
+
+Note this is not the actual code. The real code is written in c++.
+
+```{r eval = FALSE}
+#calculate the coefficient estimates for weighted least squares
+linearr = function(X, y, lam = 0, weights = NULL, intercept = TRUE, 
+    kernel = FALSE) {
+    
+    # if p > n, linear kernel ridge regression
+    if ((p > n) | (kernel == TRUE)) {
+        
+        # SVD
+        svd = svd(X.)
+        
+        # adjust d vector for regularization and diagonalize
+        d_adj = diag(1/(svd$d^2 + lam))
+        
+        # calculate beta estimates
+        betas = t(X.) %*% svd$u %*% d_adj %*% t(svd$u) %*% 
+            y.
+        rownames(betas) = NULL
+        
+    } else {
+        # compute normal ridge regression
+        
+        # SVD
+        svd = svd(X.)
+        
+        # adjust d vector for regularization and diagonalize
+        d_adj = diag(svd$d/(svd$d^2 + lam))
+        
+        # calculate beta estimates
+        betas = svd$v %*% d_adj %*% t(svd$u) %*% y.
+        rownames(betas) = NULL
+        
+    }
+    
+    returns = list(coefficients = betas)
+    return(returns)
+}
+```
+<br>\vspace{1cm}
+
+**IRLS code snippet**:
+
+Note this is not the actual code. The real code is written in c++.
+
+```{r eval = FALSE}
+# calculates the coefficient estimates for logistic
+# regression (IRLS)
+IRLS = function(X, y, lam = 0, intercept = TRUE, tol = 10^(-5),
+    maxit = 1e+05, vec) {
+
+    # IRLS algorithm
+    while ((iteration < maxit) & (max(abs(grads)) > tol)) {
+
+        # update working data
+        Xb = X %*% betas
+        P = logitr(Xb)
+        weights = as.numeric(P * (1 - P))
+        z = (y - P)/weights + Xb
+
+        # calculate new betas
+        betas = linearr(X = X, y = z, lam = 0.1, weights = weights,
+            intercept = intercept, kernel = FALSE)$coefficients
+
+        # calculate updated gradients
+        grads = gradient_IRLS_logistic(betas, X, y, lam,
+            vec)
+        iteration = iteration + 1
+    }
+
+    returns = list(coefficients = betas, total.iterations = iteration, gradient = grads)
+    return(returns)
+}
+```
+
+<br>\vspace{1cm}
+
+## Majorize-Minimization (MM)
+
+The second algorithm we propose to compute $\hat{\beta}$ is called majorize-minimization (MM). Unlike the IRLS algorithm, the MM can be used with the ridge penalty as well as the bridge penalty. The main idea is the following:
+
+\begin{itemize}
+  \item \textbf{Majorize}: find $Q(\beta | \beta^{(k)})$ such that $Q(\beta | \beta^{(k)}) \geq -l(\beta) + g(\beta)$ and $Q(\beta | \beta^{(k)}) = -l(\beta) + g(\beta)$ only when $\beta = \beta^{(k)}$.
+  \item \textbf{Minimize}: Solve for $\beta^{(k + 1)} = \arg\min_{\beta}Q(\beta | \beta^{(k)})$
+\end{itemize}
+
+Similar to IRLS, the MM algorithm will be looped for $k = 0, 1, ..., K$ until convergence. Unlike IRLS, we will assume an intercept for this problem. We will show how to find $Q$ for penalized logistic regression. Let's state our objective:
+
+\[ \hat{\beta} = \arg\min_{\beta} -l(\beta) + \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}\right)  \]
+
+where $\alpha \in \left(1, 2 \right)$ and $\gamma \in \left\{0, 1 \right\}$ will act as indicator function. If `penalty = "ridge"` then $\gamma = 1$. If `penalty = "bridge"` then $\gamma = 0$ and the appropriate terms will be set to zero.
+
+<br>\vspace{1cm}
+
+### Solve for $Q(\beta | \beta^{(k)})$
+
+Note the following fact: if for some function $\phi$, $\phi''(x) < 0$ for all $x$ then
+
+\[ \phi(x) \leq \phi(x^{(k)}) + \phi'(x^{(k)})(x - x^{(k)}) \]
+
+Let $\phi(x) = (x)^{\alpha/2}$:
+
+\[\frac{d}{dx}(x^{\alpha/2}) = \frac{\alpha}{2}x^{\alpha/2-1} > 0 \]
+
+\[\frac{d^{2}}{d^{2}x}(x^{\alpha/2}) = \frac{\alpha}{2}(\frac{\alpha}{2} - 1)x^{\alpha/2-2} < 0 \]
+
+This implies that the following inequality must hold:
+
+\[ \left|\beta_{j}\right|^{\alpha} = (\beta_{j}^{2})^{\alpha/2} \leq (\beta_{j}^{(k)^{2}})^{\alpha/2} + \frac{\alpha}{2}(\beta_{j}^{(k)^{2}})^{\alpha/2 - 1}(\beta_{j}^{2} - \beta_{j}^{(k)^{2}}) \]
+
+<br>\vspace{1cm}
+We now derive our $Q$ function:
+
+\begin{align}
+-l(\beta) &+ \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}\right) \\
+  &=  -l(\beta^{(k)}) + \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &+ \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}\right) \\
+  &\leq \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &+ \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left(\beta_{j}^{(k)^{2}})^{\alpha/2} + \frac{\alpha}{2}(\beta_{j}^{(k)^{2}})^{\alpha/2 - 1}(\beta_{j}^{2} - \beta_{j}^{(k)^{2}} \right)\right) + const. \\
+  &\leq \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &+ \lambda\left(\frac{\gamma}{2}(v \circ \beta)^{T}\beta +(1 - \gamma) \frac{1}{2}\sum_{j = 1}^{p}(\beta_{j}^{(k)^{2}})^{\alpha/2 - 1}\beta_{j}^{2} \right) + const. \\
+  &\leq \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &+ \lambda\left(\frac{\gamma}{2}(v \circ \beta)^{T}\beta +(1 - \gamma) \frac{1}{2}\beta^{T}diag(d^{(k)})\beta \right) + const. \\
+  & \nonumber \\
+  &\mbox{ where $v \circ \beta$ is the dot product between $\beta$ and a $(p + 1) \times 1$ vector $v$ with all entries equal to} \nonumber \\
+  &\mbox{ zero except the first ($v = (0, 1, 1, 1,...)^{T}$), $d^{(k)}$ is the column vector with $d_{1}^{(k)} = 0$ and} \nonumber \\
+  &\mbox{ $d_{j}^{(k)} = (\beta_{j}^{(k)^{2}})^{\alpha/2 -1}$ for $j = 2,..,p$ and $\delta = 10^{-5}$ (some small number)} \nonumber \\
+  & \nonumber \\
+  &= \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &+ \frac{\lambda}{2}\left(\beta^{T} diag\left[\gamma(v - d^{(k)}) + d^{(k)} \right]\beta \right) + const. \\
+  &\leq \frac{1}{2}(\beta - \beta^{(k)})^{T}X^{T}(\frac{1}{4} + \delta)X(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &+ \frac{\lambda}{2}\left(\beta^{T} diag\left[\gamma(v - d^{(k)}) + d^{(k)} \right]\beta \right) + const. \\
+  &=: Q(\beta | \beta^{(k)})
+\end{align}
+
+That was a lot of effort to find our $Q$ function but we eventually see that our $Q$ function is quadratic in form. Therefore, we can find a closed solution for each update. By plugging in the gradient and hessian of our log-likelihood function and dropping constants, we will eventually see by solving for the gradient of $Q$ and setting it equal to zero, that we have:
+
+\[\beta^{(k + 1)} = \left(X^{T}(\frac{1}{4} + \delta)X +\lambda diag \left[\gamma(v - d^{(k)}) + d^{(k)}\right] \right)^{-1}\left(X^{T}(y - p^{(k)}) + X^{T}(\frac{1}{4} + \delta)X \right) \]
+
+Finally, putting everything together we have the MM algorithm for penalized logistic regression:
+
+<br>\vspace{1cm}
+**Algorithm**:
+
+ - Initialize $\beta^{(0)}$.
+ - For $k = 0, ..., K$ until convergence:
+    + $\beta^{(k + 1)} = \left(X^{T}(\frac{1}{4} + \delta)X +\lambda diag \left[\gamma(v - d^{(k)}) + d^{(k)}\right] \right)^{-1}\left(X^{T}(y - p^{(k)}) + X^{T}(\frac{1}{4} + \delta)X \right)$
+
+<br>\vspace{1cm}
+
+Below you can find a snippet of code for the MM function.
+
+<br>\vspace{1cm}
+**MM code snippet**:
+
+Note this is not the actual code. The real code is written in c++.
+
+```{r eval = FALSE}
+# calculates the coefficient estimates for logistic
+# regression (MM)
+MM = function(X, y, lam = 0, alpha = 1.5, gamma = 1, intercept = TRUE, 
+    tol = 10^(-5), maxit = 1e+05, vec = NULL) {
+    
+    # MM algorithm
+    while ((iteration < maxit) & (max(abs(grads)) > tol)) {
+        
+        # update d vector
+        d = as.numeric((betas^2)^(alpha/2 - 1))
+        d[1] = 0
+        
+        # qrsolve
+        betas = qr.solve(Z + lam * diag(gamma * (vec - d) + 
+            d), t(X) %*% (y - logitr(X %*% betas)) + Z %*% 
+            betas)
+        rownames(betas) = NULL
+        
+        # calculate updated gradients
+        grads = gradient_MM_logistic(betas, X, y, lam, alpha, 
+            gamma, vec)
+        iteration = iteration + 1
+        
+    }
+    
+    returns = list(coefficients = betas, total.iterations = iteration, 
+        gradient = grads)
+    return(returns)
+}
+```
+
+
+<br>\vspace{1cm}
+
+## Usage
+
+Let us walk through some functions in the `logitr` package. We will use the iris data set for illustration.
+
+<br>\vspace{1cm}
+```{r, message = FALSE}
+library(logitr)
+
+#we will use the iris data set
+X = dplyr::select(iris, -c(Species, Sepal.Length))
+y = dplyr::select(iris, Sepal.Length)
+y_class = ifelse(dplyr::select(iris, Species) == "setosa", 1, 0)
+
+#ridge regression (specify lam = 0.1)
+linearr(X, y, lam = 0.1, penalty = "ridge")
+
+#ridge regression (use CV for optimal lam; options default to seq(0, 2, 0.1))
+linearr(X, y, penalty = "ridge")
+
+#ridge regression (use CV for optimal lam; specify seq(0, 2, 0.01))
+linearr(X, y, lam = seq(0, 2, 0.01), penalty = "ridge")
+
+#ridge logistic regression (IRLS) (use CV for optimal lam)
+logisticr(X, y_class, penalty = "ridge")
+
+#ridge logistic regression (MM) (specify lam = 0.1)
+logisticr(X, y_class, lam = 0.1, penalty = "ridge", method = "MM")
+
+#bridge logistic regression (MM)
+fit = logisticr(X, y_class, lam = 0.1, alpha = 1.2, penalty = "bridge")
+fit
+
+#predict using bridge logistic regression estimates
+predict(fit, X[1:3,], y_class[1:3])
+
+```
+
+<br>\vspace{1cm}
+
+## Example
+
+Let us now consider a real-life data set. We will use the High Time Resolution Universe Survey (HTRU) data set. The goal of this study was to classify Pulsar (type of star) candidates. From the website: "Pulsars are a rare type of Neutron star that produce radio emission detectable here on Earth. They are of considerable scientific interest as probes of space-time, the inter-stellar medium, and states of matter" (1). This data set has 17,898 rows and 9 columns -- what each column means is not of interest to us (we are only interested in computation time).
+
+<br>\vspace{1cm}
+Link : [HTRU2 Data](https://archive.ics.uci.edu/ml/datasets/HTRU2)
+<br>\vspace{1cm}
+
+In the following code, we see that is only takes 0.2 seconds to compute our estimates using IRLS method and only 3.6 seconds to compute them using the MM algorithm.
+
+<br>\vspace{1cm}
+```{r, echo = F, warnings = FALSE, message = FALSE}
+data = read.csv("/Users/Matt/Documents/Grad School/Second Year/STAT 8054/HTRU_2.csv", header = F)
+
+```
+
+```{r, eval = T, warning = F, message = F}
+
+dim(data)
+head(data)
+X = dplyr::select(data, -V9)
+y = dplyr::select(data, V9)
+
+#time IRLS (specify lam = 0.1)
+microbenchmark(logisticr(X, y, lam = 0.1, penalty = "ridge"))
+
+#time MM (specify lam = 0.1)
+microbenchmark(logisticr(X, y, lam = 0.1, penalty = "ridge", method = "MM"), times = 5)
+
+#time IRLS (use CV for optimal lam)
+microbenchmark(logisticr(X, y, penalty = "ridge"), times = 5)
+
+#ridge regression using IRLS
+fit = logisticr(X, y, lam = 0.1, penalty = "ridge")
+fit
+
+#predictions
+predict(fit, X[1:3,], y$V9[1:3])
+
+```
+
+
+<br>\vspace{1cm}
+
+## Computer Specs:
+
+ - MacBook Pro (Late 2016)
+ - Processor: 2.9 GHz Intel Core i5
+ - Memory: 8GB 2133 MHz
+ - Graphics: Intel Iris Graphics 550
+
+<br>\vspace{1cm}
+
+## References
+
+1. R. J. Lyon, B. W. Stappers, S. Cooper, J. M. Brooke, J. D. Knowles, Fifty Years of Pulsar Candidate Selection: From simple filters to a new principled real-time classification approach, Monthly Notices of the Royal Astronomical Society 459 (1), 1104-1123, DOI: 10.1093/mnras/stw656 
+
+2. R. J. Lyon, HTRU2, DOI: 10.6084/m9.figshare.3080389.v1. 

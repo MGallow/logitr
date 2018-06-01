@@ -45,3 +45,4 @@ Computes the coefficient estimates for logistic regression. ridge regularization
 CV_logisticc(X, y, lam = seq(0.1, 2, 0.1), alpha = c(1.1, 1.9, 0.1), penalty = 'bridge', method = 'MM', vec = c(0,1,1,1))
 
 }
+\keyword{internal}

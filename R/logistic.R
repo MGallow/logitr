@@ -21,28 +21,23 @@
 #' @return returns selected tuning parameters, beta estimates (includes intercept), MSE, log loss, misclassification rate, total iterations, and gradients.
 #' @export
 #' @examples
-#' Logistic Regression
 #' library(dplyr)
 #' X = dplyr::select(iris, -Species)
 #' y = dplyr::select(iris, Species)
 #' y$Species = ifelse(y$Species == 'setosa', 1, 0)
 #' logisticr(X, y)
 #'
-#' ridge Logistic Regression with IRLS
-#' logistir(X, y, lam = 0.1, penalty = 'ridge')
+#' # ridge Logistic Regression with IRLS
+#' logisticr(X, y, lam = 0.1, penalty = 'ridge')
 #'
-#' ridge Logistic Regression with MM
+#' # ridge Logistic Regression with MM
 #' logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
-#'
-#' bridge Logistic Regression
-#' (Defaults to MM -- IRLS will return error)
-#' logisticr(X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge')
-
 
 logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, 
-    penalty = "none", intercept = TRUE, method = "IRLS", 
-    tol = 1e-05, maxit = 1e+05, vec = NULL, init = 1, 
-    criteria = "logloss", K = 5) {
+    penalty = c("none", "ridge", "bridge"), intercept = TRUE, 
+    method = c("IRLS", "MM"), tol = 1e-05, maxit = 1e+05, 
+    vec = NULL, init = 1, criteria = c("logloss", "mse", "misclass"), 
+    K = 5) {
     
     # checks
     n = dim(X)[1]
@@ -99,8 +94,7 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
         
         # execute CV_logisticc
         CV = CV_logisticc(X, y, lam, alpha, penalty, intercept, 
-            method, tol, maxit, vec_, init, criteria, 
-            K)
+            method, tol, maxit, vec_, init, criteria, K)
         lam = CV$best.lam
         alpha = CV$best.alpha
     }
@@ -136,10 +130,9 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
     parameters = matrix(c(lam, alpha), ncol = 2)
     colnames(parameters) = c("lam", "alpha")
     
-    returns = list(call = call, parameters = parameters, 
-        coefficients = betas, MSE = fit$MSE, log.loss = fit$log.loss, 
-        misclassification = fit$misclassification, total.iterations = logistic$total.iterations, 
-        gradient = grads)
+    returns = list(call = call, parameters = parameters, coefficients = betas, 
+        MSE = fit$MSE, log.loss = fit$log.loss, misclassification = fit$misclassification, 
+        total.iterations = logistic$total.iterations, gradient = grads)
     class(returns) = "logisticr"
     return(returns)
     
@@ -153,14 +146,14 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
 
 
 
-#' @title Print logitr object
-#' @param x logitr class object
+#' @title Print logisticr object
+#' @param x logisticr class object
 #' @export
 print.logisticr = function(x, ...) {
     
     # print call
-    cat("\nCall: ", paste(deparse(x$call), sep = "\n", 
-        collapse = "\n"), "\n", sep = "")
+    cat("\nCall: ", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
+        "\n", sep = "")
     
     # print iterations
     cat("\nIterations:\n")

@@ -10,8 +10,6 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 
 ### ***This package is experimental and not regularly maintained. It is recommended to  use {glmnet} instead!
 
-See [vignette](https://mgallow.github.io/logitr/) or [manual](https://github.com/MGallow/logitr/blob/master/logitr.pdf).
-
 ## Overview
 
 `logitr` is an R package for linear and logistic regression with optional ridge and bridge regularization penalties. A (possibly incomplete) list of functions contained in the package can be found below:
@@ -21,7 +19,7 @@ See [vignette](https://mgallow.github.io/logitr/) or [manual](https://github.com
 * `predict.logisticr()` generates predictions and loss metrics for logistic regression
 * `predict.linearr()` generates predictions and loss metric for linear regression
 
-
+See [vignette](https://mgallow.github.io/logitr/) or [manual](https://github.com/MGallow/logitr/blob/master/logitr.pdf).
 
 ## Installation
 

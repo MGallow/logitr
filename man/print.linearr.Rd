@@ -2,10 +2,10 @@
 % Please edit documentation in R/linear.R
 \name{print.linearr}
 \alias{print.linearr}
-\title{Print logitr object}
+\title{Print linearr object}
 \usage{
 \method{print}{linearr}(x, ...)
 }
 \arguments{
-\item{x}{logitr class object}
+\item{x}{linearr class object}
 }

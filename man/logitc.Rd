@@ -15,7 +15,4 @@ returns the logit of u
 \description{
 Computes the logit for u
 }
-\examples{
-logit(X*beta)
-
-}
+\keyword{internal}

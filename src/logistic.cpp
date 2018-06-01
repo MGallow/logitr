@@ -22,22 +22,7 @@ using namespace Rcpp;
 //' @param vec optional vector to specify which coefficients will be penalized
 //' @param init optional initialization for MM algorithm
 //' @return returns beta estimates (includes intercept), total iterations, and gradients.
-//' @examples
-//' Logistic Regression
-//' library(dplyr)
-//' X = as.matrix(dplyr::select(iris, -Species))
-//' y = as.matrix(dplyr::select(iris, Species))
-//' y = ifelse(y == 'setosa', 1, 0)
-//' logisticc(X, y, vec = c(0,1,1,1))
-//'
-//' ridge Logistic Regression with IRLS
-//' logisticc(X, y, lam = 0.1, penalty = 'ridge', vec = c(0,1,1,1))
-//'
-//' ridge Logistic Regression with MM
-//' logisticc(X, y, lam = 0.1, penalty = 'ridge', method = 'MM', vec = c(0,1,1,1))
-//'
-//' bridge Logistic Regression
-//' logisticc(X, y, lam = 0.1, alpha = 1.5, penalty = 'bridge', method = "MM", vec = c(0,1,1,1))
+//' @keywords internal
 //'
 // [[Rcpp::export]]
 List logisticc(const arma::mat& X, const arma::colvec& y, double lam = 0, double alpha = 1.5, std::string penalty = "none", bool intercept = true, std::string method = "IRLS", double tol = 1e-5, double maxit = 1e5, arma::colvec vec = 0, arma::colvec init = 0) {
