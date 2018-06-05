@@ -1,31 +1,18 @@
 ---
 title: "Penalized Regression"
 author: "Matt Galloway"
-date: \today
-output:
-  html_document:
-    toc: yes
-    toc_depth: 2
-#abstract: "`logitr` is an R package for linear and logistic regression with optional ridge and bridge regularization penalties. In this report we will provide a brief theoretical justification for using logistic regression as well as examples and simulation results for this package."
-thanks: "**Contact**: gall0441@umn.edu."
-geometry: margin = 1in
-#fontfamily: mathpazo
-#fontsize: 12pt
-#spacing: double
-header-includes:
-   - \usepackage{bbm}
-   - \usepackage{multirow}
-   - \usepackage{graphicx}
-   - \usepackage{amsmath}
-   - \hypersetup{linkcolor=blue}
+#date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Penalized Regression}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(cache = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
 library(microbenchmark)
 ```
-
-<br>\vspace{1cm}
 
 ## Logistic Regression
 
