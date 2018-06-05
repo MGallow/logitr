@@ -30,3 +30,4 @@ README_cache/markdown_github/*.Rdata
 Vignette_cache/html/*.rdb
 Vignette_cache/html/*.rdx
 Vignette_cache/html/*.Rdata
+inst/doc

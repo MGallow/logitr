@@ -6,10 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Penalized Regression • logitr</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Penalized Regression">
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Penalized Regression">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -50,9 +51,22 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/MGallow/logitr">
-    <span class="fa fa-github"></span>
+  <a href="../news/index.html">
+    <span class="fa fa-newspaper-o fa-lg"></span>
      
+  </a>
+</li>
+<li>
+  <a href="https://github.com/MGallow/logitr/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://mgallow.github.io/">
+    <span class="fa fa-user fa-lg"></span>
+     
+    MGallow
   </a>
 </li>
       </ul>
@@ -98,11 +112,11 @@
 <p>This formulation is convenient because in logistic regression we make the critical assumption that this log-odds ratio is linear in form. That is, we can estimate the log-odds ration using some vector of coefficients <span class="math inline">\(\beta = (\beta_{0}, \beta_{1}, ..., \beta_{p})^{T}\)</span>:</p>
 <p><span class="math display">\[ \log \left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{P(Y_{i} = 0 | X_{i} = x_{i})} \right ) \approx x_{i}^{T}\beta \]</span></p>
 <p>This implies the following:</p>
-<span class="math display">\[\begin{align}
+<p><span class="math display">\[\begin{align}
 \log &amp;\left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{P(Y_{i} = 0 | X_{i} = x_{i})} \right ) = \log \left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{1 - P(Y_{i} = 1 | X_{i} = x_{i})} \right ) \approx x_{i}^{T}\beta \\
   &amp;\Rightarrow \frac{P(Y_{i} = 1 | X_{i} = x_{i})}{1 - P(Y_{i} = 1 | X_{i} = x_{i})} \approx \exp(x_{i}^{T}\beta) \\
   &amp;\Rightarrow P(Y_{i} = 1 | X_{i} = x_{i}) \approx \frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \equiv p(x_{i}) \mbox{ (say)}
-\end{align}\]</span>
+\end{align}\]</span></p>
 <p>We see that the conditional probability <span class="math inline">\(P(Y_{i} = 1 | X_{i} = x_{i})\)</span> can be approximated by the function <span class="math inline">\(p(x_{i})\)</span> – we call this function the <strong>logit</strong> function (hence the name of our package!). We will show the method for solving for the optimal vector of coefficients (<span class="math inline">\(\hat{\beta}\)</span>) in the next section.</p>
 <p><br></p>
 <div id="maximum-likelihood-estimation" class="section level3">
@@ -116,13 +130,13 @@ p(x_{i}) &amp; \text{ if } y_{i} = 1\\
 <p>Equivalently, we can write this as:</p>
 <p><span class="math display">\[ P(Y_{i} = y_{i} | X_{i} = x_{i}) = p(x_{i})^{y_{i}}(1 - p(x_{i}))^{1 - y_{i}} \]</span></p>
 <p>Having defined a probability distribution, we can now construct our (log) likelihood function (assume an iid setting):</p>
-<span class="math display">\[\begin{align}
+<p><span class="math display">\[\begin{align}
 l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(1 - p(x_{i})^{1 - y_{i}}) \right ] \\
   &amp;= \log \left [\prod_{i = 1}^{n} \left (\frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right)^{y_{i}} \left (1 - \frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right)^{1 - y_{i}} \right] \\
   &amp;= \log \left [\prod_{i = 1}^{n} \left (\frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right)^{y_{i}} \left (\frac{1}{1 + \exp(x_{i}^{T}\beta)} \right)^{1 - y_{i}} \right] \\
 &amp;= \log \left [\prod_{i = 1}^{n} (\exp(x_{i}^{T}\beta))^{y_{i}}(1 + \exp(x_{i}^{T}\beta))^{-1} \right] \\
 &amp;= \sum_{i = 1}^{n}y_{i}(x_{i}^{T}\beta) - \sum_{i = 1}^{n}\log(1 + \exp(x_{i}^{T}\beta))
-\end{align}\]</span>
+\end{align}\]</span></p>
 <p>Maximum likelihood estimation involves find the <span class="math inline">\(\beta\)</span> vector that maximizes the log-likelihood function – or equivalently, minimizes the negative log-likelihood:</p>
 <p><span class="math display">\[ \hat{\beta} = \arg\min_{\beta} -l(\beta)  \]</span></p>
 <p><br></p>
@@ -140,12 +154,12 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 <p>where <span class="math inline">\(\lambda \geq 0\)</span> and <span class="math inline">\(\alpha \in \left(1, 2 \right)\)</span>. Note that we do not penalize the intercept in either method. Algorithms for computing <span class="math inline">\(\hat{\beta}\)</span> will be the subject of our next section.</p>
 <p><br></p>
 <p><strong>Note:</strong></p>
-<span class="math display">\[\begin{align*}
+<p><span class="math display">\[\begin{align*}
 \nabla l(\beta) &amp;= \sum_{i = 1}^{n}y_{i}x_{i} - \sum_{i = 1}^{n}\left (\frac{x_{i}\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right) = \sum_{i = 1}^{n}y_{i}x_{i} - \sum_{i = 1}^{n}x_{i}p(x_{i}) \\
   &amp; \\
 \nabla^{2} l(\beta) &amp;= -\sum_{i = 1}^{n}\left (\frac{x_{i}x_{i}^{T}\exp(x_{i}^{T}\beta)(1 + \exp(x_{i}^{T}\beta)) - x_{i}x_{i}^{T}\exp(x_{i}^{T}\exp(x_{i}^{T}))}{(1 + \exp(x_{i}^{T}\beta))^{2}} \right) \\
   &amp;= -\sum_{i = 1}^{T}\left (\frac{x_{i}x_{i}^{T}\exp(x_{i}^{T}\beta)}{(1 + \exp(x_{i}^{n}\beta))^{2}} \right) = -\sum_{i = 1}^{n}x_{i}x_{i}^{T}p(x_{i})(1 - p(x_{i})) = \sum_{i = 1}^{n}x_{i}x_{i}^{T}w(x_{i}) \mbox{ (say)}
-\end{align*}\]</span>
+\end{align*}\]</span></p>
 <p><br></p>
 </div>
 </div>
@@ -156,14 +170,14 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 <p>According to Taylor’s Theorem (Newton-Raphson),</p>
 <p><span class="math display">\[ -l(\beta) = -l(\beta^{(k)}) + \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \]</span></p>
 <p>where <span class="math inline">\(\beta^{(k)}\)</span> is some estimator for the true <span class="math inline">\(\beta\)</span>. In this case <span class="math inline">\(\beta^{(k)}\)</span> is the <span class="math inline">\(\beta\)</span> estimate for the <span class="math inline">\(k\)</span>th iteration. Dropping constants and adding our regularization term (only ridge penalty – bridge will be computed using MM algorithm), we see the following:</p>
-<span class="math display">\[\begin{align*}
+<p><span class="math display">\[\begin{align*}
 \beta^{(k + 1)} &amp;= \arg\min_{\beta} \left \{ \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta))(\beta - \beta^{(k)}) + (\nabla - l(\beta))^{T}(\beta - \beta^{(k)}) + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right\} \\
   &amp;= \arg\min_{\beta} \left \{ \frac{1}{2}(\beta - \beta^{(k)})^{T}(\sum_{i = 1}^{n}x_{i}x_{i}^{T}w_{i})(\beta - \beta^{(k)}) -\sum_{i = 1}^{n}x_{i}^{T}(y_{i} - p_{i}^{(k)})^{T}(\beta - \beta^{(k)}) + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
   &amp;= \arg\min_{\beta} \left \{ \frac{1}{2}\sum_{i = 1}^{n}w_{i}^{(k)}(x_{i}^{T}\beta - x_{i}^{T}\beta^{(k)})^{T}(x_{i}^{T}\beta - x_{i}^{T}\beta^{(k)}) - \sum_{i = 1}^{n}w_{i}^{(k)}(x_{i}^{T}\beta - x_{i}^{T}\beta^{(k)})\frac{y_{i} - p_{i}^{(k)}}{w_{i}^{(k)}} + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
   &amp;= \arg\min_{\beta} \left \{\sum_{i = 1}^{n}w_{i}^{(k)}\left (\frac{y_{i} - p_{i}^{(k)}}{w_{i}^{(k)}} + x_{i}^{T}\beta^{(k)} - x_{i}^{T}\beta \right)^{2} + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
   &amp;= \arg\min_{\beta} \left \{\sum_{i = 1}^{n}w_{i}^{(k)}(z_{i}^{(k)} - x_{i}^{T}\beta)^{2} + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
   &amp;= \arg\min_{\beta} \left \{\frac{1}{2}(z^{(k)} - X\beta)^{T}W^{(k)}(z^{(k)} - X\beta) + \frac{\lambda}{2}\beta^{T}\beta \right \}
-\end{align*}\]</span>
+\end{align*}\]</span></p>
 <p>where <span class="math inline">\(z^{(k)}\)</span> is the column vector with <span class="math inline">\(i\)</span>th entry <span class="math inline">\(z_{i}^{(k)} = \frac{y_{i} - p_{i}^{(k)}}{w_{i}^{(k)}} + x_{i}^{T}\beta^{(k)}\)</span> for the <span class="math inline">\(k\)</span>th iteration. Further, <span class="math inline">\(W^{(k)}\)</span> is a diagonal matrix with <span class="math inline">\(i\)</span>th diagonal element <span class="math inline">\(w_{i}^{(k)} = p(x_{i})(1 - p(x_{i}))\)</span> and <span class="math inline">\(X\)</span> is an <span class="math inline">\(n \times p\)</span> matrix containing all <span class="math inline">\(n\)</span> (sample size) observations.</p>
 <p>We can see that this is a weighted-least squares problem! The iterative aspect comes from the fact that we will be solving this minimization problem and looping it for <span class="math inline">\(k = 0, 1, ..., K\)</span> until convergence. Solving for the gradient and setting it equal to zero implies that,</p>
 <p><span class="math display">\[ \beta^{(k + 1)} = (X^{T}W^{(k)}X + \lambda I_{p})^{-1}X^{T}W^{(k)}z^{(k)} \]</span></p>
@@ -189,72 +203,72 @@ l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(
 <p>Below you can find two snippets of code from the <code>logitr</code> package. The first snippet solves the weighted least squares problem. Note that this portion uses SVD decomposition which will not be discussed in this report. The second snippet is the code for IRLS.</p>
 <p><br><strong>Weighted least squares code snippet</strong>:</p>
 <p>Note this is not the actual code. The real code is written in c++.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#calculate the coefficient estimates for weighted least squares</span>
-linearr =<span class="st"> </span><span class="cf">function</span>(X, y, <span class="dt">lam =</span> <span class="dv">0</span>, <span class="dt">weights =</span> <span class="ot">NULL</span>, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, 
-    <span class="dt">kernel =</span> <span class="ot">FALSE</span>) {
-    
-    <span class="co"># if p &gt; n, linear kernel ridge regression</span>
-    <span class="cf">if</span> ((p <span class="op">&gt;</span><span class="st"> </span>n) <span class="op">|</span><span class="st"> </span>(kernel <span class="op">==</span><span class="st"> </span><span class="ot">TRUE</span>)) {
-        
-        <span class="co"># SVD</span>
-        svd =<span class="st"> </span><span class="kw">svd</span>(X.)
-        
-        <span class="co"># adjust d vector for regularization and diagonalize</span>
-        d_adj =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">1</span><span class="op">/</span>(svd<span class="op">$</span>d<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>lam))
-        
-        <span class="co"># calculate beta estimates</span>
-        betas =<span class="st"> </span><span class="kw">t</span>(X.) <span class="op">%*%</span><span class="st"> </span>svd<span class="op">$</span>u <span class="op">%*%</span><span class="st"> </span>d_adj <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(svd<span class="op">$</span>u) <span class="op">%*%</span><span class="st"> </span>
-<span class="st">            </span>y.
-        <span class="kw">rownames</span>(betas) =<span class="st"> </span><span class="ot">NULL</span>
-        
-    } <span class="cf">else</span> {
-        <span class="co"># compute normal ridge regression</span>
-        
-        <span class="co"># SVD</span>
-        svd =<span class="st"> </span><span class="kw">svd</span>(X.)
-        
-        <span class="co"># adjust d vector for regularization and diagonalize</span>
-        d_adj =<span class="st"> </span><span class="kw">diag</span>(svd<span class="op">$</span>d<span class="op">/</span>(svd<span class="op">$</span>d<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>lam))
-        
-        <span class="co"># calculate beta estimates</span>
-        betas =<span class="st"> </span>svd<span class="op">$</span>v <span class="op">%*%</span><span class="st"> </span>d_adj <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(svd<span class="op">$</span>u) <span class="op">%*%</span><span class="st"> </span>y.
-        <span class="kw">rownames</span>(betas) =<span class="st"> </span><span class="ot">NULL</span>
-        
-    }
-    
-    returns =<span class="st"> </span><span class="kw">list</span>(<span class="dt">coefficients =</span> betas)
-    <span class="kw">return</span>(returns)
-}</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#calculate the coefficient estimates for weighted least squares</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">linearr =<span class="st"> </span><span class="cf">function</span>(X, y, <span class="dt">lam =</span> <span class="dv">0</span>, <span class="dt">weights =</span> <span class="ot">NULL</span>, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">    <span class="dt">kernel =</span> <span class="ot">FALSE</span>) {</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">    </a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">    <span class="co"># if p &gt; n, linear kernel ridge regression</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">    <span class="cf">if</span> ((p <span class="op">&gt;</span><span class="st"> </span>n) <span class="op">|</span><span class="st"> </span>(kernel <span class="op">==</span><span class="st"> </span><span class="ot">TRUE</span>)) {</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">        </a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">        <span class="co"># SVD</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">        svd =<span class="st"> </span><span class="kw">svd</span>(X.)</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">        </a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">        <span class="co"># adjust d vector for regularization and diagonalize</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">        d_adj =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">1</span><span class="op">/</span>(svd<span class="op">$</span>d<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>lam))</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">        </a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">        <span class="co"># calculate beta estimates</span></a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">        betas =<span class="st"> </span><span class="kw">t</span>(X.) <span class="op">%*%</span><span class="st"> </span>svd<span class="op">$</span>u <span class="op">%*%</span><span class="st"> </span>d_adj <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(svd<span class="op">$</span>u) <span class="op">%*%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="st">            </span>y.</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">        <span class="kw">rownames</span>(betas) =<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">        </a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">    } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb1-20" data-line-number="20">        <span class="co"># compute normal ridge regression</span></a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">        </a>
+<a class="sourceLine" id="cb1-22" data-line-number="22">        <span class="co"># SVD</span></a>
+<a class="sourceLine" id="cb1-23" data-line-number="23">        svd =<span class="st"> </span><span class="kw">svd</span>(X.)</a>
+<a class="sourceLine" id="cb1-24" data-line-number="24">        </a>
+<a class="sourceLine" id="cb1-25" data-line-number="25">        <span class="co"># adjust d vector for regularization and diagonalize</span></a>
+<a class="sourceLine" id="cb1-26" data-line-number="26">        d_adj =<span class="st"> </span><span class="kw">diag</span>(svd<span class="op">$</span>d<span class="op">/</span>(svd<span class="op">$</span>d<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>lam))</a>
+<a class="sourceLine" id="cb1-27" data-line-number="27">        </a>
+<a class="sourceLine" id="cb1-28" data-line-number="28">        <span class="co"># calculate beta estimates</span></a>
+<a class="sourceLine" id="cb1-29" data-line-number="29">        betas =<span class="st"> </span>svd<span class="op">$</span>v <span class="op">%*%</span><span class="st"> </span>d_adj <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(svd<span class="op">$</span>u) <span class="op">%*%</span><span class="st"> </span>y.</a>
+<a class="sourceLine" id="cb1-30" data-line-number="30">        <span class="kw">rownames</span>(betas) =<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb1-31" data-line-number="31">        </a>
+<a class="sourceLine" id="cb1-32" data-line-number="32">    }</a>
+<a class="sourceLine" id="cb1-33" data-line-number="33">    </a>
+<a class="sourceLine" id="cb1-34" data-line-number="34">    returns =<span class="st"> </span><span class="kw">list</span>(<span class="dt">coefficients =</span> betas)</a>
+<a class="sourceLine" id="cb1-35" data-line-number="35">    <span class="kw">return</span>(returns)</a>
+<a class="sourceLine" id="cb1-36" data-line-number="36">}</a></code></pre></div>
 <p><br></p>
 <p><strong>IRLS code snippet</strong>:</p>
 <p>Note this is not the actual code. The real code is written in c++.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculates the coefficient estimates for logistic</span>
-<span class="co"># regression (IRLS)</span>
-IRLS =<span class="st"> </span><span class="cf">function</span>(X, y, <span class="dt">lam =</span> <span class="dv">0</span>, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, <span class="dt">tol =</span> <span class="dv">10</span><span class="op">^</span>(<span class="op">-</span><span class="dv">5</span>),
-    <span class="dt">maxit =</span> <span class="fl">1e+05</span>, vec) {
-
-    <span class="co"># IRLS algorithm</span>
-    <span class="cf">while</span> ((iteration <span class="op">&lt;</span><span class="st"> </span>maxit) <span class="op">&amp;</span><span class="st"> </span>(<span class="kw">max</span>(<span class="kw">abs</span>(grads)) <span class="op">&gt;</span><span class="st"> </span>tol)) {
-
-        <span class="co"># update working data</span>
-        Xb =<span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>betas
-        P =<span class="st"> </span><span class="kw">logitr</span>(Xb)
-        weights =<span class="st"> </span><span class="kw">as.numeric</span>(P <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>P))
-        z =<span class="st"> </span>(y <span class="op">-</span><span class="st"> </span>P)<span class="op">/</span>weights <span class="op">+</span><span class="st"> </span>Xb
-
-        <span class="co"># calculate new betas</span>
-        betas =<span class="st"> </span><span class="kw"><a href="../reference/linearr.html">linearr</a></span>(<span class="dt">X =</span> X, <span class="dt">y =</span> z, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">weights =</span> weights,
-            <span class="dt">intercept =</span> intercept, <span class="dt">kernel =</span> <span class="ot">FALSE</span>)<span class="op">$</span>coefficients
-
-        <span class="co"># calculate updated gradients</span>
-        grads =<span class="st"> </span><span class="kw">gradient_IRLS_logistic</span>(betas, X, y, lam,
-            vec)
-        iteration =<span class="st"> </span>iteration <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
-    }
-
-    returns =<span class="st"> </span><span class="kw">list</span>(<span class="dt">coefficients =</span> betas, <span class="dt">total.iterations =</span> iteration, <span class="dt">gradient =</span> grads)
-    <span class="kw">return</span>(returns)
-}</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># calculates the coefficient estimates for logistic</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># regression (IRLS)</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">IRLS =<span class="st"> </span><span class="cf">function</span>(X, y, <span class="dt">lam =</span> <span class="dv">0</span>, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, <span class="dt">tol =</span> <span class="dv">10</span><span class="op">^</span>(<span class="op">-</span><span class="dv">5</span>),</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="dt">maxit =</span> <span class="fl">1e+05</span>, vec) {</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">    <span class="co"># IRLS algorithm</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">    <span class="cf">while</span> ((iteration <span class="op">&lt;</span><span class="st"> </span>maxit) <span class="op">&amp;</span><span class="st"> </span>(<span class="kw">max</span>(<span class="kw">abs</span>(grads)) <span class="op">&gt;</span><span class="st"> </span>tol)) {</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">        <span class="co"># update working data</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">        Xb =<span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>betas</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">        P =<span class="st"> </span><span class="kw">logitr</span>(Xb)</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">        weights =<span class="st"> </span><span class="kw">as.numeric</span>(P <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>P))</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">        z =<span class="st"> </span>(y <span class="op">-</span><span class="st"> </span>P)<span class="op">/</span>weights <span class="op">+</span><span class="st"> </span>Xb</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">        <span class="co"># calculate new betas</span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16">        betas =<span class="st"> </span><span class="kw"><a href="../reference/linearr.html">linearr</a></span>(<span class="dt">X =</span> X, <span class="dt">y =</span> z, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">weights =</span> weights,</a>
+<a class="sourceLine" id="cb2-17" data-line-number="17">            <span class="dt">intercept =</span> intercept, <span class="dt">kernel =</span> <span class="ot">FALSE</span>)<span class="op">$</span>coefficients</a>
+<a class="sourceLine" id="cb2-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb2-19" data-line-number="19">        <span class="co"># calculate updated gradients</span></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20">        grads =<span class="st"> </span><span class="kw">gradient_IRLS_logistic</span>(betas, X, y, lam,</a>
+<a class="sourceLine" id="cb2-21" data-line-number="21">            vec)</a>
+<a class="sourceLine" id="cb2-22" data-line-number="22">        iteration =<span class="st"> </span>iteration <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-23" data-line-number="23">    }</a>
+<a class="sourceLine" id="cb2-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb2-25" data-line-number="25">    returns =<span class="st"> </span><span class="kw">list</span>(<span class="dt">coefficients =</span> betas, <span class="dt">total.iterations =</span> iteration, <span class="dt">gradient =</span> grads)</a>
+<a class="sourceLine" id="cb2-26" data-line-number="26">    <span class="kw">return</span>(returns)</a>
+<a class="sourceLine" id="cb2-27" data-line-number="27">}</a></code></pre></div>
 <p><br></p>
 </div>
 <div id="majorize-minimization-mm" class="section level2">
@@ -278,7 +292,7 @@ IRLS =<span class="st"> </span><span class="cf">function</span>(X, y, <span clas
 <p>This implies that the following inequality must hold:</p>
 <p><span class="math display">\[ \left|\beta_{j}\right|^{\alpha} = (\beta_{j}^{2})^{\alpha/2} \leq (\beta_{j}^{(k)^{2}})^{\alpha/2} + \frac{\alpha}{2}(\beta_{j}^{(k)^{2}})^{\alpha/2 - 1}(\beta_{j}^{2} - \beta_{j}^{(k)^{2}}) \]</span></p>
 <p><br> We now derive our <span class="math inline">\(Q\)</span> function:</p>
-<span class="math display">\[\begin{align}
+<p><span class="math display">\[\begin{align}
 -l(\beta) &amp;+ \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}\right) \\
   &amp;=  -l(\beta^{(k)}) + \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
   &amp;+ \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}\right) \\
@@ -298,7 +312,7 @@ IRLS =<span class="st"> </span><span class="cf">function</span>(X, y, <span clas
   &amp;\leq \frac{1}{2}(\beta - \beta^{(k)})^{T}X^{T}(\frac{1}{4} + \delta)X(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
   &amp;+ \frac{\lambda}{2}\left(\beta^{T} diag\left[\gamma(v - d^{(k)}) + d^{(k)} \right]\beta \right) + const. \\
   &amp;=: Q(\beta | \beta^{(k)})
-\end{align}\]</span>
+\end{align}\]</span></p>
 <p>That was a lot of effort to find our <span class="math inline">\(Q\)</span> function but we eventually see that our <span class="math inline">\(Q\)</span> function is quadratic in form. Therefore, we can find a closed solution for each update. By plugging in the gradient and hessian of our log-likelihood function and dropping constants, we will eventually see by solving for the gradient of <span class="math inline">\(Q\)</span> and setting it equal to zero, that we have:</p>
 <p><span class="math display">\[\beta^{(k + 1)} = \left(X^{T}(\frac{1}{4} + \delta)X +\lambda diag \left[\gamma(v - d^{(k)}) + d^{(k)}\right] \right)^{-1}\left(X^{T}(y - p^{(k)}) + X^{T}(\frac{1}{4} + \delta)X \right) \]</span></p>
 <p>Finally, putting everything together we have the MM algorithm for penalized logistic regression:</p>
@@ -315,35 +329,35 @@ IRLS =<span class="st"> </span><span class="cf">function</span>(X, y, <span clas
 <p>Below you can find a snippet of code for the MM function.</p>
 <p><br><strong>MM code snippet</strong>:</p>
 <p>Note this is not the actual code. The real code is written in c++.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculates the coefficient estimates for logistic</span>
-<span class="co"># regression (MM)</span>
-MM =<span class="st"> </span><span class="cf">function</span>(X, y, <span class="dt">lam =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">1.5</span>, <span class="dt">gamma =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, 
-    <span class="dt">tol =</span> <span class="dv">10</span><span class="op">^</span>(<span class="op">-</span><span class="dv">5</span>), <span class="dt">maxit =</span> <span class="fl">1e+05</span>, <span class="dt">vec =</span> <span class="ot">NULL</span>) {
-    
-    <span class="co"># MM algorithm</span>
-    <span class="cf">while</span> ((iteration <span class="op">&lt;</span><span class="st"> </span>maxit) <span class="op">&amp;</span><span class="st"> </span>(<span class="kw">max</span>(<span class="kw">abs</span>(grads)) <span class="op">&gt;</span><span class="st"> </span>tol)) {
-        
-        <span class="co"># update d vector</span>
-        d =<span class="st"> </span><span class="kw">as.numeric</span>((betas<span class="op">^</span><span class="dv">2</span>)<span class="op">^</span>(alpha<span class="op">/</span><span class="dv">2</span> <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))
-        d[<span class="dv">1</span>] =<span class="st"> </span><span class="dv">0</span>
-        
-        <span class="co"># qrsolve</span>
-        betas =<span class="st"> </span><span class="kw">qr.solve</span>(Z <span class="op">+</span><span class="st"> </span>lam <span class="op">*</span><span class="st"> </span><span class="kw">diag</span>(gamma <span class="op">*</span><span class="st"> </span>(vec <span class="op">-</span><span class="st"> </span>d) <span class="op">+</span><span class="st"> </span>
-<span class="st">            </span>d), <span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>(y <span class="op">-</span><span class="st"> </span><span class="kw">logitr</span>(X <span class="op">%*%</span><span class="st"> </span>betas)) <span class="op">+</span><span class="st"> </span>Z <span class="op">%*%</span><span class="st"> </span>
-<span class="st">            </span>betas)
-        <span class="kw">rownames</span>(betas) =<span class="st"> </span><span class="ot">NULL</span>
-        
-        <span class="co"># calculate updated gradients</span>
-        grads =<span class="st"> </span><span class="kw">gradient_MM_logistic</span>(betas, X, y, lam, alpha, 
-            gamma, vec)
-        iteration =<span class="st"> </span>iteration <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
-        
-    }
-    
-    returns =<span class="st"> </span><span class="kw">list</span>(<span class="dt">coefficients =</span> betas, <span class="dt">total.iterations =</span> iteration, 
-        <span class="dt">gradient =</span> grads)
-    <span class="kw">return</span>(returns)
-}</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># calculates the coefficient estimates for logistic</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co"># regression (MM)</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">MM =<span class="st"> </span><span class="cf">function</span>(X, y, <span class="dt">lam =</span> <span class="dv">0</span>, <span class="dt">alpha =</span> <span class="fl">1.5</span>, <span class="dt">gamma =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">    <span class="dt">tol =</span> <span class="dv">10</span><span class="op">^</span>(<span class="op">-</span><span class="dv">5</span>), <span class="dt">maxit =</span> <span class="fl">1e+05</span>, <span class="dt">vec =</span> <span class="ot">NULL</span>) {</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">    </a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">    <span class="co"># MM algorithm</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">    <span class="cf">while</span> ((iteration <span class="op">&lt;</span><span class="st"> </span>maxit) <span class="op">&amp;</span><span class="st"> </span>(<span class="kw">max</span>(<span class="kw">abs</span>(grads)) <span class="op">&gt;</span><span class="st"> </span>tol)) {</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">        </a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">        <span class="co"># update d vector</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">        d =<span class="st"> </span><span class="kw">as.numeric</span>((betas<span class="op">^</span><span class="dv">2</span>)<span class="op">^</span>(alpha<span class="op">/</span><span class="dv">2</span> <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">        d[<span class="dv">1</span>] =<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">        </a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">        <span class="co"># qrsolve</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">        betas =<span class="st"> </span><span class="kw">qr.solve</span>(Z <span class="op">+</span><span class="st"> </span>lam <span class="op">*</span><span class="st"> </span><span class="kw">diag</span>(gamma <span class="op">*</span><span class="st"> </span>(vec <span class="op">-</span><span class="st"> </span>d) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="st">            </span>d), <span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>(y <span class="op">-</span><span class="st"> </span><span class="kw">logitr</span>(X <span class="op">%*%</span><span class="st"> </span>betas)) <span class="op">+</span><span class="st"> </span>Z <span class="op">%*%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="st">            </span>betas)</a>
+<a class="sourceLine" id="cb3-17" data-line-number="17">        <span class="kw">rownames</span>(betas) =<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18">        </a>
+<a class="sourceLine" id="cb3-19" data-line-number="19">        <span class="co"># calculate updated gradients</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20">        grads =<span class="st"> </span><span class="kw">gradient_MM_logistic</span>(betas, X, y, lam, alpha, </a>
+<a class="sourceLine" id="cb3-21" data-line-number="21">            gamma, vec)</a>
+<a class="sourceLine" id="cb3-22" data-line-number="22">        iteration =<span class="st"> </span>iteration <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23">        </a>
+<a class="sourceLine" id="cb3-24" data-line-number="24">    }</a>
+<a class="sourceLine" id="cb3-25" data-line-number="25">    </a>
+<a class="sourceLine" id="cb3-26" data-line-number="26">    returns =<span class="st"> </span><span class="kw">list</span>(<span class="dt">coefficients =</span> betas, <span class="dt">total.iterations =</span> iteration, </a>
+<a class="sourceLine" id="cb3-27" data-line-number="27">        <span class="dt">gradient =</span> grads)</a>
+<a class="sourceLine" id="cb3-28" data-line-number="28">    <span class="kw">return</span>(returns)</a>
+<a class="sourceLine" id="cb3-29" data-line-number="29">}</a></code></pre></div>
 <p><br></p>
 </div>
 </div>
@@ -352,15 +366,15 @@ MM =<span class="st"> </span><span class="cf">function</span>(X, y, <span class=
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>Let us walk through some functions in the <code>logitr</code> package. We will use the iris data set for illustration.</p>
 <p><br></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(logitr)
-
-<span class="co">#we will use the iris data set</span>
-X =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, <span class="op">-</span><span class="kw">c</span>(Species, Sepal.Length))
-y =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, Sepal.Length)
-y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, Species) <span class="op">==</span><span class="st"> "setosa"</span>, <span class="dv">1</span>, <span class="dv">0</span>)
-
-<span class="co">#ridge regression (specify lam = 0.1)</span>
-<span class="kw"><a href="../reference/linearr.html">linearr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(logitr)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#we will use the iris data set</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">X =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, <span class="op">-</span><span class="kw">c</span>(Species, Sepal.Length))</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">y =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, Sepal.Length)</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, Species) <span class="op">==</span><span class="st"> "setosa"</span>, <span class="dv">1</span>, <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#ridge regression (specify lam = 0.1)</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="kw"><a href="../reference/linearr.html">linearr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call: linearr(X = X, y = y, lam = 0.1, penalty = "ridge")
 ## 
@@ -377,44 +391,44 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr<span clas
 ##            0.64624
 ##            0.70231
 ##           -0.54160</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge regression (use CV for optimal lam; options default to seq(0, 2, 0.1))</span>
-<span class="kw"><a href="../reference/linearr.html">linearr</a></span>(X, y, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">#ridge regression (use CV for optimal lam; options default to seq(0, 2, 0.1))</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="../reference/linearr.html">linearr</a></span>(X, y, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call: linearr(X = X, y = y, penalty = "ridge")
 ## 
 ## Tuning parameters:
 ##       lam  alpha
-## [1,]  0.4    NaN
+## [1,]  0.2    NaN
 ## 
 ## MSE:
-## [1] 0.09645479
+## [1] 0.09634343
 ## 
 ## Coefficients:
 ##               [,1]
-## intercept  1.94009
-##            0.63304
-##            0.68330
-##           -0.50028</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge regression (use CV for optimal lam; specify seq(0, 2, 0.01))</span>
-<span class="kw"><a href="../reference/linearr.html">linearr</a></span>(X, y, <span class="dt">lam =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>), <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</code></pre></div>
+## intercept  1.89913
+##            0.64175
+##            0.69573
+##           -0.52729</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#ridge regression (use CV for optimal lam; specify seq(0, 2, 0.01))</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="../reference/linearr.html">linearr</a></span>(X, y, <span class="dt">lam =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>), <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call: linearr(X = X, y = y, lam = seq(0, 2, 0.01), penalty = "ridge")
 ## 
 ## Tuning parameters:
 ##        lam  alpha
-## [1,]  0.18    NaN
+## [1,]  0.37    NaN
 ## 
 ## MSE:
-## [1] 0.09633592
+## [1] 0.09643416
 ## 
 ## Coefficients:
 ##               [,1]
-## intercept  1.89492
-##            0.64264
-##            0.69703
-##           -0.53011</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (IRLS) (use CV for optimal lam)</span>
-<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</code></pre></div>
+## intercept  1.93408
+##            0.63433
+##            0.68510
+##           -0.50421</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">#ridge logistic regression (IRLS) (use CV for optimal lam)</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call: logisticr(X = X, y = y_class, penalty = "ridge")
 ## 
@@ -440,8 +454,8 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr<span clas
 ##             8.89485
 ##            -7.54863
 ##           -18.60425</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (MM) (specify lam = 0.1)</span>
-<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>, <span class="dt">method =</span> <span class="st">"MM"</span>)</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">#ridge logistic regression (MM) (specify lam = 0.1)</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>, <span class="dt">method =</span> <span class="st">"MM"</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call: logisticr(X = X, y = y_class, lam = 0.1, penalty = "ridge", method = "MM")
 ## 
@@ -467,10 +481,10 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr<span clas
 ##            1.54082
 ##           -3.64177
 ##           -1.63050</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#bridge logistic regression (MM)</span>
-fit =<span class="st"> </span><span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">alpha =</span> <span class="fl">1.2</span>, <span class="dt">penalty =</span> <span class="st">"bridge"</span>)</code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co">#bridge logistic regression (MM)</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">fit =<span class="st"> </span><span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">alpha =</span> <span class="fl">1.2</span>, <span class="dt">penalty =</span> <span class="st">"bridge"</span>)</a></code></pre></div>
 <pre><code>## [1] "using MM algorithm..."</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">fit</a></code></pre></div>
 <pre><code>## 
 ## Call: logisticr(X = X, y = y_class, lam = 0.1, alpha = 1.2, penalty = "bridge")
 ## 
@@ -496,8 +510,8 @@ fit =<span class="st"> </span><span class="kw"><a href="../reference/logisticr.h
 ##            0.61701
 ##           -5.71684
 ##           -0.23004</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#predict using bridge logistic regression estimates</span>
-<span class="kw">predict</span>(fit, X[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,], y_class[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co">#predict using bridge logistic regression estimates</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">predict</span>(fit, X[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,], y_class[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</a></code></pre></div>
 <pre><code>## $fitted.values
 ##           [,1]
 ## [1,] 0.9992467
@@ -527,9 +541,9 @@ fit =<span class="st"> </span><span class="kw"><a href="../reference/logisticr.h
 <p><br> Link : <a href="https://archive.ics.uci.edu/ml/datasets/HTRU2">HTRU2 Data</a> <br></p>
 <p>In the following code, we see that is only takes 0.2 seconds to compute our estimates using IRLS method and only 3.6 seconds to compute them using the MM algorithm.</p>
 <p><br></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(data)</code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">dim</span>(data)</a></code></pre></div>
 <pre><code>## [1] 17898     9</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(data)</code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">head</span>(data)</a></code></pre></div>
 <pre><code>##          V1       V2          V3         V4       V5       V6        V7
 ## 1 140.56250 55.68378 -0.23457141 -0.6996484 3.199833 19.11043  7.975532
 ## 2 102.50781 58.88243  0.46531815 -0.5150879 1.677258 14.86015 10.576487
@@ -544,33 +558,33 @@ fit =<span class="st"> </span><span class="kw"><a href="../reference/logisticr.h
 ## 4  53.59366  0
 ## 5 252.56731  0
 ## 6 131.39400  0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">X =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(data, <span class="op">-</span>V9)
-y =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(data, V9)
-
-<span class="co">#time IRLS (specify lam = 0.1)</span>
-<span class="kw">microbenchmark</span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>))</code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">X =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(data, <span class="op">-</span>V9)</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">y =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(data, V9)</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co">#time IRLS (specify lam = 0.1)</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="kw">microbenchmark</span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>))</a></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##                                           expr      min       lq     mean
-##  logisticr(X, y, lam = 0.1, penalty = "ridge") 39.69941 46.94706 52.92193
+##  logisticr(X, y, lam = 0.1, penalty = "ridge") 36.51054 41.04515 47.97711
 ##    median       uq      max neval
-##  50.51572 54.97714 114.5475   100</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#time MM (specify lam = 0.1)</span>
-<span class="kw">microbenchmark</span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>, <span class="dt">method =</span> <span class="st">"MM"</span>), <span class="dt">times =</span> <span class="dv">5</span>)</code></pre></div>
+##  44.28076 49.89457 124.7095   100</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co">#time MM (specify lam = 0.1)</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">microbenchmark</span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>, <span class="dt">method =</span> <span class="st">"MM"</span>), <span class="dt">times =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##                                                          expr      min
-##  logisticr(X, y, lam = 0.1, penalty = "ridge", method = "MM") 892.0948
-##        lq    mean   median       uq      max neval
-##  948.4478 979.516 990.5807 1007.819 1058.638     5</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#time IRLS (use CV for optimal lam)</span>
-<span class="kw">microbenchmark</span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">penalty =</span> <span class="st">"ridge"</span>), <span class="dt">times =</span> <span class="dv">5</span>)</code></pre></div>
+##  logisticr(X, y, lam = 0.1, penalty = "ridge", method = "MM") 871.6377
+##        lq     mean   median       uq     max neval
+##  874.5964 906.5329 882.6953 931.1269 972.608     5</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co">#time IRLS (use CV for optimal lam)</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">microbenchmark</span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">penalty =</span> <span class="st">"ridge"</span>), <span class="dt">times =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## Unit: seconds
-##                                expr     min       lq     mean   median
-##  logisticr(X, y, penalty = "ridge") 2.89625 2.930908 3.059623 2.997808
+##                                expr      min       lq     mean   median
+##  logisticr(X, y, penalty = "ridge") 3.052126 3.071233 3.159211 3.157173
 ##        uq      max neval
-##  3.011103 3.462043     5</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge regression using IRLS</span>
-fit =<span class="st"> </span><span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)
-fit</code></pre></div>
+##  3.206834 3.308689     5</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co">#ridge regression using IRLS</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">fit =<span class="st"> </span><span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">fit</a></code></pre></div>
 <pre><code>## 
 ## Call: logisticr(X = X, y = y, lam = 0.1, penalty = "ridge")
 ## 
@@ -601,8 +615,8 @@ fit</code></pre></div>
 ##            0.05315
 ##            0.04646
 ##           -0.00470</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#predictions</span>
-<span class="kw">predict</span>(fit, X[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,], y<span class="op">$</span>V9[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co">#predictions</span></a>
+<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="kw">predict</span>(fit, X[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,], y<span class="op">$</span>V9[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</a></code></pre></div>
 <pre><code>## $fitted.values
 ##             [,1]
 ## [1,] 0.001018225

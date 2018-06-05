@@ -1,8 +1,13 @@
 pandoc: 1.19.2.1
 pkgdown: 1.0.0
 pkgdown_sha: ~
-articles:
-  Vignette: Vignette.html
+
+title: logitr
+url: https://mgallow.github.io/logitr/
+template:
+  params:
+    bootswatch: flatly
+
 navbar:
   title: "logitr"
   left:
@@ -21,8 +26,16 @@ navbar:
         #- text: "GLASSOO"
           #href: https://mgallow.github.io/GLASSOO/
   right:
-    - icon: fa-github
-      href: https://github.com/MGallow/logitr
+    - icon: fa-newspaper-o fa-lg
+      #text: "News"
+      href: news/index.html
+    - icon: fa-github fa-lg
+      #text: "Github"
+      href: https://github.com/MGallow/logitr/
+    - icon: fa-user fa-lg
+      text: "MGallow"
+      href: https://mgallow.github.io/
+      
 reference:
   - title: Logistic Regression
     contents:

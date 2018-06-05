@@ -6,10 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Penalized Logistic Regression • logitr</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><meta property="og:title" content="Penalized Logistic Regression">
+<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
+<meta property="og:title" content="Penalized Logistic Regression">
 <meta property="og:description" content="This is an R package for linear and logistic regression with optional ridge and bridge regularization penalties.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -50,9 +51,22 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/MGallow/logitr">
-    <span class="fa fa-github"></span>
+  <a href="news/index.html">
+    <span class="fa fa-newspaper-o fa-lg"></span>
      
+  </a>
+</li>
+<li>
+  <a href="https://github.com/MGallow/logitr/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://mgallow.github.io/">
+    <span class="fa fa-user fa-lg"></span>
+     
+    MGallow
   </a>
 </li>
       </ul>
@@ -70,6 +84,7 @@
 
     
     
+
 <div id="this-package-is-experimental-and-not-regularly-maintained--it-is-recommended-to-use-glmnet-instead" class="section level3">
 <h3 class="hasAnchor">
 <a href="#this-package-is-experimental-and-not-regularly-maintained--it-is-recommended-to-use-glmnet-instead" class="anchor"></a>***This package is experimental and not regularly maintained. It is recommended to use {glmnet} instead!</h3>
@@ -93,23 +108,23 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The easiest way to install is from the development version from GitHub:</span>
-<span class="co"># install.packages("devtools")</span>
-devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"MGallow/logitr"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># The easiest way to install is from the development version from GitHub:</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"MGallow/logitr"</span>)</a></code></pre></div>
 <p>If there are any issues/bugs, please let me know: <a href="https://github.com/MGallow/logitr/issues">github</a>. You can also contact me via my <a href="http://users.stat.umn.edu/~gall0441/">website</a>. Pull requests are welcome!</p>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(logitr)
-
-<span class="co">#we will use the iris data set</span>
-X =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, <span class="op">-</span><span class="kw">c</span>(Species, Sepal.Length))
-y =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, Sepal.Length)
-y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, Species) <span class="op">==</span><span class="st"> "setosa"</span>, <span class="dv">1</span>, <span class="dv">0</span>)
-
-<span class="co">#ridge regression (use CV for optimal lambda)</span>
-<span class="kw"><a href="reference/linearr.html">linearr</a></span>(X, y, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(logitr)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#we will use the iris data set</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">X =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, <span class="op">-</span><span class="kw">c</span>(Species, Sepal.Length))</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">y =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, Sepal.Length)</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(iris, Species) <span class="op">==</span><span class="st"> "setosa"</span>, <span class="dv">1</span>, <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#ridge regression (use CV for optimal lambda)</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="kw"><a href="reference/linearr.html">linearr</a></span>(X, y, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call: linearr(X = X, y = y, penalty = "ridge")
 ## 
@@ -126,8 +141,8 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr<span clas
 ##            0.64175
 ##            0.69573
 ##           -0.52729</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (IRLS) (use CV for optimal lambda)</span>
-<span class="kw"><a href="reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">#ridge logistic regression (IRLS) (use CV for optimal lambda)</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call: logisticr(X = X, y = y_class, penalty = "ridge")
 ## 
@@ -153,8 +168,8 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr<span clas
 ##             8.89485
 ##            -7.54863
 ##           -18.60425</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#ridge logistic regression (MM)</span>
-<span class="kw"><a href="reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>, <span class="dt">method =</span> <span class="st">"MM"</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">#ridge logistic regression (MM)</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>, <span class="dt">method =</span> <span class="st">"MM"</span>)</a></code></pre></div>
 <pre><code>## 
 ## Call: logisticr(X = X, y = y_class, lam = 0.1, penalty = "ridge", method = "MM")
 ## 
@@ -180,10 +195,10 @@ y_class =<span class="st"> </span><span class="kw">ifelse</span>(dplyr<span clas
 ##            1.54082
 ##           -3.64177
 ##           -1.63050</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#bridge logistic regression (MM)</span>
-fit =<span class="st"> </span><span class="kw"><a href="reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">alpha =</span> <span class="fl">1.2</span>, <span class="dt">penalty =</span> <span class="st">"bridge"</span>)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#bridge logistic regression (MM)</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">fit =<span class="st"> </span><span class="kw"><a href="reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">alpha =</span> <span class="fl">1.2</span>, <span class="dt">penalty =</span> <span class="st">"bridge"</span>)</a></code></pre></div>
 <pre><code>## [1] "using MM algorithm..."</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">fit</a></code></pre></div>
 <pre><code>## 
 ## Call: logisticr(X = X, y = y_class, lam = 0.1, alpha = 1.2, penalty = "bridge")
 ## 
@@ -209,8 +224,8 @@ fit =<span class="st"> </span><span class="kw"><a href="reference/logisticr.html
 ##            0.61701
 ##           -5.71684
 ##           -0.23004</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#predict using bridge logistic regression estimates</span>
-<span class="kw">predict</span>(fit, X[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,], y_class[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">#predict using bridge logistic regression estimates</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">predict</span>(fit, X[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,], y_class[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</a></code></pre></div>
 <pre><code>## $fitted.values
 ##           [,1]
 ## [1,] 0.9992467
@@ -259,7 +274,13 @@ fit =<span class="st"> </span><span class="kw"><a href="reference/logisticr.html
 </ul>
 </div>
 
-      </div>
+      <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=logitr"><img src="http://www.r-pkg.org/badges/version/logitr" alt="CRAN_Status_Badge"></a></li>
+</ul>
+</div>
+</div>
 
 </div>
 

@@ -8,6 +8,8 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 ```
 
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/logitr)](https://cran.r-project.org/package=logitr)
+
 ### ***This package is experimental and not regularly maintained. It is recommended to  use {glmnet} instead!
 
 ## Overview
