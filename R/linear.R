@@ -92,15 +92,15 @@ linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
         
         # execute CV_logisticc
         CV = CV_linearc(X, y, lam, alpha, penalty, weights, 
-            intercept, kernel, method, tol, maxit, vec_, init, 
-            K)
+            intercept, kernel, method, tol, maxit, vec_, 
+            init, K)
         lam = CV$best.lam
         alpha = CV$best.alpha
     }
     
     # execute linearc
-    linear = linearc(X, y, lam, alpha, penalty, weights, intercept, 
-        kernel, method, tol, maxit, vec_, init)
+    linear = linearc(X, y, lam, alpha, penalty, weights, 
+        intercept, kernel, method, tol, maxit, vec_, init)
     
     
     # add intercept name, if needed
@@ -129,8 +129,8 @@ linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
     parameters = matrix(c(lam, alpha), ncol = 2)
     colnames(parameters) = c("lam", "alpha")
     
-    returns = list(call = call, parameters = parameters, coefficients = betas, 
-        MSE = fit$MSE, gradient = grads)
+    returns = list(call = call, parameters = parameters, 
+        coefficients = betas, MSE = fit$MSE, gradient = grads)
     class(returns) = "linearr"
     return(returns)
 }
@@ -145,7 +145,10 @@ linearr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
 
 
 #' @title Print linearr object
+#' @description Print linearr object.
 #' @param x linearr class object
+#' @param ... additional arguments
+#' @keywords internal
 #' @export
 print.linearr = function(x, ...) {
     

@@ -4,7 +4,7 @@
 \alias{predict.logisticr}
 \title{Predict Logistic Regression}
 \usage{
-\method{predict}{logisticr}(object, X, y = NULL)
+\method{predict}{logisticr}(object, X, y = NULL, ...)
 }
 \arguments{
 \item{object}{'logisticr' object or matrix of betas}
@@ -12,6 +12,8 @@
 \item{X}{matrix or data frame of (new) observations}
 
 \item{y}{optional, matrix or vector of response values 0,1}
+
+\item{...}{additional arguments}
 }
 \value{
 predictions and loss metrics

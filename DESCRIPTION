@@ -7,13 +7,11 @@ Authors@R: person("Matt", "Galloway", email = "gall0441@umn.edu",
 Description: This is an R package for linear and logistic regression with optional ridge and bridge regularization penalties.
 URL: https://github.com/MGallow/logitr
 BugReports: https://github.com/MGallow/logitr/issues
-License: MIT + file LICENSE
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-Depends:
-    Rcpp (>= 0.12.10),
-    RcppArmadillo,
-    dplyr
+Imports: dplyr
+Depends: Rcpp (>= 0.12.10)
 LinkingTo: Rcpp,
     RcppArmadillo
 RoxygenNote: 6.0.1

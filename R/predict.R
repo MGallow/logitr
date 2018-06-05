@@ -8,6 +8,7 @@
 #' @param object 'logisticr' object or matrix of betas
 #' @param X matrix or data frame of (new) observations
 #' @param y optional, matrix or vector of response values 0,1
+#' @param ... additional arguments
 #' @return predictions and loss metrics
 #' @export
 #' @examples
@@ -20,7 +21,7 @@
 #' fitted = logisticr(X, y, lam = 0.1, penalty = 'ridge', method = 'MM')
 #' predict(fitted, X)
 
-predict.logisticr = function(object, X, y = NULL) {
+predict.logisticr = function(object, X, y = NULL, ...) {
     
     # checks
     X = as.matrix(X)
@@ -81,6 +82,7 @@ predict.logisticr = function(object, X, y = NULL) {
 #' @param object 'linearr' object or matrix of betas
 #' @param X matrix or data frame of (new) observations
 #' @param y optional, matrix or vector of response values
+#' @param ... additional arguments
 #' @return predictions and loss metrics
 #' @export
 #' @examples
@@ -91,7 +93,7 @@ predict.logisticr = function(object, X, y = NULL) {
 #' predict(fitted, X)
 
 
-predict.linearr = function(object, X, y = NULL) {
+predict.linearr = function(object, X, y = NULL, ...) {
     
     # checks
     X = as.matrix(X)

@@ -4,7 +4,7 @@
 \alias{predict.linearr}
 \title{Predict Linear Regression}
 \usage{
-\method{predict}{linearr}(object, X, y = NULL)
+\method{predict}{linearr}(object, X, y = NULL, ...)
 }
 \arguments{
 \item{object}{'linearr' object or matrix of betas}
@@ -12,6 +12,8 @@
 \item{X}{matrix or data frame of (new) observations}
 
 \item{y}{optional, matrix or vector of response values}
+
+\item{...}{additional arguments}
 }
 \value{
 predictions and loss metrics

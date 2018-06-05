@@ -5,13 +5,12 @@ author: "Matt Galloway"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Penalized Regression}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::knitr}
+  %\usepackage[UTF-8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(microbenchmark)
 ```
 
 ## Logistic Regression
@@ -411,6 +410,7 @@ data = read.csv("/Users/Matt/Documents/Grad School/Second Year/STAT 8054/HTRU_2.
 ```
 
 ```{r, eval = T, warning = F, message = F}
+library(microbenchmark)
 
 dim(data)
 head(data)

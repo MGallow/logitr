@@ -8,4 +8,10 @@
 }
 \arguments{
 \item{x}{logisticr class object}
+
+\item{...}{additional arguments}
 }
+\description{
+Print logisticr object.
+}
+\keyword{internal}

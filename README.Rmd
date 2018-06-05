@@ -31,7 +31,7 @@ See [vignette](https://mgallow.github.io/logitr/) or [manual](https://github.com
 devtools::install_github("MGallow/logitr")
 ```
 
-If there are any issues/bugs, please let me know: [github](https://github.com/MGallow/logitr/issues). You can also contact me via my [website](http://users.stat.umn.edu/~gall0441/). Pull requests are welcome!
+If there are any issues/bugs, please let me know: [github](https://github.com/MGallow/logitr/issues). You can also contact me via my [website](https://mgallow.github.io/). Pull requests are welcome!
 
 ## Usage
 

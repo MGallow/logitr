@@ -41,8 +41,4 @@ returns best lambda, best alpha, and cross validation errors
 \description{
 Computes the coefficient estimates for logistic regression. ridge regularization and bridge regularization optional. This function is to be used with the 'logisticc' function.
 }
-\examples{
-CV_logisticc(X, y, lam = seq(0.1, 2, 0.1), alpha = c(1.1, 1.9, 0.1), penalty = 'bridge', method = 'MM', vec = c(0,1,1,1))
-
-}
 \keyword{internal}

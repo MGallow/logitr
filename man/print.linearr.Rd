@@ -8,4 +8,10 @@
 }
 \arguments{
 \item{x}{linearr class object}
+
+\item{...}{additional arguments}
 }
+\description{
+Print linearr object.
+}
+\keyword{internal}
