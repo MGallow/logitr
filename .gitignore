@@ -6,7 +6,6 @@ src/*.o
 src/*.so
 src/*.dll
 .DS_Store
-.Rbuildignore
 .Rproj
 .Rdata
 .rdb
@@ -18,17 +17,8 @@ tests/.DS_Store
 data/.DS_Store
 R/.DS_Store
 man/.DS_Store
-Vignette/logitr_cache/html/*.rdb
-Vignette/logitr_cache/html/*.rdx
-Vignette/logitr_cache/html/*.Rdata
-Vignette/logitr_cache/latex/*.rdb
-Vignette/logitr_cache/latex/*.rdx
-Vignette/logitr_cache/latex/*.Rdata
 README_cache/markdown_github/*.rdb
 README_cache/markdown_github/*.rdx
 README_cache/markdown_github/*.Rdata
-Vignette_cache/html/*.rdb
-Vignette_cache/html/*.rdx
-Vignette_cache/html/*.Rdata
 inst/doc
 docs
