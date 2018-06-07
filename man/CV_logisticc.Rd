@@ -31,7 +31,7 @@ CV_logisticc(X, y, lam = 0L, alpha = 0L, penalty = "none",
 
 \item{init}{optional initialization for MM algorithm}
 
-\item{criteria}{specify the criteria for cross validation. Choose from c('mse', 'logloss', 'misclass'). Defauls to 'logloss'}
+\item{criteria}{specify the criteria for cross validation. Choose from c("mse", "logloss", "misclass"). Defauls to "logloss"}
 
 \item{K}{specify number of folds in cross validation, if necessary}
 }
@@ -39,6 +39,6 @@ CV_logisticc(X, y, lam = 0L, alpha = 0L, penalty = "none",
 returns best lambda, best alpha, and cross validation errors
 }
 \description{
-Computes the coefficient estimates for logistic regression. ridge regularization and bridge regularization optional. This function is to be used with the 'logisticc' function.
+Computes the coefficient estimates for logistic regression. ridge regularization and bridge regularization optional. This function is to be used with the "logisticc" function.
 }
 \keyword{internal}

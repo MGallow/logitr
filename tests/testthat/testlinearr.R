@@ -1,6 +1,4 @@
 
-library(statr)
-
 X = as.matrix(dplyr::select(iris, -c(Species, Sepal.Length)))
 X1 = cbind(1, X)
 
