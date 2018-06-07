@@ -361,6 +361,7 @@ Let us walk through some functions in the `logitr` package. We will use the iris
 <br>\vspace{1cm}
 ```{r, message = FALSE}
 library(logitr)
+library(microbenchmark)
 
 #we will use the iris data set
 X = dplyr::select(iris, -c(Species, Sepal.Length))
