@@ -406,7 +406,7 @@ In the following code, we see that is only takes 0.2 seconds to compute our esti
 <br>\vspace{1cm}
 ```{r, echo = F, warnings = FALSE, message = FALSE}
 temp = tempfile()
-download.file("https://archive.ics.uci.edu/ml/datasets/HTRU2")
+download.file("https://archive.ics.uci.edu/ml/machine-learning-databases/00372/HTRU2.zip", temp)
 data = read.csv(unz(temp, "HTRU_2.csv"), header = F)
 unlink(temp)
 
