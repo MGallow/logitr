@@ -7,6 +7,7 @@ url: https://mgallow.github.io/logitr/
 template:
   params:
     bootswatch: flatly
+    ganalytics: UA-84680750-6
 
 navbar:
   title: "logitr"

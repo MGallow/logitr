@@ -1,6 +1,8 @@
 logitr
 ================
 
+[![Build
+Status](https://travis-ci.org/MGallow/logitr.svg?branch=master)](https://travis-ci.org/MGallow/logitr)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/logitr)](https://cran.r-project.org/package=logitr)
 
 ### \*\*\*This package is experimental and not regularly maintained. It is recommended to use {glmnet} instead\!
@@ -34,8 +36,8 @@ devtools::install_github("MGallow/logitr")
 
 If there are any issues/bugs, please let me know:
 [github](https://github.com/MGallow/logitr/issues). You can also contact
-me via my [website](http://users.stat.umn.edu/~gall0441/). Pull requests
-are welcome\!
+me via my [website](https://mgallow.github.io/). Pull requests are
+welcome\!
 
 ## Usage
 

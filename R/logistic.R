@@ -36,8 +36,8 @@
 logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5, 
     penalty = c("none", "ridge", "bridge"), intercept = TRUE, 
     method = c("IRLS", "MM"), tol = 1e-05, maxit = 1e+05, 
-    vec = NULL, init = 1, criteria = c("logloss", "mse", 
-        "misclass"), K = 5) {
+    vec = NULL, init = 1, criteria = c("logloss", "mse", "misclass"), 
+    K = 5) {
     
     # checks
     n = dim(X)[1]
@@ -130,10 +130,9 @@ logisticr = function(X, y, lam = seq(0, 2, 0.1), alpha = 1.5,
     parameters = matrix(c(lam, alpha), ncol = 2)
     colnames(parameters) = c("lam", "alpha")
     
-    returns = list(call = call, parameters = parameters, 
-        coefficients = betas, MSE = fit$MSE, log.loss = fit$log.loss, 
-        misclassification = fit$misclassification, total.iterations = logistic$total.iterations, 
-        gradient = grads)
+    returns = list(call = call, parameters = parameters, coefficients = betas, 
+        MSE = fit$MSE, log.loss = fit$log.loss, misclassification = fit$misclassification, 
+        total.iterations = logistic$total.iterations, gradient = grads)
     class(returns) = "logisticr"
     return(returns)
     
