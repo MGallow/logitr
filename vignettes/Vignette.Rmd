@@ -405,7 +405,10 @@ In the following code, we see that is only takes 0.2 seconds to compute our esti
 
 <br>\vspace{1cm}
 ```{r, echo = F, warnings = FALSE, message = FALSE}
-data = read.csv("/Users/Matt/Documents/Grad School/Second Year/STAT 8054/HTRU_2.csv", header = F)
+temp = tempfile()
+download.file("https://archive.ics.uci.edu/ml/datasets/HTRU2")
+data = read.csv(unz(temp, "HTRU_2.csv"), header = F)
+unlink(temp)
 
 ```
 
