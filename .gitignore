@@ -21,4 +21,3 @@ README_cache/markdown_github/*.rdb
 README_cache/markdown_github/*.rdx
 README_cache/markdown_github/*.Rdata
 inst/doc
-docs
