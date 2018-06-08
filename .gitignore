@@ -22,3 +22,4 @@ README_cache/markdown_github/*.rdx
 README_cache/markdown_github/*.Rdata
 inst/doc
 docs
+vignettes/Vignette_cache
