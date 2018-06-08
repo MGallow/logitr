@@ -1,7 +1,8 @@
 pandoc: '2.2'
 pkgdown: 1.1.0
 pkgdown_sha: ~
-articles: []
+articles:
+  Vignette: Vignette.html
 urls:
   reference: https://mgallow.github.io/logitr//reference
   article: https://mgallow.github.io/logitr//articles
