@@ -362,17 +362,17 @@ p(x_{i}) &amp; \text{ if } y_{i} = 1\\
 ## 
 ## Tuning parameters:
 ##       lam  alpha
-## [1,]    0    NaN
+## [1,]  0.2    NaN
 ## 
 ## MSE:
-## [1] 0.0963027
+## [1] 0.09634343
 ## 
 ## Coefficients:
 ##               [,1]
-## intercept  1.85600
-##            0.65084
-##            0.70913
-##           -0.55648</code></pre>
+## intercept  1.89913
+##            0.64175
+##            0.69573
+##           -0.52729</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#ridge regression (use CV for optimal lam; specify seq(0, 2, 0.01))</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="../reference/linearr.html">linearr</a></span>(X, y, <span class="dt">lam =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>), <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a></code></pre></div>
 <pre><code>## 
@@ -380,17 +380,17 @@ p(x_{i}) &amp; \text{ if } y_{i} = 1\\
 ## 
 ## Tuning parameters:
 ##        lam  alpha
-## [1,]  0.05    NaN
+## [1,]  0.22    NaN
 ## 
 ## MSE:
-## [1] 0.09630539
+## [1] 0.09635164
 ## 
 ## Coefficients:
 ##               [,1]
-## intercept  1.86700
-##            0.64853
-##            0.70569
-##           -0.54897</code></pre>
+## intercept  1.90332
+##            0.64086
+##            0.69445
+##           -0.52450</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">#ridge logistic regression (IRLS) (use CV for optimal lam)</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a></code></pre></div>
 <pre><code>## 
@@ -531,23 +531,23 @@ p(x_{i}) &amp; \text{ if } y_{i} = 1\\
 <a class="sourceLine" id="cb24-5" data-line-number="5"><span class="kw"><a href="http://www.rdocumentation.org/packages/microbenchmark/topics/microbenchmark">microbenchmark</a></span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>))</a></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##                                           expr      min       lq     mean
-##  logisticr(X, y, lam = 0.1, penalty = "ridge") 87.42939 90.25078 92.84234
+##  logisticr(X, y, lam = 0.1, penalty = "ridge") 86.01089 86.96771 89.60092
 ##    median       uq      max neval
-##  92.20259 94.91386 104.2624   100</code></pre>
+##  88.48692 92.07122 104.0072   100</code></pre>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co">#time MM (specify lam = 0.1)</span></a>
 <a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw"><a href="http://www.rdocumentation.org/packages/microbenchmark/topics/microbenchmark">microbenchmark</a></span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>, <span class="dt">method =</span> <span class="st">"MM"</span>), <span class="dt">times =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## Unit: seconds
 ##                                                          expr      min
-##  logisticr(X, y, lam = 0.1, penalty = "ridge", method = "MM") 2.660999
-##        lq     mean   median       uq      max neval
-##  2.671671 2.742358 2.750607 2.801659 2.826852     5</code></pre>
+##  logisticr(X, y, lam = 0.1, penalty = "ridge", method = "MM") 2.771777
+##        lq     mean   median      uq      max neval
+##  2.773182 2.778453 2.780812 2.78119 2.785306     5</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co">#time IRLS (use CV for optimal lam)</span></a>
 <a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw"><a href="http://www.rdocumentation.org/packages/microbenchmark/topics/microbenchmark">microbenchmark</a></span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">penalty =</span> <span class="st">"ridge"</span>), <span class="dt">times =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## Unit: seconds
 ##                                expr      min       lq     mean   median
-##  logisticr(X, y, penalty = "ridge") 7.417544 7.446667 7.632068 7.662416
-##        uq    max neval
-##  7.786916 7.8468     5</code></pre>
+##  logisticr(X, y, penalty = "ridge") 7.351662 7.385061 7.425494 7.417681
+##        uq      max neval
+##  7.453986 7.519079     5</code></pre>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co">#ridge regression using IRLS</span></a>
 <a class="sourceLine" id="cb30-2" data-line-number="2">fit =<span class="st"> </span><span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a>
 <a class="sourceLine" id="cb30-3" data-line-number="3">fit</a></code></pre></div>
