@@ -117,7 +117,11 @@
 <p>This formulation is convenient because in logistic regression we make the critical assumption that this log-odds ratio is linear in form. That is, we can estimate the log-odds ration using some vector of coefficients <span class="math inline">\(\beta = (\beta_{0}, \beta_{1}, ..., \beta_{p})^{T}\)</span>:</p>
 <p><span class="math display">\[ \log \left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{P(Y_{i} = 0 | X_{i} = x_{i})} \right ) \approx x_{i}^{T}\beta \]</span></p>
 <p>This implies the following:</p>
-
+<p><span class="math display">\[\begin{align}
+\log &amp;\left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{P(Y_{i} = 0 | X_{i} = x_{i})} \right ) = \log \left (\frac{P(Y_{i} = 1 | X_{i} = x_{i})}{1 - P(Y_{i} = 1 | X_{i} = x_{i})} \right ) \approx x_{i}^{T}\beta \\
+  &amp;\Rightarrow \frac{P(Y_{i} = 1 | X_{i} = x_{i})}{1 - P(Y_{i} = 1 | X_{i} = x_{i})} \approx \exp(x_{i}^{T}\beta) \\
+  &amp;\Rightarrow P(Y_{i} = 1 | X_{i} = x_{i}) \approx \frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \equiv p(x_{i}) \mbox{ (say)}
+\end{align}\]</span></p>
 <p>We see that the conditional probability <span class="math inline">\(P(Y_{i} = 1 | X_{i} = x_{i})\)</span> can be approximated by the function <span class="math inline">\(p(x_{i})\)</span> – we call this function the <strong>logit</strong> function (hence the name of our package!). We will show the method for solving for the optimal vector of coefficients (<span class="math inline">\(\hat{\beta}\)</span>) in the next section.</p>
 <p><br></p>
 <div id="maximum-likelihood-estimation" class="section level3">
@@ -131,7 +135,13 @@ p(x_{i}) &amp; \text{ if } y_{i} = 1\\
 <p>Equivalently, we can write this as:</p>
 <p><span class="math display">\[ P(Y_{i} = y_{i} | X_{i} = x_{i}) = p(x_{i})^{y_{i}}(1 - p(x_{i}))^{1 - y_{i}} \]</span></p>
 <p>Having defined a probability distribution, we can now construct our (log) likelihood function (assume an iid setting):</p>
-
+<p><span class="math display">\[\begin{align}
+l(\beta) = \log L(\beta) &amp;=  \log \left [ \prod_{i = 1}^{n}p(x_{i})^{y_{i}}(1 - p(x_{i})^{1 - y_{i}}) \right ] \\
+  &amp;= \log \left [\prod_{i = 1}^{n} \left (\frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right)^{y_{i}} \left (1 - \frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right)^{1 - y_{i}} \right] \\
+  &amp;= \log \left [\prod_{i = 1}^{n} \left (\frac{\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right)^{y_{i}} \left (\frac{1}{1 + \exp(x_{i}^{T}\beta)} \right)^{1 - y_{i}} \right] \\
+&amp;= \log \left [\prod_{i = 1}^{n} (\exp(x_{i}^{T}\beta))^{y_{i}}(1 + \exp(x_{i}^{T}\beta))^{-1} \right] \\
+&amp;= \sum_{i = 1}^{n}y_{i}(x_{i}^{T}\beta) - \sum_{i = 1}^{n}\log(1 + \exp(x_{i}^{T}\beta))
+\end{align}\]</span></p>
 <p>Maximum likelihood estimation involves find the <span class="math inline">\(\beta\)</span> vector that maximizes the log-likelihood function – or equivalently, minimizes the negative log-likelihood:</p>
 <p><span class="math display">\[ \hat{\beta} = \arg\min_{\beta} -l(\beta)  \]</span></p>
 <p><br></p>
@@ -149,7 +159,12 @@ p(x_{i}) &amp; \text{ if } y_{i} = 1\\
 <p>where <span class="math inline">\(\lambda \geq 0\)</span> and <span class="math inline">\(\alpha \in \left(1, 2 \right)\)</span>. Note that we do not penalize the intercept in either method. Algorithms for computing <span class="math inline">\(\hat{\beta}\)</span> will be the subject of our next section.</p>
 <p><br></p>
 <p><strong>Note:</strong></p>
-
+<p><span class="math display">\[\begin{align*}
+\nabla l(\beta) &amp;= \sum_{i = 1}^{n}y_{i}x_{i} - \sum_{i = 1}^{n}\left (\frac{x_{i}\exp(x_{i}^{T}\beta)}{1 + \exp(x_{i}^{T}\beta)} \right) = \sum_{i = 1}^{n}y_{i}x_{i} - \sum_{i = 1}^{n}x_{i}p(x_{i}) \\
+  &amp; \\
+\nabla^{2} l(\beta) &amp;= -\sum_{i = 1}^{n}\left (\frac{x_{i}x_{i}^{T}\exp(x_{i}^{T}\beta)(1 + \exp(x_{i}^{T}\beta)) - x_{i}x_{i}^{T}\exp(x_{i}^{T}\exp(x_{i}^{T}))}{(1 + \exp(x_{i}^{T}\beta))^{2}} \right) \\
+  &amp;= -\sum_{i = 1}^{T}\left (\frac{x_{i}x_{i}^{T}\exp(x_{i}^{T}\beta)}{(1 + \exp(x_{i}^{n}\beta))^{2}} \right) = -\sum_{i = 1}^{n}x_{i}x_{i}^{T}p(x_{i})(1 - p(x_{i})) = \sum_{i = 1}^{n}x_{i}x_{i}^{T}w(x_{i}) \mbox{ (say)}
+\end{align*}\]</span></p>
 <p><br></p>
 </div>
 </div>
@@ -160,7 +175,14 @@ p(x_{i}) &amp; \text{ if } y_{i} = 1\\
 <p>According to Taylor’s Theorem (Newton-Raphson),</p>
 <p><span class="math display">\[ -l(\beta) = -l(\beta^{(k)}) + \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \]</span></p>
 <p>where <span class="math inline">\(\beta^{(k)}\)</span> is some estimator for the true <span class="math inline">\(\beta\)</span>. In this case <span class="math inline">\(\beta^{(k)}\)</span> is the <span class="math inline">\(\beta\)</span> estimate for the <span class="math inline">\(k\)</span>th iteration. Dropping constants and adding our regularization term (only ridge penalty – bridge will be computed using MM algorithm), we see the following:</p>
-
+<p><span class="math display">\[\begin{align*}
+\beta^{(k + 1)} &amp;= \arg\min_{\beta} \left \{ \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta))(\beta - \beta^{(k)}) + (\nabla - l(\beta))^{T}(\beta - \beta^{(k)}) + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right\} \\
+  &amp;= \arg\min_{\beta} \left \{ \frac{1}{2}(\beta - \beta^{(k)})^{T}(\sum_{i = 1}^{n}x_{i}x_{i}^{T}w_{i})(\beta - \beta^{(k)}) -\sum_{i = 1}^{n}x_{i}^{T}(y_{i} - p_{i}^{(k)})^{T}(\beta - \beta^{(k)}) + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
+  &amp;= \arg\min_{\beta} \left \{ \frac{1}{2}\sum_{i = 1}^{n}w_{i}^{(k)}(x_{i}^{T}\beta - x_{i}^{T}\beta^{(k)})^{T}(x_{i}^{T}\beta - x_{i}^{T}\beta^{(k)}) - \sum_{i = 1}^{n}w_{i}^{(k)}(x_{i}^{T}\beta - x_{i}^{T}\beta^{(k)})\frac{y_{i} - p_{i}^{(k)}}{w_{i}^{(k)}} + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
+  &amp;= \arg\min_{\beta} \left \{\sum_{i = 1}^{n}w_{i}^{(k)}\left (\frac{y_{i} - p_{i}^{(k)}}{w_{i}^{(k)}} + x_{i}^{T}\beta^{(k)} - x_{i}^{T}\beta \right)^{2} + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
+  &amp;= \arg\min_{\beta} \left \{\sum_{i = 1}^{n}w_{i}^{(k)}(z_{i}^{(k)} - x_{i}^{T}\beta)^{2} + \frac{\lambda}{2}\sum_{j = 1}^{p}\beta_{j}^{2} \right \} \\
+  &amp;= \arg\min_{\beta} \left \{\frac{1}{2}(z^{(k)} - X\beta)^{T}W^{(k)}(z^{(k)} - X\beta) + \frac{\lambda}{2}\beta^{T}\beta \right \}
+\end{align*}\]</span></p>
 <p>where <span class="math inline">\(z^{(k)}\)</span> is the column vector with <span class="math inline">\(i\)</span>th entry <span class="math inline">\(z_{i}^{(k)} = \frac{y_{i} - p_{i}^{(k)}}{w_{i}^{(k)}} + x_{i}^{T}\beta^{(k)}\)</span> for the <span class="math inline">\(k\)</span>th iteration. Further, <span class="math inline">\(W^{(k)}\)</span> is a diagonal matrix with <span class="math inline">\(i\)</span>th diagonal element <span class="math inline">\(w_{i}^{(k)} = p(x_{i})(1 - p(x_{i}))\)</span> and <span class="math inline">\(X\)</span> is an <span class="math inline">\(n \times p\)</span> matrix containing all <span class="math inline">\(n\)</span> (sample size) observations.</p>
 <p>We can see that this is a weighted-least squares problem! The iterative aspect comes from the fact that we will be solving this minimization problem and looping it for <span class="math inline">\(k = 0, 1, ..., K\)</span> until convergence. Solving for the gradient and setting it equal to zero implies that,</p>
 <p><span class="math display">\[ \beta^{(k + 1)} = (X^{T}W^{(k)}X + \lambda I_{p})^{-1}X^{T}W^{(k)}z^{(k)} \]</span></p>
@@ -275,7 +297,27 @@ p(x_{i}) &amp; \text{ if } y_{i} = 1\\
 <p>This implies that the following inequality must hold:</p>
 <p><span class="math display">\[ \left|\beta_{j}\right|^{\alpha} = (\beta_{j}^{2})^{\alpha/2} \leq (\beta_{j}^{(k)^{2}})^{\alpha/2} + \frac{\alpha}{2}(\beta_{j}^{(k)^{2}})^{\alpha/2 - 1}(\beta_{j}^{2} - \beta_{j}^{(k)^{2}}) \]</span></p>
 <p><br> We now derive our <span class="math inline">\(Q\)</span> function:</p>
-
+<p><span class="math display">\[\begin{align}
+-l(\beta) &amp;+ \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}\right) \\
+  &amp;=  -l(\beta^{(k)}) + \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &amp;+ \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left|\beta_{j} \right|^{\alpha}\right) \\
+  &amp;\leq \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &amp;+ \lambda\left(\gamma\frac{1}{2}\sum_{j = 1}^{p}\beta_{j}^{2} +(1 - \gamma) \frac{1}{\alpha}\sum_{j = 1}^{p}\left(\beta_{j}^{(k)^{2}})^{\alpha/2} + \frac{\alpha}{2}(\beta_{j}^{(k)^{2}})^{\alpha/2 - 1}(\beta_{j}^{2} - \beta_{j}^{(k)^{2}} \right)\right) + const. \\
+  &amp;\leq \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &amp;+ \lambda\left(\frac{\gamma}{2}(v \circ \beta)^{T}\beta +(1 - \gamma) \frac{1}{2}\sum_{j = 1}^{p}(\beta_{j}^{(k)^{2}})^{\alpha/2 - 1}\beta_{j}^{2} \right) + const. \\
+  &amp;\leq \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &amp;+ \lambda\left(\frac{\gamma}{2}(v \circ \beta)^{T}\beta +(1 - \gamma) \frac{1}{2}\beta^{T}diag(d^{(k)})\beta \right) + const. \\
+  &amp; \nonumber \\
+  &amp;\mbox{ where $v \circ \beta$ is the dot product between $\beta$ and a $(p + 1) \times 1$ vector $v$ with all entries equal to} \nonumber \\
+  &amp;\mbox{ zero except the first ($v = (0, 1, 1, 1,...)^{T}$), $d^{(k)}$ is the column vector with $d_{1}^{(k)} = 0$ and} \nonumber \\
+  &amp;\mbox{ $d_{j}^{(k)} = (\beta_{j}^{(k)^{2}})^{\alpha/2 -1}$ for $j = 2,..,p$ and $\delta = 10^{-5}$ (some small number)} \nonumber \\
+  &amp; \nonumber \\
+  &amp;= \frac{1}{2}(\beta - \beta^{(k)})^{T}(\nabla^{2} -l(\beta^{(k)}))(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &amp;+ \frac{\lambda}{2}\left(\beta^{T} diag\left[\gamma(v - d^{(k)}) + d^{(k)} \right]\beta \right) + const. \\
+  &amp;\leq \frac{1}{2}(\beta - \beta^{(k)})^{T}X^{T}(\frac{1}{4} + \delta)X(\beta - \beta^{(k)}) + (\nabla - l(\beta^{(k)}))^{T}(\beta - \beta^{(k)}) \\
+  &amp;+ \frac{\lambda}{2}\left(\beta^{T} diag\left[\gamma(v - d^{(k)}) + d^{(k)} \right]\beta \right) + const. \\
+  &amp;=: Q(\beta | \beta^{(k)})
+\end{align}\]</span></p>
 <p>That was a lot of effort to find our <span class="math inline">\(Q\)</span> function but we eventually see that our <span class="math inline">\(Q\)</span> function is quadratic in form. Therefore, we can find a closed solution for each update. By plugging in the gradient and hessian of our log-likelihood function and dropping constants, we will eventually see by solving for the gradient of <span class="math inline">\(Q\)</span> and setting it equal to zero, that we have:</p>
 <p><span class="math display">\[\beta^{(k + 1)} = \left(X^{T}(\frac{1}{4} + \delta)X +\lambda diag \left[\gamma(v - d^{(k)}) + d^{(k)}\right] \right)^{-1}\left(X^{T}(y - p^{(k)}) + X^{T}(\frac{1}{4} + \delta)X \right) \]</span></p>
 <p>Finally, putting everything together we have the MM algorithm for penalized logistic regression:</p>
@@ -379,18 +421,18 @@ p(x_{i}) &amp; \text{ if } y_{i} = 1\\
 ## Call: linearr(X = X, y = y, lam = seq(0, 2, 0.01), penalty = "ridge")
 ## 
 ## Tuning parameters:
-##        lam  alpha
-## [1,]  0.22    NaN
+##       lam  alpha
+## [1,]  0.2    NaN
 ## 
 ## MSE:
-## [1] 0.09635164
+## [1] 0.09634343
 ## 
 ## Coefficients:
 ##               [,1]
-## intercept  1.90332
-##            0.64086
-##            0.69445
-##           -0.52450</code></pre>
+## intercept  1.89913
+##            0.64175
+##            0.69573
+##           -0.52729</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">#ridge logistic regression (IRLS) (use CV for optimal lam)</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y_class, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a></code></pre></div>
 <pre><code>## 
@@ -530,24 +572,24 @@ p(x_{i}) &amp; \text{ if } y_{i} = 1\\
 <a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co">#time IRLS (specify lam = 0.1)</span></a>
 <a class="sourceLine" id="cb24-5" data-line-number="5"><span class="kw"><a href="http://www.rdocumentation.org/packages/microbenchmark/topics/microbenchmark">microbenchmark</a></span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>))</a></code></pre></div>
 <pre><code>## Unit: milliseconds
-##                                           expr      min       lq     mean
-##  logisticr(X, y, lam = 0.1, penalty = "ridge") 86.01089 86.96771 89.60092
+##                                           expr      min       lq   mean
+##  logisticr(X, y, lam = 0.1, penalty = "ridge") 86.82767 88.84533 92.008
 ##    median       uq      max neval
-##  88.48692 92.07122 104.0072   100</code></pre>
+##  89.92341 92.06625 129.2564   100</code></pre>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co">#time MM (specify lam = 0.1)</span></a>
 <a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw"><a href="http://www.rdocumentation.org/packages/microbenchmark/topics/microbenchmark">microbenchmark</a></span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>, <span class="dt">method =</span> <span class="st">"MM"</span>), <span class="dt">times =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## Unit: seconds
 ##                                                          expr      min
-##  logisticr(X, y, lam = 0.1, penalty = "ridge", method = "MM") 2.771777
-##        lq     mean   median      uq      max neval
-##  2.773182 2.778453 2.780812 2.78119 2.785306     5</code></pre>
+##  logisticr(X, y, lam = 0.1, penalty = "ridge", method = "MM") 2.861886
+##        lq     mean   median       uq      max neval
+##  2.875933 3.012516 3.028524 3.097979 3.198258     5</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co">#time IRLS (use CV for optimal lam)</span></a>
 <a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw"><a href="http://www.rdocumentation.org/packages/microbenchmark/topics/microbenchmark">microbenchmark</a></span>(<span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">penalty =</span> <span class="st">"ridge"</span>), <span class="dt">times =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## Unit: seconds
 ##                                expr      min       lq     mean   median
-##  logisticr(X, y, penalty = "ridge") 7.351662 7.385061 7.425494 7.417681
+##  logisticr(X, y, penalty = "ridge") 7.615897 7.810411 7.860075 7.812191
 ##        uq      max neval
-##  7.453986 7.519079     5</code></pre>
+##  7.925333 8.136543     5</code></pre>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co">#ridge regression using IRLS</span></a>
 <a class="sourceLine" id="cb30-2" data-line-number="2">fit =<span class="st"> </span><span class="kw"><a href="../reference/logisticr.html">logisticr</a></span>(X, y, <span class="dt">lam =</span> <span class="fl">0.1</span>, <span class="dt">penalty =</span> <span class="st">"ridge"</span>)</a>
 <a class="sourceLine" id="cb30-3" data-line-number="3">fit</a></code></pre></div>
